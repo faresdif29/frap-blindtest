@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: frap-blindtest
+    runtime: python
+    startCommand: python3 server.py
+    plan: free
