@@ -11,17 +11,21 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --ink:     #f2ede8;
-  --ink2:    #a09a92;
-  --ink3:    #5a544e;
-  --paper:   #0c0b09;
-  --card:    #111009;
-  --card2:   #1a1915;
-  --line:    #262420;
+  --ink:     #edf2f8;
+  --ink2:    #6b90b4;
+  --ink3:    #2a4060;
+  --paper:   #03080e;
+  --card:    #060f18;
+  --card2:   #0c1a26;
+  --line:    #112030;
+  --blue:    #1461ff;
+  --blue2:   #4080ff;
+  --green:   #00e87a;
+  --green2:  #00ff90;
   --red:     #e8321a;
   --red2:    #ff4427;
-  --green:   #2ec27e;
-  --gold:    #d4a017;
+  --gold:    #ffb830;
+  --err:     #e8321a;
   --ff-head: 'Bebas Neue', 'Impact', sans-serif;
   --ff-body: 'Space Grotesk', system-ui, sans-serif;
   --ff-tag:  'Permanent Marker', cursive;
@@ -67,7 +71,7 @@ header {
   color: var(--ink);
   line-height: 1;
 }
-.logo-main .rap { color: var(--red); }
+.logo-main .rap { color: var(--blue); }
 .logo-sub-line {
   font-size: .5rem; font-weight: 700; letter-spacing: 5px;
   text-transform: uppercase; color: var(--ink3);
@@ -89,11 +93,11 @@ header {
 }
 .nav-tab::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 2px; background: var(--red); transform: scaleX(0);
+  height: 2px; background: var(--blue); transform: scaleX(0);
   transition: transform .25s;
 }
 .nav-tab:hover { color: var(--ink); }
-.nav-tab.active { color: var(--ink); background: rgba(232,50,26,.07); }
+.nav-tab.active { color: var(--ink); background: rgba(20,97,255,.07); }
 .nav-tab.active::after { transform: scaleX(1); }
 
 /* ── PAGES ── */
@@ -222,7 +226,7 @@ header {
   position: absolute; top: 16px; left: 20px; z-index: 4;
   font-family: var(--ff-head); font-size: 2.2rem; letter-spacing: 3px;
   color: var(--ink); line-height: 1;
-  text-shadow: 2px 2px 0 rgba(232,50,26,.4), 0 4px 24px rgba(0,0,0,.9);
+  text-shadow: 2px 2px 0 rgba(20,97,255,.4), 0 4px 24px rgba(0,0,0,.9);
   opacity: 0; transform: translateY(-6px);
   transition: opacity .6s ease .3s, transform .6s ease .3s;
   pointer-events: none;
@@ -252,7 +256,7 @@ header {
 }
 .tier-tag.mainstream { color: var(--gold);  border-color: rgba(212,160,23,.35); }
 .tier-tag.mid        { color: var(--ink2);  border-color: var(--line); }
-.tier-tag.underground{ color: var(--red);   border-color: rgba(232,50,26,.35); }
+.tier-tag.underground{ color: var(--blue);   border-color: rgba(20,97,255,.35); }
 .tier-tag .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
 .waveform {
@@ -264,7 +268,7 @@ header {
   transition: background .3s;
 }
 .waveform.playing .wf-bar {
-  background: var(--red);
+  background: var(--blue);
   animation: wfpulse var(--d) ease-in-out infinite alternate;
 }
 @keyframes wfpulse { from { transform: scaleY(.2); } to { transform: scaleY(1); } }
@@ -274,13 +278,13 @@ header {
 }
 .btn-play {
   width: 52px; height: 52px; border-radius: 0;
-  background: var(--red); border: none; cursor: pointer;
+  background: var(--blue); border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   color: #fff; flex-shrink: 0;
   transition: background .15s, transform .1s;
 }
 .btn-play svg { width: 18px; height: 18px; fill: currentColor; }
-.btn-play:hover { background: var(--red2); }
+.btn-play:hover { background: var(--blue2); }
 .btn-play:disabled { opacity: .3; cursor: default; }
 
 .btn-skip {
@@ -312,7 +316,7 @@ header {
   color: var(--ink);
 }
 .pts-cell.hit  .pts-val { color: var(--green); }
-.pts-cell.miss .pts-val { color: var(--red); }
+.pts-cell.miss .pts-val { color: var(--err); }
 .pts-cell.bonus .pts-val { color: var(--gold); }
 
 /* HUD bottom */
@@ -344,7 +348,7 @@ header {
 }
 .loader-line::after {
   content: ''; position: absolute; top: 0; left: -40%;
-  width: 40%; height: 100%; background: var(--red);
+  width: 40%; height: 100%; background: var(--blue);
   animation: scan 1.2s ease-in-out infinite;
 }
 @keyframes scan { to { left: 100%; } }
@@ -370,12 +374,12 @@ header {
   content: 'RAP';
   position: absolute; right: -10px; top: -12px;
   font-family: var(--ff-head); font-size: 7rem; letter-spacing: -4px;
-  color: var(--red); opacity: .04; pointer-events: none; line-height: 1;
+  color: var(--blue); opacity: .04; pointer-events: none; line-height: 1;
   z-index: 0;
 }
 .guess-cultural-ref {
   font-family: var(--ff-tag); font-size: .88rem;
-  color: var(--red); opacity: .7;
+  color: var(--blue); opacity: .7;
   transform: rotate(-1deg); display: inline-block;
   margin-bottom: 4px; position: relative; z-index: 1;
 }
@@ -383,7 +387,7 @@ header {
   font-family: var(--ff-head);
   font-size: 4.2rem; letter-spacing: 5px; line-height: .88;
   color: var(--ink);
-  text-shadow: 3px 3px 0 rgba(232,50,26,.18);
+  text-shadow: 3px 3px 0 rgba(20,97,255,.18);
   position: relative; z-index: 1;
 }
 .guess-sub {
@@ -404,7 +408,7 @@ header {
   opacity: .5;
 }
 .guess-hh-strip .sep {
-  color: var(--red); opacity: .4; font-size: .5rem;
+  color: var(--blue); opacity: .4; font-size: .5rem;
 }
 
 .guess-body {
@@ -432,7 +436,7 @@ header {
 }
 .field-input:focus { border-color: var(--ink3); }
 .field-input.hit  { border-color: var(--green); background: rgba(46,194,126,.05); }
-.field-input.miss { border-color: var(--red);   background: rgba(232,50,26,.04); }
+.field-input.miss { border-color: var(--err);   background: rgba(232,50,26,.04); }
 .field-input:disabled { opacity: .65; cursor: default; }
 
 /* Feat tags */
@@ -444,7 +448,7 @@ header {
 }
 .feat-tags-wrap:focus-within { border-color: var(--ink3); }
 .feat-tags-wrap.hit  { border-color: var(--green); background: rgba(46,194,126,.05); }
-.feat-tags-wrap.miss { border-color: var(--red);   background: rgba(232,50,26,.04); }
+.feat-tags-wrap.miss { border-color: var(--err);   background: rgba(232,50,26,.04); }
 .feat-tag {
   display: flex; align-items: center; gap: 6px;
   background: var(--card); border: 1px solid var(--line);
@@ -455,7 +459,7 @@ header {
   cursor: pointer; color: var(--ink3); font-size: .75rem;
   line-height: 1; transition: color .15s;
 }
-.feat-tag .rm:hover { color: var(--red); }
+.feat-tag .rm:hover { color: var(--blue); }
 .feat-tag-input {
   flex: 1; min-width: 120px; border: none; background: transparent;
   color: var(--ink); font-family: var(--ff-body); font-size: .9rem;
@@ -484,12 +488,12 @@ header {
 
 .btn-validate {
   width: 100%; height: 54px;
-  background: var(--red); border: none;
+  background: var(--blue); border: none;
   color: #fff; font-family: var(--ff-head);
   font-size: 1.3rem; letter-spacing: 4px;
   cursor: pointer; transition: background .15s;
 }
-.btn-validate:hover { background: var(--red2); }
+.btn-validate:hover { background: var(--blue2); }
 .btn-validate:disabled { opacity: .3; cursor: default; }
 
 /* ── RESULT OVERLAY ── */
@@ -511,7 +515,7 @@ header {
 }
 .verdict-word.v-perfect { color: var(--green); }
 .verdict-word.v-partial  { color: var(--gold); }
-.verdict-word.v-miss     { color: var(--red); }
+.verdict-word.v-miss     { color: var(--err); }
 .verdict-pts {
   font-family: var(--ff-head); font-size: 1.4rem; letter-spacing: 3px;
   color: var(--ink3);
@@ -544,7 +548,7 @@ header {
   font-size: .8rem; color: var(--ink3);
 }
 .reveal-guess .hit-txt  { color: var(--green); font-weight: 600; }
-.reveal-guess .miss-txt { color: var(--red);   font-weight: 600; }
+.reveal-guess .miss-txt { color: var(--err);   font-weight: 600; }
 .reveal-status {
   margin-left: auto; flex-shrink: 0;
   width: 28px; height: 28px;
@@ -552,7 +556,7 @@ header {
   font-size: .8rem; font-weight: 900;
 }
 .reveal-status.ok   { background: var(--green); color: var(--paper); }
-.reveal-status.ko   { background: var(--red);   color: #fff; }
+.reveal-status.ko   { background: var(--err);   color: #fff; }
 .reveal-status.skip { background: var(--line);  color: var(--ink3); }
 
 /* Cover strip */
@@ -619,12 +623,12 @@ header {
 .multi-title {
   font-family: var(--ff-head); font-size: 4rem; letter-spacing: 5px; line-height: .9;
 }
-.multi-title .acc { color: var(--red); }
+.multi-title .acc { color: var(--blue); }
 .multi-sub { font-size: .72rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--ink3); }
 .multi-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .btn-multi-create {
   flex: 1; min-width: 160px; height: 52px;
-  background: var(--red); border: none; color: #fff;
+  background: var(--blue); border: none; color: #fff;
   font-family: var(--ff-head); font-size: 1.1rem; letter-spacing: 3px;
   cursor: pointer; transition: background .15s;
 }
@@ -650,7 +654,7 @@ header {
 .multi-input.name { text-transform: none; letter-spacing: 0; }
 .multi-form-row { display: flex; gap: 10px; }
 .btn-confirm {
-  flex: 1; height: 50px; background: var(--red); border: none; color: #fff;
+  flex: 1; height: 50px; background: var(--blue); border: none; color: #fff;
   font-family: var(--ff-head); font-size: 1.1rem; letter-spacing: 3px;
   cursor: pointer;
 }
@@ -664,8 +668,8 @@ header {
 .lobby-wrap { border: 1px solid var(--line); display: flex; flex-direction: column; }
 .lobby-header { padding: 24px 32px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 20px; }
 .lobby-code {
-  font-family: var(--ff-head); font-size: 3rem; letter-spacing: 8px; color: var(--red);
-  text-shadow: 2px 2px 0 rgba(232,50,26,.2);
+  font-family: var(--ff-head); font-size: 3rem; letter-spacing: 8px; color: var(--blue);
+  text-shadow: 2px 2px 0 rgba(20,97,255,.2);
 }
 .lobby-code-label { font-size: .6rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--ink3); }
 .lobby-players { display: flex; flex-direction: column; }
@@ -683,12 +687,81 @@ header {
 }
 .lobby-footer { padding: 20px 32px; border-top: 1px solid var(--line); display: flex; gap: 12px; }
 .btn-start {
-  flex: 1; height: 52px; background: var(--red); border: none; color: #fff;
+  flex: 1; height: 52px; background: var(--blue); border: none; color: #fff;
   font-family: var(--ff-head); font-size: 1.2rem; letter-spacing: 3px;
   cursor: pointer;
 }
 .btn-start:disabled { opacity: .3; cursor: default; }
 .lobby-waiting-txt { color: var(--ink3); font-size: .8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; align-self: center; }
+
+/* ── ÈRE SELECTOR ── */
+.era-selector {
+  display: flex; flex-shrink: 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--card);
+}
+.era-btn {
+  flex: 1; padding: 10px 6px 8px; border: none;
+  border-right: 1px solid var(--line);
+  background: transparent; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  transition: background .2s; position: relative;
+}
+.era-btn:last-child { border-right: none; }
+.era-btn::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--era-color, var(--blue));
+  transform: scaleX(0); transition: transform .2s;
+}
+.era-btn.active::after { transform: scaleX(1); }
+.era-btn:hover { background: rgba(255,255,255,.03); }
+.era-btn.active { background: rgba(255,255,255,.04); }
+
+.era-icon {
+  font-size: .75rem; line-height: 1;
+  color: var(--ink3); transition: color .2s;
+}
+.era-btn.active .era-icon { color: var(--era-color, var(--blue)); }
+.era-name {
+  font-family: var(--ff-head); font-size: .82rem; letter-spacing: 2px;
+  color: var(--ink3); transition: color .2s; white-space: nowrap;
+}
+.era-btn.active .era-name { color: var(--ink); }
+.era-years {
+  font-family: var(--ff-alt); font-size: .48rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--ink3); opacity: .45; white-space: nowrap;
+}
+
+/* Era-specific colors */
+.era-btn[data-era="all"]       { --era-color: var(--blue); }
+.era-btn[data-era="actuel"]    { --era-color: var(--green); }
+.era-btn[data-era="classique"] { --era-color: #4080ff; }
+.era-btn[data-era="oldschool"] { --era-color: var(--gold); }
+
+/* Era badge next to tier tag */
+.era-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--ff-alt); font-size: .65rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 10px; border: 1px solid;
+  transition: color .3s, border-color .3s;
+}
+.era-badge.actuel    { color: var(--green); border-color: rgba(0,232,122,.3); }
+.era-badge.classique { color: var(--blue2); border-color: rgba(64,128,255,.3); }
+.era-badge.oldschool { color: var(--gold);  border-color: rgba(255,184,48,.3); }
+
+/* ── SCORE BONUS ERA ── */
+.streak-flare {
+  font-family: var(--ff-tag); font-size: .85rem;
+  animation: flare .4s ease;
+  color: var(--green);
+}
+@keyframes flare {
+  0% { transform: scale(1.6); opacity: 0; }
+  60% { opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 
 /* Multi game view — same layout as solo but with leaderboard sidebar */
 .multi-game { display: flex; min-height: calc(100vh - 56px); }
@@ -714,14 +787,14 @@ header {
 .lb-score { font-family: var(--ff-head); font-size: 1.3rem; color: var(--ink); }
 .lb-answered { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
 .lb-answered.done { background: var(--green); }
-.lb-answered.me { background: var(--red); }
+.lb-answered.me { background: var(--blue); }
 .multi-timer {
   padding: 16px 20px; border-top: 1px solid var(--line);
   font-family: var(--ff-head); font-size: 2.5rem; letter-spacing: 2px;
   text-align: center; color: var(--ink);
   transition: color .3s;
 }
-.multi-timer.urgent { color: var(--red); }
+.multi-timer.urgent { color: var(--err); }
 
 /* Round result overlay */
 .result-full {
@@ -755,12 +828,12 @@ header {
 .result-lb-row .rlb-rank.gold { color: var(--gold); }
 .result-lb-row .rlb-name { flex: 1; font-weight: 700; }
 .result-lb-row .rlb-gained { font-family: var(--ff-head); font-size: 1.2rem; color: var(--green); }
-.result-lb-row .rlb-gained.zero { color: var(--red); }
+.result-lb-row .rlb-gained.zero { color: var(--err); }
 .result-lb-row .rlb-total { font-family: var(--ff-head); font-size: 1.5rem; }
 .result-lb-row .rlb-ans { font-size: .75rem; color: var(--ink3); }
 .result-footer { padding: 20px 24px; border-top: 1px solid var(--line); display: flex; gap: 12px; }
 .btn-next-round {
-  flex: 1; height: 52px; background: var(--red); border: none; color: #fff;
+  flex: 1; height: 52px; background: var(--blue); border: none; color: #fff;
   font-family: var(--ff-head); font-size: 1.2rem; letter-spacing: 3px;
   cursor: pointer;
 }
@@ -825,15 +898,15 @@ header {
 }
 .st-eyebrow {
   font-family: var(--ff-tag); font-size: .85rem;
-  color: var(--red); transform: rotate(-1.5deg); display: inline-block;
+  color: var(--blue); transform: rotate(-1.5deg); display: inline-block;
   margin-bottom: 2px;
 }
 .st-title-word {
   font-family: var(--ff-head); font-size: 3.5rem;
   letter-spacing: 6px; line-height: .9; color: var(--ink);
-  text-shadow: 3px 3px 0 rgba(232,50,26,.25);
+  text-shadow: 3px 3px 0 rgba(20,97,255,.25);
 }
-.st-title-word .acc { color: var(--red); }
+.st-title-word .acc { color: var(--blue); }
 
 /* Transport controls */
 .st-transport {
@@ -849,14 +922,14 @@ header {
   font-size: .58rem; font-weight: 700; letter-spacing: 2.5px;
   text-transform: uppercase; color: var(--ink3); white-space: nowrap;
 }
-.st-tgroup input[type=range] { accent-color: var(--red); }
+.st-tgroup input[type=range] { accent-color: var(--blue); }
 .st-bpm-num {
   width: 48px; padding: 4px 6px; text-align: center;
   background: var(--card2); border: 1px solid var(--line);
   color: var(--ink); font-family: var(--ff-head); font-size: 1.4rem;
   letter-spacing: 1px; outline: none;
 }
-.st-bpm-num:focus { border-color: var(--red); }
+.st-bpm-num:focus { border-color: var(--blue); }
 .st-bpm-range { width: 72px; }
 .st-swing-range { width: 80px; }
 .st-val-txt {
@@ -866,12 +939,12 @@ header {
 
 .st-btn-play {
   height: 100%; padding: 0 28px; min-height: 52px;
-  background: var(--red); border: none; color: #fff;
+  background: var(--blue); border: none; color: #fff;
   font-family: var(--ff-head); font-size: 1.2rem; letter-spacing: 4px;
   cursor: pointer; transition: background .15s;
   border-left: 1px solid var(--line);
 }
-.st-btn-play:hover { background: var(--red2); }
+.st-btn-play:hover { background: var(--blue2); }
 .st-btn-tap {
   height: 100%; padding: 0 16px; min-height: 52px;
   background: transparent; border: none; border-left: 1px solid var(--line);
@@ -887,7 +960,7 @@ header {
   font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
   cursor: pointer; transition: color .15s;
 }
-.st-btn-clear:hover { color: var(--red); }
+.st-btn-clear:hover { color: var(--err); }
 
 /* Toolbar: steps + presets + saves */
 .st-toolbar {
@@ -910,9 +983,9 @@ header {
   cursor: pointer; transition: all .15s;
 }
 .st-chip:hover { border-color: var(--ink2); color: var(--ink); }
-.st-chip.active { background: var(--red); border-color: var(--red); color: #fff; }
-.st-chip.preset { border-color: rgba(232,50,26,.25); color: var(--ink3); }
-.st-chip.preset:hover { border-color: var(--red); color: var(--red); }
+.st-chip.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+.st-chip.preset { border-color: rgba(20,97,255,.25); color: var(--ink3); }
+.st-chip.preset:hover { border-color: var(--blue); color: var(--blue); }
 .st-chip.save-chip { border-color: rgba(212,160,23,.2); color: var(--ink3); }
 .st-chip.save-chip:hover { border-color: var(--gold); color: var(--gold); }
 .st-chip.save-chip.has-data { border-color: rgba(212,160,23,.5); color: var(--gold); }
@@ -946,7 +1019,7 @@ header {
   display: flex; align-items: center; justify-content: center;
 }
 .st-track-btn.mute { color: var(--ink3); }
-.st-track-btn.mute:hover, .st-track-btn.mute.active { background: var(--red); color: #fff; }
+.st-track-btn.mute:hover, .st-track-btn.mute.active { background: var(--err); color: #fff; }
 .st-track-btn.solo { color: var(--ink3); }
 .st-track-btn.solo:hover, .st-track-btn.solo.active { background: var(--gold); color: var(--paper); }
 .st-track-vol {
@@ -986,7 +1059,7 @@ header {
   font-size: .58rem; font-weight: 700; letter-spacing: 2px;
   text-transform: uppercase; color: var(--ink3); white-space: nowrap;
 }
-.st-fx-group input[type=range] { width: 90px; accent-color: var(--red); }
+.st-fx-group input[type=range] { width: 90px; accent-color: var(--blue); }
 .st-fx-note {
   margin-left: auto; padding: 10px 20px;
   font-family: var(--ff-tag); font-size: .9rem; color: var(--ink3);
@@ -1022,6 +1095,30 @@ header {
   <!-- LEFT: player -->
   <div class="panel-player">
 
+    <!-- Sélecteur d'ère -->
+    <div class="era-selector" id="era-selector">
+      <button class="era-btn active" data-era="all" onclick="setEra('all')">
+        <span class="era-icon">∞</span>
+        <span class="era-name">TOUS</span>
+        <span class="era-years">toutes ères</span>
+      </button>
+      <button class="era-btn" data-era="actuel" onclick="setEra('actuel')">
+        <span class="era-icon">▶</span>
+        <span class="era-name">ACTUEL</span>
+        <span class="era-years">2018 → 2026</span>
+      </button>
+      <button class="era-btn" data-era="classique" onclick="setEra('classique')">
+        <span class="era-icon">◈</span>
+        <span class="era-name">CLASSIQUES</span>
+        <span class="era-years">2008 – 2018</span>
+      </button>
+      <button class="era-btn" data-era="oldschool" onclick="setEra('oldschool')">
+        <span class="era-icon">◉</span>
+        <span class="era-name">OLD SCHOOL</span>
+        <span class="era-years">1990 – 2008</span>
+      </button>
+    </div>
+
     <!-- Art hero -->
     <div class="art-hero" id="art-hero">
       <div class="artist-bg" id="artist-bg"></div>
@@ -1044,9 +1141,14 @@ header {
     <!-- Player controls (hidden until track loaded) -->
     <div id="player-ui" class="hidden">
       <div class="player-controls">
-        <div class="tier-tag mainstream" id="tier-tag">
-          <span class="dot"></span>
-          <span id="tier-txt">Mainstream</span>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <div class="tier-tag mainstream" id="tier-tag">
+            <span class="dot"></span>
+            <span id="tier-txt">Mainstream</span>
+          </div>
+          <div class="era-badge actuel" id="era-badge" style="display:none;">
+            <span id="era-badge-txt">ACTUEL</span>
+          </div>
         </div>
         <div class="waveform" id="waveform" onclick="togglePlay()"></div>
         <div class="ctrl-row">
@@ -1223,7 +1325,7 @@ header {
           <button class="btn-confirm" id="mf-btn" onclick="submitMultiForm()">Entrer</button>
           <button class="btn-cancel-form" onclick="showMultiScreen('home')">Retour</button>
         </div>
-        <div id="mf-error" style="color:var(--red);font-size:.8rem;font-weight:600;letter-spacing:1px;min-height:16px;"></div>
+        <div id="mf-error" style="color:var(--err);font-size:.8rem;font-weight:600;letter-spacing:1px;min-height:16px;"></div>
       </div>
     </div>
 
@@ -1442,155 +1544,176 @@ header {
 // Ces sons s'ajoutent au pool random par artiste.
 // Chaque entrée = { id: deezer_track_id }
 const CURATED_TRACKS = [
-  // Top 2025-2026
-  3314018771, // Phénoménal — Jul
-  3102004051, // NANANI NANANA — Gazo
-  2659306652, // Pyramide — Werenoi
-  3045111081, // La famine — Werenoi (feat. Gazo)
-  1759430967, // Meuda — Tiakola
-  3000573421, // PONA NINI — Tiakola
-  3282889891, // Freestyle CKO — L2B
-  2872998762, // Monaco — Guy2bezbar
-  3728009502, // JACK HONEY — Niaks
-  4002471911, // Cat Stevens — ZKR
-  3411610351, // COACHELLA — Gambi
-  3484456821, // FDT — Timar
-  3713170282, // Angela — Hatik
-  // 2023-2024
-  2635800932, // Chambre 140 — PLK
-  991623302,  // Drill FR 4 (feat. Freeze Corleone) — Gazo
-  3058139731, // Collabo — Ninho
-  2527530731, // Petit génie — Jungeli
-  // Classiques récents
-  653159322,  // Au DD — PNL
-  882365842,  // TRINITYVILLE — Laylow
-  354918041,  // Macarena — Damso
-  414838122,  // Basique — Orelsan
-  133165774,  // DKR — Booba
-  135203382,  // Chocolat — Lartiste (feat. Awa Imani)
-  602971012,  // La force — Rohff
-  463794542,  // Guerilla — Soolking
-  84310967,   // Corleone — Lacrim
+  // ═══ ACTUEL 2018→2026 ═══
+  { id: 3314018771, era: 'actuel'    }, // Phénoménal — Jul
+  { id: 3102004051, era: 'actuel'    }, // NANANI NANANA — Gazo
+  { id: 2659306652, era: 'actuel'    }, // Pyramide — Werenoi
+  { id: 3045111081, era: 'actuel'    }, // La famine — Werenoi feat. Gazo
+  { id: 1759430967, era: 'actuel'    }, // Meuda — Tiakola
+  { id: 3000573421, era: 'actuel'    }, // PONA NINI — Tiakola
+  { id: 3282889891, era: 'actuel'    }, // Freestyle CKO — L2B
+  { id: 2872998762, era: 'actuel'    }, // Monaco — Guy2Bezbar
+  { id: 3728009502, era: 'actuel'    }, // JACK HONEY — Niaks
+  { id: 4002471911, era: 'actuel'    }, // Cat Stevens — ZKR
+  { id: 3411610351, era: 'actuel'    }, // COACHELLA — Gambi
+  { id: 3484456821, era: 'actuel'    }, // FDT — Timar
+  { id: 3713170282, era: 'actuel'    }, // Angela — Hatik
+  { id: 2635800932, era: 'actuel'    }, // Chambre 140 — PLK
+  { id: 991623302,  era: 'actuel'    }, // Drill FR 4 — Gazo feat. Freeze
+  { id: 3058139731, era: 'actuel'    }, // Collabo — Ninho
+  { id: 2527530731, era: 'actuel'    }, // Petit génie — Jungeli
+  // ═══ CLASSIQUES 2008→2018 ═══
+  { id: 653159322,  era: 'classique' }, // Au DD — PNL
+  { id: 882365842,  era: 'classique' }, // TRINITYVILLE — Laylow
+  { id: 354918041,  era: 'classique' }, // Macarena — Damso
+  { id: 414838122,  era: 'classique' }, // Basique — Orelsan
+  { id: 133165774,  era: 'classique' }, // DKR — Booba
+  { id: 135203382,  era: 'classique' }, // Chocolat — Lartiste
+  { id: 463794542,  era: 'classique' }, // Guerilla — Soolking
+  { id: 84310967,   era: 'classique' }, // Corleone — Lacrim
+  // ═══ OLD SCHOOL avant 2008 ═══
+  { id: 602971012,  era: 'oldschool' }, // La force — Rohff
 ];
 
+// ── ARTISTES PAR ÈRE ───────────────────────────────────────────────────────
+// era: 'actuel' (2018+) | 'classique' (2008-2018) | 'oldschool' (avant 2008)
 const ARTISTS = [
-  // ── TOP STREAMING 2024/2025/2026 ──
-  { name: 'Jul',               id: 1191615,   tier: 'mainstream' },
-  { name: 'GIMS',              id: 4429712,   tier: 'mainstream' },
-  { name: 'Ninho',             id: 5542343,   tier: 'mainstream' },
-  { name: 'Gazo',              id: 8873540,   tier: 'mainstream' },
-  { name: 'Naps',              id: 4842061,   tier: 'mainstream' },
-  { name: 'Werenoi',           id: 121672292, tier: 'mainstream' },
-  { name: 'PLK',               id: 1479842,   tier: 'mainstream' },
-  { name: 'Koba LaD',          id: 14621667,  tier: 'mainstream' },
-  { name: 'Soprano',           id: 13011,     tier: 'mainstream' },
-  { name: 'Niska',             id: 5288900,   tier: 'mainstream' },
-  { name: 'SDM',               id: 604107,    tier: 'mainstream' },
-  { name: 'Niro',              id: 58624,     tier: 'mainstream' },
-  { name: 'Tayc',              id: 12526056,  tier: 'mainstream' },
-  { name: 'KeBlack',           id: 7459268,   tier: 'mainstream' },
-  { name: 'Naza',              id: 7459270,   tier: 'mainstream' },
-  { name: 'Tiakola',           id: 13918545,  tier: 'mainstream' },
-  { name: 'Hamza',             id: 171998,    tier: 'mainstream' },
-  { name: 'Leto',              id: 455796,    tier: 'mainstream' },
-  { name: 'L2B',               id: 13790723,  tier: 'mainstream' },
-  { name: 'Franglish',         id: 10695573,  tier: 'mainstream' },
-  { name: 'Hatik',             id: 12422192,  tier: 'mainstream' },
-  { name: 'Niaks',             id: 52937632,  tier: 'mainstream' },
-  { name: 'Guy2Bezbar',        id: 11026886,  tier: 'mainstream' },
-  { name: 'Ziak',              id: 7668530,   tier: 'mainstream' },
-  { name: 'Gradur',            id: 5876247,   tier: 'mainstream' },
-  { name: 'Lartiste',          id: 1670355,   tier: 'mainstream' },
-  { name: "Heuss L'Enfoiré",   id: 13645509,  tier: 'mainstream' },
-  { name: 'Hornet La Frappe',  id: 6545727,   tier: 'mainstream' },
-  { name: 'Zola',              id: 13962203,  tier: 'mainstream' },
-  { name: 'Sofiane',           id: 89657,     tier: 'mainstream' },
-  { name: 'La Fouine',         id: 12778,     tier: 'mainstream' },
-  { name: 'Josman',            id: 7365500,   tier: 'mainstream' },
-  { name: 'ZKR',               id: 14240131,  tier: 'mainstream' },
-  { name: 'Gambi',             id: 65303292,  tier: 'mainstream' },
-  { name: 'Siboy',             id: 6311908,   tier: 'mainstream' },
-  { name: 'Lyna Mahyem',       id: 7995536,   tier: 'mainstream' },
-  { name: 'Jungeli',           id: 220540115, tier: 'mainstream' },
-  { name: 'Rohff',             id: 750,       tier: 'mainstream' },
-  // ── CLASSIQUES / PILIERS ──
-  { name: 'PNL',               id: 1519461,   tier: 'mainstream' },
-  { name: 'Damso',             id: 9197980,   tier: 'mainstream' },
-  { name: 'Booba',             id: 390,       tier: 'mainstream' },
-  { name: 'Nekfeu',            id: 1412564,   tier: 'mainstream' },
-  { name: 'SCH',               id: 162665,    tier: 'mainstream' },
-  { name: 'Kaaris',            id: 388973,    tier: 'mainstream' },
-  { name: 'Lacrim',            id: 4087782,   tier: 'mainstream' },
-  { name: 'Freeze Corleone',   id: 13755123,  tier: 'mainstream' },
-  { name: 'Orelsan',           id: 259467,    tier: 'mainstream' },
-  { name: 'Bigflo & Oli',      id: 5497121,   tier: 'mainstream' },
-  { name: 'Laylow',            id: 4510044,   tier: 'mainstream' },
-  { name: 'Soolking',          id: 10189104,  tier: 'mainstream' },
-  { name: 'Alonzo',            id: 259729,    tier: 'mainstream' },
-  { name: "Rim'K",             id: 256080,    tier: 'mainstream' },
-  { name: 'Guizmo',            id: 162815,    tier: 'mainstream' },
-  { name: 'Sadek',             id: 1270444,   tier: 'mainstream' },
-  { name: 'Soso Maness',       id: 5594859,   tier: 'mainstream' },
-  { name: 'Youssoupha',        id: 13020,     tier: 'mainstream' },
-  { name: 'IAM',               id: 48,        tier: 'mainstream' },
-  // ── MID — reconnus, scène active ──
-  { name: 'Vald',              id: 5175734,   tier: 'mid' },
-  { name: 'Dinos',             id: 292949,    tier: 'mid' },
-  { name: 'Lomepal',           id: 5111084,   tier: 'mid' },
-  { name: 'Alpha Wann',        id: 4428187,   tier: 'mid' },
-  { name: 'Kofs',              id: 5593078,   tier: 'mid' },
-  { name: 'Lefa',              id: 1473902,   tier: 'mid' },
-  { name: 'Da Uzi',            id: 11884111,  tier: 'mid' },
-  { name: 'Benjamin Epps',     id: 88464372,  tier: 'mid' },
-  { name: 'Ven1',              id: 243505001, tier: 'mid' },
-  { name: 'La Rvfleuze',       id: 174484227, tier: 'mid' },
-  { name: 'HOUDI',             id: 48443532,  tier: 'mid' },
-  { name: 'Chilla',            id: 4121259,   tier: 'mid' },
-  { name: 'Morad',             id: 111130212, tier: 'mid' },
-  { name: 'Abou Debeing',      id: 6329070,   tier: 'mid' },
-  { name: 'Rsko',              id: 9976422,   tier: 'mid' },
-  { name: 'Timal',             id: 74463,     tier: 'mid' },
-  { name: 'Bello & Dallas',    id: 144701542, tier: 'mid' },
-  { name: 'WIXO & LA2S',       id: 145561382, tier: 'mid' },
-  { name: 'Landy',             id: 14447309,  tier: 'mid' },
-  { name: 'Bramsito',          id: 10930872,  tier: 'mid' },
-  { name: 'Kekra',             id: 8352118,   tier: 'mid' },
-  { name: 'Carbonne',          id: 98775702,  tier: 'mid' },
-  { name: 'Moha K',            id: 73205432,  tier: 'mid' },
-  { name: '4Keus',             id: 13918541,  tier: 'mid' },
-  { name: 'Maska',             id: 4438831,   tier: 'mid' },
-  { name: 'Casseurs Flowters', id: 4944278,   tier: 'mid' },
-  { name: 'Disiz',             id: 292,       tier: 'mid' },
-  { name: 'Dosseh',            id: 158083,    tier: 'mid' },
-  { name: 'Poison Kid',        id: 65246912,  tier: 'mid' },
-  { name: 'Timar',             id: 6354270,   tier: 'mid' },
-  { name: 'KLN',               id: 274705721, tier: 'mid' },
-  { name: 'iDS',               id: 239541711, tier: 'mid' },
-  // ── UNDERGROUND / CULTURE ──
-  { name: 'Ichon',             id: 5157545,   tier: 'underground' },
-  { name: 'Georgio',           id: 183727,    tier: 'underground' },
-  { name: 'Zed Yun Pavarotti', id: 14082715,  tier: 'underground' },
-  { name: 'Kerchak',           id: 162070292, tier: 'underground' },
-  { name: 'Kery James',        id: 5025,      tier: 'underground' },
-  { name: 'Oxmo Puccino',      id: 7983,      tier: 'underground' },
-  { name: 'Lino',              id: 6568,      tier: 'underground' },
-  { name: 'Médine',            id: 14289,     tier: 'underground' },
-  { name: 'Akhenaton',         id: 49,        tier: 'underground' },
-  { name: 'Tunisiano',         id: 64085,     tier: 'underground' },
-  { name: 'Hologram Lo',       id: 4450096,   tier: 'underground' },
-  { name: 'Demi Portion',      id: 89172,     tier: 'underground' },
-  { name: 'Nessbeal',          id: 74095,     tier: 'underground' },
-  { name: 'Scylla',            id: 104154,    tier: 'underground' },
-  { name: 'Sefyu',             id: 12984,     tier: 'underground' },
+  // ══ ACTUEL — 2018 → 2026 ══
+  { name: 'Gazo',              id: 8873540,   tier: 'mainstream', era: 'actuel' },
+  { name: 'Werenoi',           id: 121672292, tier: 'mainstream', era: 'actuel' },
+  { name: 'Tiakola',           id: 13918545,  tier: 'mainstream', era: 'actuel' },
+  { name: 'L2B',               id: 13790723,  tier: 'mainstream', era: 'actuel' },
+  { name: 'Guy2Bezbar',        id: 11026886,  tier: 'mainstream', era: 'actuel' },
+  { name: 'Niaks',             id: 52937632,  tier: 'mainstream', era: 'actuel' },
+  { name: 'ZKR',               id: 14240131,  tier: 'mainstream', era: 'actuel' },
+  { name: 'Gambi',             id: 65303292,  tier: 'mainstream', era: 'actuel' },
+  { name: 'Hatik',             id: 12422192,  tier: 'mainstream', era: 'actuel' },
+  { name: 'Jungeli',           id: 220540115, tier: 'mainstream', era: 'actuel' },
+  { name: 'Zola',              id: 13962203,  tier: 'mainstream', era: 'actuel' },
+  { name: 'Siboy',             id: 6311908,   tier: 'mainstream', era: 'actuel' },
+  { name: 'Lyna Mahyem',       id: 7995536,   tier: 'mainstream', era: 'actuel' },
+  { name: 'Tayc',              id: 12526056,  tier: 'mainstream', era: 'actuel' },
+  { name: 'KeBlack',           id: 7459268,   tier: 'mainstream', era: 'actuel' },
+  { name: 'Naza',              id: 7459270,   tier: 'mainstream', era: 'actuel' },
+  { name: 'Franglish',         id: 10695573,  tier: 'mainstream', era: 'actuel' },
+  { name: 'Hamza',             id: 171998,    tier: 'mainstream', era: 'actuel' },
+  { name: 'Leto',              id: 455796,    tier: 'mainstream', era: 'actuel' },
+  { name: 'Ziak',              id: 7668530,   tier: 'mainstream', era: 'actuel' },
+  { name: 'Kofs',              id: 5593078,   tier: 'mid',        era: 'actuel' },
+  { name: 'Da Uzi',            id: 11884111,  tier: 'mid',        era: 'actuel' },
+  { name: 'Benjamin Epps',     id: 88464372,  tier: 'mid',        era: 'actuel' },
+  { name: 'HOUDI',             id: 48443532,  tier: 'mid',        era: 'actuel' },
+  { name: 'Morad',             id: 111130212, tier: 'mid',        era: 'actuel' },
+  { name: '4Keus',             id: 13918541,  tier: 'mid',        era: 'actuel' },
+  { name: 'KLN',               id: 274705721, tier: 'mid',        era: 'actuel' },
+  { name: 'Carbonne',          id: 98775702,  tier: 'mid',        era: 'actuel' },
+  { name: 'Timar',             id: 6354270,   tier: 'mid',        era: 'actuel' },
+  { name: 'Bramsito',          id: 10930872,  tier: 'mid',        era: 'actuel' },
+  { name: 'Kerchak',           id: 162070292, tier: 'underground',era: 'actuel' },
+  { name: 'Zed Yun Pavarotti', id: 14082715,  tier: 'underground',era: 'actuel' },
+  { name: 'Chilla',            id: 4121259,   tier: 'underground',era: 'actuel' },
+
+  // ══ CLASSIQUES — 2008 → 2018 ══
+  { name: 'PNL',               id: 1519461,   tier: 'mainstream', era: 'classique' },
+  { name: 'Damso',             id: 9197980,   tier: 'mainstream', era: 'classique' },
+  { name: 'SCH',               id: 162665,    tier: 'mainstream', era: 'classique' },
+  { name: 'Nekfeu',            id: 1412564,   tier: 'mainstream', era: 'classique' },
+  { name: 'Booba',             id: 390,       tier: 'mainstream', era: 'classique' },
+  { name: 'Kaaris',            id: 388973,    tier: 'mainstream', era: 'classique' },
+  { name: 'Lacrim',            id: 4087782,   tier: 'mainstream', era: 'classique' },
+  { name: 'Freeze Corleone',   id: 13755123,  tier: 'mainstream', era: 'classique' },
+  { name: 'Laylow',            id: 4510044,   tier: 'mainstream', era: 'classique' },
+  { name: 'Orelsan',           id: 259467,    tier: 'mainstream', era: 'classique' },
+  { name: 'Jul',               id: 1191615,   tier: 'mainstream', era: 'classique' },
+  { name: 'Ninho',             id: 5542343,   tier: 'mainstream', era: 'classique' },
+  { name: 'PLK',               id: 1479842,   tier: 'mainstream', era: 'classique' },
+  { name: 'Niska',             id: 5288900,   tier: 'mainstream', era: 'classique' },
+  { name: 'GIMS',              id: 4429712,   tier: 'mainstream', era: 'classique' },
+  { name: 'Naps',              id: 4842061,   tier: 'mainstream', era: 'classique' },
+  { name: 'Koba LaD',          id: 14621667,  tier: 'mainstream', era: 'classique' },
+  { name: 'Soolking',          id: 10189104,  tier: 'mainstream', era: 'classique' },
+  { name: 'Bigflo & Oli',      id: 5497121,   tier: 'mainstream', era: 'classique' },
+  { name: "Heuss L\'Enfoiré", id: 13645509,  tier: 'mainstream', era: 'classique' },
+  { name: 'Hornet La Frappe',  id: 6545727,   tier: 'mainstream', era: 'classique' },
+  { name: 'Soprano',           id: 13011,     tier: 'mainstream', era: 'classique' },
+  { name: 'Rohff',             id: 750,       tier: 'mainstream', era: 'classique' },
+  { name: 'Alonzo',            id: 259729,    tier: 'mainstream', era: 'classique' },
+  { name: 'Sadek',             id: 1270444,   tier: 'mainstream', era: 'classique' },
+  { name: 'Sofiane',           id: 89657,     tier: 'mainstream', era: 'classique' },
+  { name: 'SDM',               id: 604107,    tier: 'mainstream', era: 'classique' },
+  { name: 'La Fouine',         id: 12778,     tier: 'mainstream', era: 'classique' },
+  { name: 'Lartiste',          id: 1670355,   tier: 'mainstream', era: 'classique' },
+  { name: 'Soso Maness',       id: 5594859,   tier: 'mainstream', era: 'classique' },
+  { name: "Rim\'K",           id: 256080,    tier: 'mainstream', era: 'classique' },
+  { name: 'Niro',              id: 58624,     tier: 'mainstream', era: 'classique' },
+  { name: 'Josman',            id: 7365500,   tier: 'mid',        era: 'classique' },
+  { name: 'Vald',              id: 5175734,   tier: 'mid',        era: 'classique' },
+  { name: 'Dinos',             id: 292949,    tier: 'mid',        era: 'classique' },
+  { name: 'Lomepal',           id: 5111084,   tier: 'mid',        era: 'classique' },
+  { name: 'Alpha Wann',        id: 4428187,   tier: 'mid',        era: 'classique' },
+  { name: 'Lefa',              id: 1473902,   tier: 'mid',        era: 'classique' },
+  { name: 'Kekra',             id: 8352118,   tier: 'mid',        era: 'classique' },
+  { name: 'Abou Debeing',      id: 6329070,   tier: 'mid',        era: 'classique' },
+  { name: 'Rsko',              id: 9976422,   tier: 'mid',        era: 'classique' },
+  { name: 'Timal',             id: 74463,     tier: 'mid',        era: 'classique' },
+  { name: 'Maska',             id: 4438831,   tier: 'mid',        era: 'classique' },
+  { name: 'Dosseh',            id: 158083,    tier: 'mid',        era: 'classique' },
+  { name: 'Guizmo',            id: 162815,    tier: 'mid',        era: 'classique' },
+  { name: 'Casseurs Flowters', id: 4944278,   tier: 'mid',        era: 'classique' },
+  { name: 'Georgio',           id: 183727,    tier: 'underground',era: 'classique' },
+  { name: 'Ichon',             id: 5157545,   tier: 'underground',era: 'classique' },
+  { name: 'Hologram Lo',       id: 4450096,   tier: 'underground',era: 'classique' },
+
+  // ══ OLD SCHOOL — avant 2008 ══
+  { name: 'IAM',               id: 48,        tier: 'mainstream', era: 'oldschool' },
+  { name: 'Kery James',        id: 5025,      tier: 'mainstream', era: 'oldschool' },
+  { name: 'Oxmo Puccino',      id: 7983,      tier: 'mainstream', era: 'oldschool' },
+  { name: 'Sefyu',             id: 12984,     tier: 'mainstream', era: 'oldschool' },
+  { name: 'Youssoupha',        id: 13020,     tier: 'mainstream', era: 'oldschool' },
+  { name: 'Médine',            id: 14289,     tier: 'mid',        era: 'oldschool' },
+  { name: 'Lino',              id: 6568,      tier: 'mid',        era: 'oldschool' },
+  { name: 'Akhenaton',         id: 49,        tier: 'mid',        era: 'oldschool' },
+  { name: 'Tunisiano',         id: 64085,     tier: 'mid',        era: 'oldschool' },
+  { name: 'Nessbeal',          id: 74095,     tier: 'mid',        era: 'oldschool' },
+  { name: 'Scylla',            id: 104154,    tier: 'mid',        era: 'oldschool' },
+  { name: 'Demi Portion',      id: 89172,     tier: 'mid',        era: 'oldschool' },
+  { name: "Rim\'K",           id: 256080,    tier: 'mid',        era: 'oldschool' },
+  { name: 'Disiz',             id: 292,       tier: 'mid',        era: 'oldschool' },
+  { name: 'La Fouine',         id: 12778,     tier: 'mid',        era: 'oldschool' },
 ];
 
 // ── STATE ────────────────────────────────────────────────────────────────────
 const S = {
   score: 0, streak: 0, round: 0,
-  current: null,   // { track, artist, feats[] }
+  current: null,
   answered: false, playing: false,
   featTags: [],
+  era: 'all',  // 'all' | 'actuel' | 'classique' | 'oldschool'
 };
+
+// ── ÈRE SELECTOR ─────────────────────────────────────────────────────────────
+const ERA_META = {
+  all:       { label: 'TOUS',       color: 'var(--blue)',  hh: 'RAP FRANÇAIS ◆ HIP-HOP ◆ TOUTES GÉNÉRATIONS' },
+  actuel:    { label: 'ACTUEL',     color: 'var(--green)', hh: 'TRAP ◆ DRILL ◆ AFROTRAP ◆ 2018 → 2026' },
+  classique: { label: 'CLASSIQUES', color: 'var(--blue2)', hh: 'TRAP FR ◆ CLOUD RAP ◆ STREET ◆ 2008 – 2018' },
+  oldschool: { label: 'OLD SCHOOL', color: 'var(--gold)',  hh: 'CONSCIOUS ◆ HARDCORE ◆ BOOM BAP ◆ 1990 – 2008' },
+};
+
+function setEra(era) {
+  S.era = era;
+  document.querySelectorAll('.era-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.era === era)
+  );
+  // Update hh strip text
+  const strip = document.querySelector('.hero-culture-strip');
+  if (strip) strip.textContent = ERA_META[era]?.hh || '';
+  // Update hh watermark
+  const wm = document.getElementById('hero-hh-pattern');
+  const wmTexts = { all: 'RAP', actuel: 'TRAP', classique: 'FR', oldschool: '93' };
+  if (wm) wm.textContent = wmTexts[era] || 'RAP';
+  // Load new track for this era
+  nextTrack();
+}
 const audio = document.getElementById('audio-player');
 
 // ── FEAT PARSER ──────────────────────────────────────────────────────────────
@@ -1716,24 +1839,33 @@ async function nextTrack() {
     document.getElementById(id).className = 'pts-cell';
   });
 
-  // 40% chance: pick from curated tracks, 60%: random artist
-  const useCurated = Math.random() < 0.4 && CURATED_TRACKS.length > 0;
+  // Filtre artistes par ère sélectionnée
+  const artistPool = S.era === 'all' ? ARTISTS : ARTISTS.filter(a => a.era === S.era);
+  if (!artistPool.length) { nextTrack(); return; }
+
+  // Curated tracks filtrés par ère
+  const curatedPool = S.era === 'all'
+    ? CURATED_TRACKS
+    : CURATED_TRACKS.filter(t => !t.era || t.era === S.era);
+
+  const useCurated = Math.random() < 0.35 && curatedPool.length > 0;
 
   try {
     let track, artist, feats;
 
     if (useCurated) {
-      const trackId = CURATED_TRACKS[Math.floor(Math.random() * CURATED_TRACKS.length)];
-      track = await fetchTrackById(trackId);
+      const trackId = curatedPool[Math.floor(Math.random() * curatedPool.length)];
+      const tid = typeof trackId === 'object' ? trackId.id : trackId;
+      track = await fetchTrackById(tid);
       if (!track) { nextTrack(); return; }
-      // Try to match artist from ARTISTS list, fallback to Deezer artist name
       const deezerArtistName = track.artist?.name || '';
-      artist = ARTISTS.find(a => matches(a.name, deezerArtistName))
-             || { name: deezerArtistName, id: track.artist?.id, tier: 'mainstream' };
+      artist = artistPool.find(a => matches(a.name, deezerArtistName))
+             || ARTISTS.find(a => matches(a.name, deezerArtistName))
+             || { name: deezerArtistName, id: track.artist?.id, tier: 'mainstream', era: S.era };
       feats = parseFeats(track.title);
     } else {
       const weights = { mainstream: 3, mid: 2, underground: 1 };
-      const pool = ARTISTS.flatMap(a => Array(weights[a.tier]).fill(a));
+      const pool = artistPool.flatMap(a => Array(weights[a.tier] || 1).fill(a));
       artist = pool[Math.floor(Math.random() * pool.length)];
       const tracks = await fetchTracks(artist.id);
       if (!tracks.length) { nextTrack(); return; }
@@ -1770,6 +1902,17 @@ async function nextTrack() {
     document.getElementById('tier-txt').textContent = tierTxt[artist.tier];
     const tag = document.getElementById('tier-tag');
     tag.className = 'tier-tag ' + artist.tier;
+
+    // Era badge
+    const eraBadge = document.getElementById('era-badge');
+    const eraTxtEl = document.getElementById('era-badge-txt');
+    const eraKey   = artist.era || 'classique';
+    const eraLabels = { actuel: 'ACTUEL', classique: 'CLASSIQUE', oldschool: 'OLD SCHOOL' };
+    if (eraBadge && eraKey) {
+      eraBadge.className = 'era-badge ' + eraKey;
+      if (eraTxtEl) eraTxtEl.textContent = eraLabels[eraKey] || eraKey.toUpperCase();
+      eraBadge.style.display = '';
+    }
 
     // Feat chip
     const pcFeat = document.getElementById('pc-feat');
@@ -2321,7 +2464,7 @@ async function mValidate() {
     document.getElementById('m-btn-validate').style.background = 'var(--green)';
   } else {
     document.getElementById('m-btn-validate').textContent = 'Raté';
-    document.getElementById('m-btn-validate').style.background = 'var(--red)';
+    document.getElementById('m-btn-validate').style.background = 'var(--err)';
   }
 }
 
@@ -2336,7 +2479,7 @@ function showMultiResult(ev) {
   const gained = myAns ? myAns.gained : 0;
   const max = 2 + (ev.feats || []).length;
   const vw = document.getElementById('mr-verdict-word');
-  if (gained === 0) { vw.textContent = 'RATÉ'; vw.style.color = 'var(--red)'; }
+  if (gained === 0) { vw.textContent = 'RATÉ'; vw.style.color = 'var(--err)'; }
   else if (gained === max) { vw.textContent = 'PARFAIT'; vw.style.color = 'var(--green)'; }
   else { vw.textContent = 'PAS MAL'; vw.style.color = 'var(--gold)'; }
   document.getElementById('mr-verdict-pts').textContent = `${gained} / ${max} POINTS`;
@@ -2698,7 +2841,7 @@ function stToggle() {
   stPlaying = !stPlaying;
   const btn = document.getElementById('st-play-btn');
   btn.textContent = stPlaying ? 'STOP' : 'PLAY';
-  btn.style.background = stPlaying ? 'var(--ink3)' : 'var(--red)';
+  btn.style.background = stPlaying ? 'var(--ink3)' : 'var(--blue)';
   if (stPlaying) {
     stStep = 0; stNextNote = stCtx.currentTime + 0.05;
     stSchedulerLoop();
