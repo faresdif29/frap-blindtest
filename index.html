@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FRAP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=Permanent+Marker&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 /* ── RESET & BASE ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,6 +24,8 @@
   --gold:    #d4a017;
   --ff-head: 'Bebas Neue', 'Impact', sans-serif;
   --ff-body: 'Space Grotesk', system-ui, sans-serif;
+  --ff-tag:  'Permanent Marker', cursive;
+  --ff-alt:  'Barlow Condensed', 'Impact', sans-serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -638,63 +640,228 @@ header {
 
 /* ── STUDIO ── */
 #page-studio {
-  align-items: center; justify-content: center; padding: 60px 24px;
-  background-image:
-    repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0px, rgba(255,255,255,.02) 1px, transparent 1px, transparent 56px),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.02) 0px, rgba(255,255,255,.02) 1px, transparent 1px, transparent 56px);
+  flex-direction: column;
+  padding: 0;
 }
-.studio-inner {
-  max-width: 520px; width: 100%;
-  border: 1px solid var(--line);
+
+/* Artist photo wall */
+.st-faces {
+  width: 100%; height: 140px;
+  display: flex; overflow: hidden; flex-shrink: 0;
+  border-bottom: 1px solid var(--line);
+  background: #050504;
+  position: relative;
 }
-.studio-top {
-  padding: 40px 40px 32px;
+.st-faces::before, .st-faces::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+  pointer-events: none;
+}
+.st-faces::before { left: 0; background: linear-gradient(to right, var(--paper), transparent); }
+.st-faces::after  { right: 0; background: linear-gradient(to left, var(--paper), transparent); }
+.st-face-item {
+  flex-shrink: 0; width: 140px; height: 140px; overflow: hidden;
+  position: relative;
+}
+.st-face-item img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: grayscale(100%) contrast(1.3) brightness(0.65);
+  transition: filter .35s ease;
+}
+.st-face-item:hover img { filter: grayscale(0%) contrast(1.1) brightness(.9); }
+.st-face-item .st-face-name {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 4px 8px;
+  font-family: var(--ff-alt); font-size: .65rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(242,237,232,0); transition: color .2s;
+  background: linear-gradient(transparent, rgba(0,0,0,.7));
+}
+.st-face-item:hover .st-face-name { color: var(--ink); }
+
+/* Studio workstation */
+.st-work {
+  flex: 1; display: flex; flex-direction: column;
+  overflow-y: auto; padding: 0;
+}
+
+/* Studio header bar */
+.st-header {
+  display: flex; align-items: stretch; flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  gap: 0;
+}
+.st-title-block {
+  padding: 20px 28px; border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; justify-content: center; gap: 2px;
+}
+.st-eyebrow {
+  font-family: var(--ff-tag); font-size: .85rem;
+  color: var(--red); transform: rotate(-1.5deg); display: inline-block;
+  margin-bottom: 2px;
+}
+.st-title-word {
+  font-family: var(--ff-head); font-size: 3.5rem;
+  letter-spacing: 6px; line-height: .9; color: var(--ink);
+  text-shadow: 3px 3px 0 rgba(232,50,26,.25);
+}
+.st-title-word .acc { color: var(--red); }
+
+/* Transport controls */
+.st-transport {
+  flex: 1; display: flex; align-items: center; flex-wrap: wrap;
+  gap: 0; padding: 0;
+}
+.st-tgroup {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-right: 1px solid var(--line);
+  height: 100%;
+}
+.st-tgroup label {
+  font-size: .58rem; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--ink3); white-space: nowrap;
+}
+.st-tgroup input[type=range] { accent-color: var(--red); }
+.st-bpm-num {
+  width: 48px; padding: 4px 6px; text-align: center;
+  background: var(--card2); border: 1px solid var(--line);
+  color: var(--ink); font-family: var(--ff-head); font-size: 1.4rem;
+  letter-spacing: 1px; outline: none;
+}
+.st-bpm-num:focus { border-color: var(--red); }
+.st-bpm-range { width: 72px; }
+.st-swing-range { width: 80px; }
+.st-val-txt {
+  font-family: var(--ff-head); font-size: 1.1rem; letter-spacing: 1px;
+  color: var(--ink2); min-width: 32px;
+}
+
+.st-btn-play {
+  height: 100%; padding: 0 28px; min-height: 52px;
+  background: var(--red); border: none; color: #fff;
+  font-family: var(--ff-head); font-size: 1.2rem; letter-spacing: 4px;
+  cursor: pointer; transition: background .15s;
+  border-left: 1px solid var(--line);
+}
+.st-btn-play:hover { background: var(--red2); }
+.st-btn-tap {
+  height: 100%; padding: 0 16px; min-height: 52px;
+  background: transparent; border: none; border-left: 1px solid var(--line);
+  color: var(--ink3); font-family: var(--ff-body); font-size: .7rem;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; transition: color .15s;
+}
+.st-btn-tap:hover { color: var(--ink); }
+.st-btn-clear {
+  height: 100%; padding: 0 16px; min-height: 52px;
+  background: transparent; border: none; border-left: 1px solid var(--line);
+  color: var(--ink3); font-family: var(--ff-body); font-size: .7rem;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; transition: color .15s;
+}
+.st-btn-clear:hover { color: var(--red); }
+
+/* Toolbar: steps + presets + saves */
+.st-toolbar {
+  display: flex; align-items: stretch; flex-wrap: wrap;
+  border-bottom: 1px solid var(--line); background: var(--card);
+}
+.st-toolbar-group {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-right: 1px solid var(--line);
+}
+.st-toolbar-label {
+  font-size: .55rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink3); margin-right: 4px;
+}
+.st-chip {
+  padding: 4px 12px; border: 1px solid var(--line);
+  background: transparent; color: var(--ink3);
+  font-family: var(--ff-body); font-size: .7rem;
+  font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  cursor: pointer; transition: all .15s;
+}
+.st-chip:hover { border-color: var(--ink2); color: var(--ink); }
+.st-chip.active { background: var(--red); border-color: var(--red); color: #fff; }
+.st-chip.preset { border-color: rgba(232,50,26,.25); color: var(--ink3); }
+.st-chip.preset:hover { border-color: var(--red); color: var(--red); }
+.st-chip.save-chip { border-color: rgba(212,160,23,.2); color: var(--ink3); }
+.st-chip.save-chip:hover { border-color: var(--gold); color: var(--gold); }
+.st-chip.save-chip.has-data { border-color: rgba(212,160,23,.5); color: var(--gold); }
+
+/* Sequencer grid */
+.st-grid {
+  flex: 1; border-bottom: 1px solid var(--line);
+}
+.st-track-row {
+  display: flex; align-items: stretch;
   border-bottom: 1px solid var(--line);
 }
-.studio-eyebrow {
-  font-size: .6rem; font-weight: 700; letter-spacing: 3px;
-  text-transform: uppercase; color: var(--ink3); margin-bottom: 16px;
-  display: flex; align-items: center; gap: 10px;
+.st-track-row:last-child { border-bottom: none; }
+.st-track-info {
+  width: 160px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 0;
+  border-right: 1px solid var(--line);
 }
-.studio-eyebrow::before {
-  content: ''; display: inline-block;
-  width: 20px; height: 1px; background: var(--red);
+.st-track-name {
+  flex: 1; padding: 0 12px;
+  font-family: var(--ff-alt); font-size: .72rem; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
 }
-.studio-name {
-  font-family: var(--ff-head);
-  font-size: 4.5rem; letter-spacing: 6px; line-height: .85;
-  color: var(--ink);
-}
-.studio-name .accent { color: var(--red); }
-.studio-bottom {
-  padding: 24px 40px;
-  display: flex; flex-direction: column; gap: 20px;
-}
-.studio-desc {
-  font-size: .88rem; color: var(--ink3); line-height: 1.8;
-}
-.studio-features {
-  display: flex; flex-direction: column; gap: 0;
-}
-.studio-feat-row {
-  display: flex; align-items: center; gap: 16px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: .82rem; font-weight: 600; color: var(--ink2);
-  letter-spacing: .5px;
-}
-.studio-feat-row:last-child { border-bottom: none; }
-.studio-feat-row .feat-icon {
-  width: 28px; height: 28px; background: var(--card2);
-  border: 1px solid var(--line);
+.st-track-btn {
+  width: 28px; height: 100%; min-height: 48px;
+  border: none; border-left: 1px solid var(--line);
+  background: transparent; cursor: pointer;
+  font-family: var(--ff-body); font-size: .6rem; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  transition: background .15s, color .15s;
   display: flex; align-items: center; justify-content: center;
-  font-size: .7rem; flex-shrink: 0; color: var(--ink3);
-  font-family: var(--ff-head); letter-spacing: 1px;
 }
-.studio-feat-row .feat-soon {
-  margin-left: auto; font-size: .6rem; font-weight: 700;
-  letter-spacing: 2px; text-transform: uppercase; color: var(--red);
-  border: 1px solid rgba(232,50,26,.3); padding: 2px 8px;
+.st-track-btn.mute { color: var(--ink3); }
+.st-track-btn.mute:hover, .st-track-btn.mute.active { background: var(--red); color: #fff; }
+.st-track-btn.solo { color: var(--ink3); }
+.st-track-btn.solo:hover, .st-track-btn.solo.active { background: var(--gold); color: var(--paper); }
+.st-track-vol {
+  width: 36px; display: flex; align-items: center; justify-content: center;
+  border-left: 1px solid var(--line); padding: 0 4px;
+}
+.st-track-vol input[type=range] {
+  writing-mode: vertical-lr; direction: rtl;
+  width: 28px; height: 36px; accent-color: currentColor;
+}
+
+.st-steps {
+  flex: 1; display: flex; align-items: stretch;
+}
+.st-step {
+  flex: 1; min-height: 48px; border-right: 1px solid rgba(255,255,255,.04);
+  cursor: pointer; transition: background .08s; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.st-step:last-child { border-right: none; }
+.st-step.beat-start { border-left: 1px solid var(--line); }
+.st-step.active-step::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(255,255,255,.12); pointer-events: none;
+}
+
+/* FX strip */
+.st-fx {
+  display: flex; align-items: center; flex-wrap: wrap;
+  border-top: 1px solid var(--line); gap: 0;
+}
+.st-fx-group {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-right: 1px solid var(--line);
+}
+.st-fx-group label {
+  font-size: .58rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink3); white-space: nowrap;
+}
+.st-fx-group input[type=range] { width: 90px; accent-color: var(--red); }
+.st-fx-note {
+  margin-left: auto; padding: 10px 20px;
+  font-family: var(--ff-tag); font-size: .9rem; color: var(--ink3);
+  opacity: .5;
 }
 
 /* Misc */
@@ -1038,45 +1205,86 @@ header {
 
 <!-- ── STUDIO ── -->
 <div id="page-studio" class="page">
-  <div style="width:100%;max-width:900px;margin:0 auto;padding:28px 16px;display:flex;flex-direction:column;gap:0;">
 
-    <!-- Header -->
-    <div style="border:1px solid var(--line);padding:24px 32px;border-bottom:none;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div>
-        <div style="font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;">Beatmaker</div>
-        <div style="font-family:var(--ff-head);font-size:3rem;letter-spacing:5px;line-height:1;">STU<span style="color:var(--red);">DIO</span></div>
+  <!-- Artist photo wall -->
+  <div class="st-faces" id="st-faces">
+    <!-- Injected by JS -->
+  </div>
+
+  <div class="st-work">
+
+    <!-- Header + transport -->
+    <div class="st-header">
+      <div class="st-title-block">
+        <div class="st-eyebrow">// beatmaker</div>
+        <div class="st-title-word">STU<span class="acc">DIO</span></div>
       </div>
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);">BPM</span>
-          <input type="range" id="st-bpm" min="60" max="180" value="90"
-            style="width:100px;accent-color:var(--red);" oninput="stBpmChange()">
-          <span id="st-bpm-val" style="font-family:var(--ff-head);font-size:1.3rem;letter-spacing:1px;min-width:36px;">90</span>
+      <div class="st-transport">
+        <div class="st-tgroup">
+          <label>BPM</label>
+          <input type="number" id="st-bpm-num" class="st-bpm-num" min="60" max="200" value="90"
+            oninput="stBpmNumChange()">
+          <input type="range" id="st-bpm" class="st-bpm-range" min="60" max="200" value="90"
+            oninput="stBpmChange()">
         </div>
-        <button id="st-play-btn" onclick="stToggle()"
-          style="height:44px;padding:0 24px;background:var(--red);border:none;color:#fff;font-family:var(--ff-head);font-size:1rem;letter-spacing:3px;cursor:pointer;">
-          PLAY
-        </button>
-        <button onclick="stClear()"
-          style="height:44px;padding:0 16px;background:transparent;border:1px solid var(--line);color:var(--ink3);font-family:var(--ff-body);font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">
-          Clear
-        </button>
+        <button class="st-btn-tap" onclick="stTap()">TAP</button>
+        <div class="st-tgroup">
+          <label>SWING</label>
+          <input type="range" id="st-swing" class="st-swing-range" min="0" max="80" value="0"
+            oninput="stSwingChange()">
+          <span class="st-val-txt" id="st-swing-val">0%</span>
+        </div>
+        <button id="st-play-btn" class="st-btn-play" onclick="stToggle()">PLAY</button>
+        <button class="st-btn-clear" onclick="stClear()">CLEAR</button>
+      </div>
+    </div>
+
+    <!-- Toolbar: steps toggle + presets + saves -->
+    <div class="st-toolbar">
+      <div class="st-toolbar-group">
+        <span class="st-toolbar-label">STEPS</span>
+        <button class="st-chip active" id="st-steps-16" onclick="stSetSteps(16)">16</button>
+        <button class="st-chip" id="st-steps-32" onclick="stSetSteps(32)">32</button>
+      </div>
+      <div class="st-toolbar-group">
+        <span class="st-toolbar-label">PRESET</span>
+        <button class="st-chip preset" onclick="stLoadPreset('trap')">TRAP</button>
+        <button class="st-chip preset" onclick="stLoadPreset('boombap')">BOOM BAP</button>
+        <button class="st-chip preset" onclick="stLoadPreset('drill')">DRILL</button>
+        <button class="st-chip preset" onclick="stLoadPreset('afrotrap')">AFROTRAP</button>
+      </div>
+      <div class="st-toolbar-group">
+        <span class="st-toolbar-label">SAVE</span>
+        <button class="st-chip save-chip" id="st-save-1" onclick="stSave(1)">1</button>
+        <button class="st-chip save-chip" id="st-save-2" onclick="stSave(2)">2</button>
+        <button class="st-chip save-chip" id="st-save-3" onclick="stSave(3)">3</button>
+        <span class="st-toolbar-label" style="margin-left:8px;">LOAD</span>
+        <button class="st-chip save-chip" id="st-load-1" onclick="stLoad(1)">1</button>
+        <button class="st-chip save-chip" id="st-load-2" onclick="stLoad(2)">2</button>
+        <button class="st-chip save-chip" id="st-load-3" onclick="stLoad(3)">3</button>
       </div>
     </div>
 
     <!-- Sequencer grid -->
-    <div style="border:1px solid var(--line);" id="st-grid">
-      <!-- Injected by JS -->
-    </div>
+    <div id="st-grid"><!-- Injected by JS --></div>
 
-    <!-- FX row -->
-    <div style="border:1px solid var(--line);border-top:none;padding:16px 20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
-      <span style="font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);">Volume</span>
-      <input type="range" id="st-vol" min="0" max="1" step=".05" value=".8"
-        style="width:120px;accent-color:var(--red);" oninput="stVolChange()">
-      <span style="font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-left:auto;">
-        Web Audio API — Sons synthétisés
-      </span>
+    <!-- FX strip -->
+    <div class="st-fx">
+      <div class="st-fx-group">
+        <label>MASTER VOL</label>
+        <input type="range" id="st-vol" min="0" max="1" step=".05" value=".8" oninput="stVolChange()">
+      </div>
+      <div class="st-fx-group">
+        <label>REVERB</label>
+        <input type="range" id="st-reverb" min="0" max="1" step=".05" value="0" oninput="stReverbChange()">
+        <span class="st-val-txt" id="st-reverb-val">0%</span>
+      </div>
+      <div class="st-fx-group">
+        <label>DELAY</label>
+        <input type="range" id="st-delay" min="0" max="0.85" step=".05" value="0" oninput="stDelayChange()">
+        <span class="st-val-txt" id="st-delay-val">0%</span>
+      </div>
+      <div class="st-fx-note">// web audio api</div>
     </div>
 
   </div>
@@ -2046,68 +2254,282 @@ function mOnFeatKey(e) { onMFeatKey(e); }
 // ── STUDIO BEATMAKER ─────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════
 let stCtx = null, stScheduler = null, stNextNote = 0, stStep = 0;
-let stBpm = 90, stVol = 0.8, stPlaying = false;
-const ST_STEPS = 16;
-const ST_TRACKS = [
-  { name: 'KICK',  color: '#e8321a', fn: stKick  },
-  { name: 'SNARE', color: '#d4a017', fn: stSnare },
-  { name: 'HI-HAT',color: '#8b5cf6', fn: stHat   },
-  { name: 'CLAP',  color: '#2ec27e', fn: stClap  },
-  { name: 'OPEN HAT', color: '#06b6d4', fn: stOpenHat },
-  { name: 'PERC',  color: '#f59e0b', fn: stPerc  },
-];
-let stPattern = ST_TRACKS.map(() => Array(ST_STEPS).fill(false));
-let stInited = false;
+let stBpm = 90, stVol = 0.8, stPlaying = false, stSwing = 0;
+let stReverbNode = null, stReverbGain = null, stDelayNode = null, stDelayGain = null, stDelayFb = null;
+let stStepCount = 16, stInited = false;
 
+const ST_TRACKS = [
+  { name: 'KICK',     color: '#e8321a', fn: () => stKick    },
+  { name: 'SNARE',    color: '#d4a017', fn: () => stSnare   },
+  { name: 'HI-HAT',  color: '#8b5cf6', fn: () => stHat     },
+  { name: 'CLAP',    color: '#2ec27e', fn: () => stClap    },
+  { name: 'OPEN HAT',color: '#06b6d4', fn: () => stOpenHat },
+  { name: '808',      color: '#ff6b35', fn: () => st808     },
+  { name: 'PERC',    color: '#f59e0b', fn: () => stPerc    },
+  { name: 'SHAKER',  color: '#a78bfa', fn: () => stShaker  },
+];
+
+let stPattern = ST_TRACKS.map(() => Array(32).fill(false));
+let stMuted   = ST_TRACKS.map(() => false);
+let stSoloed  = ST_TRACKS.map(() => false);
+let stTrackVol = ST_TRACKS.map(() => 1.0);
+
+const ST_PRESETS = {
+  trap: {
+    bpm: 140, swing: 0,
+    steps: [
+      [1,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0],
+      [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    ]
+  },
+  boombap: {
+    bpm: 90, swing: 55,
+    steps: [
+      [1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0],
+      [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+      [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      [0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    ]
+  },
+  drill: {
+    bpm: 145, swing: 10,
+    steps: [
+      [1,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0],
+      [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+      [1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+      [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
+    ]
+  },
+  afrotrap: {
+    bpm: 115, swing: 25,
+    steps: [
+      [1,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0],
+      [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      [1,0,1,1,0,1,0,1,1,0,1,0,1,1,0,1],
+      [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0],
+      [0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0],
+      [0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],
+    ]
+  },
+};
+
+// ── TAP TEMPO ────────────────────────────────────────────────────────────────
+const stTapTimes = [];
+function stTap() {
+  const now = Date.now();
+  stTapTimes.push(now);
+  if (stTapTimes.length > 4) stTapTimes.shift();
+  if (stTapTimes.length >= 2) {
+    const avg = (stTapTimes[stTapTimes.length-1] - stTapTimes[0]) / (stTapTimes.length - 1);
+    stBpm = Math.max(60, Math.min(200, Math.round(60000 / avg)));
+    document.getElementById('st-bpm').value = stBpm;
+    document.getElementById('st-bpm-num').value = stBpm;
+  }
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
 function stInit() {
   if (stInited) return;
   stInited = true;
-  const grid = document.getElementById('st-grid');
-  grid.innerHTML = ST_TRACKS.map((t, ti) => `
-    <div style="display:flex;align-items:center;border-bottom:1px solid var(--line);">
-      <div style="width:80px;flex-shrink:0;padding:0 16px;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${t.color};border-right:1px solid var(--line);height:52px;display:flex;align-items:center;">
-        ${t.name}
-      </div>
-      ${Array.from({length:ST_STEPS},(_,si) => `
-        <div class="st-btn" data-t="${ti}" data-s="${si}"
-          onclick="stToggleStep(${ti},${si})"
-          style="flex:1;height:52px;border-right:1px solid var(--line);cursor:pointer;
-                 background:${si%4===0?'rgba(255,255,255,.03)':'transparent'};
-                 transition:background .1s;
-                 ${si===ST_STEPS-1?'border-right:none;':''}">
-        </div>
-      `).join('')}
-    </div>
-  `).join('');
+  stRenderGrid();
+  stRefreshSaveButtons();
+  stLoadArtistFaces();
 }
 
+function stRenderGrid() {
+  const anySolo = stSoloed.some(Boolean);
+  const grid = document.getElementById('st-grid');
+  grid.innerHTML = ST_TRACKS.map((t, ti) => {
+    const isMuted  = stMuted[ti];
+    const isSoloed = stSoloed[ti];
+    const silenced = anySolo && !isSoloed;
+    return `
+    <div class="st-track-row" id="st-row-${ti}">
+      <div class="st-track-info">
+        <div class="st-track-name" style="color:${silenced||isMuted?'var(--ink3)':t.color}">${t.name}</div>
+        <button class="st-track-btn mute ${isMuted?'active':''}" onclick="stToggleMute(${ti})" title="Mute">M</button>
+        <button class="st-track-btn solo ${isSoloed?'active':''}" onclick="stToggleSolo(${ti})" title="Solo">S</button>
+        <div class="st-track-vol">
+          <input type="range" orient="vertical" min="0" max="1" step=".1" value="${stTrackVol[ti]}"
+            style="accent-color:${t.color}" oninput="stTrackVolChange(${ti},this.value)">
+        </div>
+      </div>
+      <div class="st-steps" id="st-steps-${ti}">
+        ${Array.from({length:stStepCount},(_,si) => `
+          <div class="st-step${si%4===0?' beat-start':''}" data-t="${ti}" data-s="${si}"
+            onclick="stToggleStep(${ti},${si})"
+            style="background:${stPattern[ti][si]?(silenced||isMuted?'rgba('+hexToRgb(t.color)+',.35)':t.color):(si%4===0?'rgba(255,255,255,.03)':'transparent')}">
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+function stToggleMute(ti) {
+  stMuted[ti] = !stMuted[ti];
+  stRenderGrid();
+}
+function stToggleSolo(ti) {
+  stSoloed[ti] = !stSoloed[ti];
+  stRenderGrid();
+}
+function stTrackVolChange(ti, val) {
+  stTrackVol[ti] = parseFloat(val);
+}
+
+// ── STEP TOGGLE ───────────────────────────────────────────────────────────────
 function stToggleStep(ti, si) {
   stPattern[ti][si] = !stPattern[ti][si];
-  const btn = document.querySelector(`.st-btn[data-t="${ti}"][data-s="${si}"]`);
-  if (btn) btn.style.background = stPattern[ti][si]
-    ? ST_TRACKS[ti].color
-    : (si%4===0?'rgba(255,255,255,.03)':'transparent');
+  const el = document.querySelector(`.st-step[data-t="${ti}"][data-s="${si}"]`);
+  if (!el) return;
+  const anySolo = stSoloed.some(Boolean);
+  const silenced = (stMuted[ti]) || (anySolo && !stSoloed[ti]);
+  const col = ST_TRACKS[ti].color;
+  el.style.background = stPattern[ti][si]
+    ? (silenced ? `rgba(${hexToRgb(col)},.35)` : col)
+    : (si%4===0 ? 'rgba(255,255,255,.03)' : 'transparent');
 }
 
+// ── BPM / SWING / VOL ────────────────────────────────────────────────────────
 function stBpmChange() {
   stBpm = parseInt(document.getElementById('st-bpm').value);
-  document.getElementById('st-bpm-val').textContent = stBpm;
+  document.getElementById('st-bpm-num').value = stBpm;
+}
+function stBpmNumChange() {
+  stBpm = Math.max(60, Math.min(200, parseInt(document.getElementById('st-bpm-num').value)||90));
+  document.getElementById('st-bpm').value = stBpm;
+}
+function stSwingChange() {
+  stSwing = parseInt(document.getElementById('st-swing').value);
+  document.getElementById('st-swing-val').textContent = stSwing + '%';
 }
 function stVolChange() {
   stVol = parseFloat(document.getElementById('st-vol').value);
 }
+function stReverbChange() {
+  const v = parseFloat(document.getElementById('st-reverb').value);
+  document.getElementById('st-reverb-val').textContent = Math.round(v*100)+'%';
+  if (stReverbGain) stReverbGain.gain.value = v;
+}
+function stDelayChange() {
+  const v = parseFloat(document.getElementById('st-delay').value);
+  document.getElementById('st-delay-val').textContent = Math.round(v*100)+'%';
+  if (stDelayGain) stDelayGain.gain.value = v;
+}
 
+// ── STEPS TOGGLE ─────────────────────────────────────────────────────────────
+function stSetSteps(n) {
+  stStepCount = n;
+  document.getElementById('st-steps-16').classList.toggle('active', n===16);
+  document.getElementById('st-steps-32').classList.toggle('active', n===32);
+  stRenderGrid();
+}
+
+// ── PRESETS ───────────────────────────────────────────────────────────────────
+function stLoadPreset(name) {
+  const p = ST_PRESETS[name];
+  if (!p) return;
+  stBpm = p.bpm;
+  stSwing = p.swing;
+  document.getElementById('st-bpm').value = stBpm;
+  document.getElementById('st-bpm-num').value = stBpm;
+  document.getElementById('st-swing').value = stSwing;
+  document.getElementById('st-swing-val').textContent = stSwing + '%';
+  stPattern = ST_TRACKS.map((_,ti) => {
+    const row = p.steps[ti] || [];
+    return Array.from({length:32}, (_,si) => !!(row[si % row.length]));
+  });
+  stSetSteps(16);
+}
+
+// ── SAVE / LOAD ───────────────────────────────────────────────────────────────
+function stSave(slot) {
+  const data = { bpm: stBpm, swing: stSwing, steps: stStepCount, pattern: stPattern };
+  localStorage.setItem(`frap_studio_${slot}`, JSON.stringify(data));
+  stRefreshSaveButtons();
+}
+function stLoad(slot) {
+  try {
+    const data = JSON.parse(localStorage.getItem(`frap_studio_${slot}`));
+    if (!data) return;
+    stBpm = data.bpm || 90;
+    stSwing = data.swing || 0;
+    stPattern = data.pattern || ST_TRACKS.map(() => Array(32).fill(false));
+    document.getElementById('st-bpm').value = stBpm;
+    document.getElementById('st-bpm-num').value = stBpm;
+    document.getElementById('st-swing').value = stSwing;
+    document.getElementById('st-swing-val').textContent = stSwing + '%';
+    stSetSteps(data.steps || 16);
+  } catch(e) {}
+}
+function stRefreshSaveButtons() {
+  [1,2,3].forEach(i => {
+    const has = !!localStorage.getItem(`frap_studio_${i}`);
+    document.getElementById(`st-load-${i}`)?.classList.toggle('has-data', has);
+    document.getElementById(`st-save-${i}`)?.classList.toggle('has-data', has);
+  });
+}
+
+// ── AUDIO CONTEXT + FX ───────────────────────────────────────────────────────
+function stInitCtx() {
+  if (stCtx) return;
+  stCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Reverb
+  const len = stCtx.sampleRate * 2.5;
+  const ir = stCtx.createBuffer(2, len, stCtx.sampleRate);
+  for (let c = 0; c < 2; c++) {
+    const d = ir.getChannelData(c);
+    for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 2.5);
+  }
+  stReverbNode = stCtx.createConvolver();
+  stReverbNode.buffer = ir;
+  stReverbGain = stCtx.createGain(); stReverbGain.gain.value = 0;
+  stReverbNode.connect(stReverbGain); stReverbGain.connect(stCtx.destination);
+
+  // Delay
+  stDelayNode = stCtx.createDelay(1.0);
+  stDelayFb   = stCtx.createGain(); stDelayFb.gain.value = 0.35;
+  stDelayGain = stCtx.createGain(); stDelayGain.gain.value = 0;
+  stDelayNode.connect(stDelayFb); stDelayFb.connect(stDelayNode);
+  stDelayNode.connect(stDelayGain); stDelayGain.connect(stCtx.destination);
+}
+
+// ── PLAY / STOP ───────────────────────────────────────────────────────────────
 function stToggle() {
-  if (!stCtx) stCtx = new (window.AudioContext || window.webkitAudioContext)();
+  stInitCtx();
   stPlaying = !stPlaying;
-  document.getElementById('st-play-btn').textContent = stPlaying ? 'STOP' : 'PLAY';
-  document.getElementById('st-play-btn').style.background = stPlaying ? '#333' : 'var(--red)';
+  const btn = document.getElementById('st-play-btn');
+  btn.textContent = stPlaying ? 'STOP' : 'PLAY';
+  btn.style.background = stPlaying ? 'var(--ink3)' : 'var(--red)';
   if (stPlaying) {
-    stStep = 0; stNextNote = stCtx.currentTime;
+    stStep = 0; stNextNote = stCtx.currentTime + 0.05;
     stSchedulerLoop();
   } else {
     clearTimeout(stScheduler);
-    document.querySelectorAll('.st-btn').forEach(b => b.style.outline = '');
+    document.querySelectorAll('.st-step').forEach(b => b.classList.remove('active-step'));
   }
 }
 
@@ -2116,125 +2538,187 @@ function stSchedulerLoop() {
   const lookahead = 0.1, scheduleAhead = 0.15;
   while (stNextNote < stCtx.currentTime + scheduleAhead) {
     stScheduleStep(stStep, stNextNote);
-    stNextNote += (60 / stBpm) / 4;
-    stStep = (stStep + 1) % ST_STEPS;
+    const stepDur = (60 / stBpm) / 4;
+    const swingOffset = (stStep % 2 === 1) ? stepDur * (stSwing / 100) * 0.5 : 0;
+    stNextNote += stepDur + swingOffset;
+    stStep = (stStep + 1) % stStepCount;
   }
   stScheduler = setTimeout(stSchedulerLoop, lookahead * 1000);
 }
 
 function stScheduleStep(step, when) {
-  // Visual highlight
   requestAnimationFrame(() => {
-    document.querySelectorAll('.st-btn').forEach(b => b.style.outline = '');
-    document.querySelectorAll(`.st-btn[data-s="${step}"]`).forEach(b =>
-      b.style.outline = '2px solid rgba(255,255,255,.25)');
+    document.querySelectorAll('.st-step').forEach(b => b.classList.remove('active-step'));
+    document.querySelectorAll(`.st-step[data-s="${step}"]`).forEach(b => b.classList.add('active-step'));
   });
+  const anySolo = stSoloed.some(Boolean);
   ST_TRACKS.forEach((t, ti) => {
-    if (stPattern[ti][step]) t.fn(when);
+    if (!stPattern[ti][step]) return;
+    if (stMuted[ti]) return;
+    if (anySolo && !stSoloed[ti]) return;
+    stDelayNode && (stDelayNode.delayTime.value = (60/stBpm)/2);
+    t.fn()(when, stTrackVol[ti]);
   });
 }
 
-// Sound synthesis
-function stGain(vol=1) {
+// ── SOUND SYNTHESIS ───────────────────────────────────────────────────────────
+function stOut(node, vol=1) {
   const g = stCtx.createGain();
   g.gain.value = stVol * vol;
   g.connect(stCtx.destination);
+  if (stReverbGain) { g.connect(stReverbNode); }
+  if (stDelayGain) { g.connect(stDelayNode); }
   return g;
 }
 
-function stKick(when) {
+function stKick(when, tv=1) {
   const osc = stCtx.createOscillator();
-  const g = stGain(.9);
+  const g = stOut(.95 * tv);
   osc.connect(g);
-  osc.frequency.setValueAtTime(150, when);
-  osc.frequency.exponentialRampToValueAtTime(0.01, when + 0.4);
-  g.gain.setValueAtTime(1, when);
-  g.gain.exponentialRampToValueAtTime(0.01, when + 0.4);
+  osc.frequency.setValueAtTime(160, when);
+  osc.frequency.exponentialRampToValueAtTime(0.01, when + 0.45);
+  g.gain.setValueAtTime(1.2, when);
+  g.gain.exponentialRampToValueAtTime(0.001, when + 0.45);
   osc.start(when); osc.stop(when + 0.5);
+
+  const click = stCtx.createOscillator();
+  const cg = stOut(.5 * tv);
+  click.frequency.value = 2400;
+  click.connect(cg);
+  cg.gain.setValueAtTime(1, when);
+  cg.gain.exponentialRampToValueAtTime(0.001, when + 0.012);
+  click.start(when); click.stop(when + 0.015);
 }
 
-function stSnare(when) {
+function stSnare(when, tv=1) {
   const buf = stCtx.createBuffer(1, stCtx.sampleRate * 0.2, stCtx.sampleRate);
-  const data = buf.getChannelData(0);
-  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-  const src = stCtx.createBufferSource();
-  src.buffer = buf;
-  const filt = stCtx.createBiquadFilter();
-  filt.type = 'highpass'; filt.frequency.value = 1000;
-  const g = stGain(.5);
-  src.connect(filt); filt.connect(g);
-  g.gain.setValueAtTime(1, when);
-  g.gain.exponentialRampToValueAtTime(0.01, when + 0.18);
-  src.start(when); src.stop(when + 0.2);
-
+  const d = buf.getChannelData(0);
+  for (let i=0;i<d.length;i++) d[i] = Math.random()*2-1;
+  const src = stCtx.createBufferSource(); src.buffer = buf;
+  const hp = stCtx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=900;
+  const g = stOut(.55 * tv);
+  src.connect(hp); hp.connect(g);
+  g.gain.setValueAtTime(1.1, when);
+  g.gain.exponentialRampToValueAtTime(0.001, when+0.2);
+  src.start(when); src.stop(when+0.22);
+  // tone body
   const osc = stCtx.createOscillator();
-  const g2 = stGain(.3);
+  const g2 = stOut(.28 * tv);
+  osc.frequency.value = 185;
   osc.connect(g2);
-  osc.frequency.value = 200;
-  g2.gain.setValueAtTime(1, when);
-  g2.gain.exponentialRampToValueAtTime(0.01, when + 0.1);
-  osc.start(when); osc.stop(when + 0.15);
+  g2.gain.setValueAtTime(1,when); g2.gain.exponentialRampToValueAtTime(0.001,when+0.08);
+  osc.start(when); osc.stop(when+0.1);
 }
 
-function stHat(when) {
-  const buf = stCtx.createBuffer(1, stCtx.sampleRate * 0.05, stCtx.sampleRate);
-  const data = buf.getChannelData(0);
-  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-  const src = stCtx.createBufferSource(); src.buffer = buf;
-  const filt = stCtx.createBiquadFilter(); filt.type = 'highpass'; filt.frequency.value = 8000;
-  const g = stGain(.3);
-  src.connect(filt); filt.connect(g);
-  g.gain.setValueAtTime(1, when);
-  g.gain.exponentialRampToValueAtTime(0.01, when + 0.05);
-  src.start(when); src.stop(when + 0.06);
+function stHat(when, tv=1) {
+  const buf = stCtx.createBuffer(1, stCtx.sampleRate*0.05, stCtx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  const src = stCtx.createBufferSource(); src.buffer=buf;
+  const hp = stCtx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=9000;
+  const g = stOut(.28 * tv);
+  src.connect(hp); hp.connect(g);
+  g.gain.setValueAtTime(1,when); g.gain.exponentialRampToValueAtTime(0.001,when+0.05);
+  src.start(when); src.stop(when+0.06);
 }
 
-function stOpenHat(when) {
-  const buf = stCtx.createBuffer(1, stCtx.sampleRate * 0.2, stCtx.sampleRate);
-  const data = buf.getChannelData(0);
-  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-  const src = stCtx.createBufferSource(); src.buffer = buf;
-  const filt = stCtx.createBiquadFilter(); filt.type = 'highpass'; filt.frequency.value = 7000;
-  const g = stGain(.25);
-  src.connect(filt); filt.connect(g);
-  g.gain.setValueAtTime(1, when);
-  g.gain.exponentialRampToValueAtTime(0.01, when + 0.18);
-  src.start(when); src.stop(when + 0.2);
-}
-
-function stClap(when) {
-  [0, 0.01, 0.02].forEach(offset => {
-    const buf = stCtx.createBuffer(1, stCtx.sampleRate * 0.1, stCtx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-    const src = stCtx.createBufferSource(); src.buffer = buf;
-    const filt = stCtx.createBiquadFilter(); filt.type = 'bandpass'; filt.frequency.value = 1200; filt.Q.value = 0.5;
-    const g = stGain(.35);
-    src.connect(filt); filt.connect(g);
-    g.gain.setValueAtTime(1, when+offset);
-    g.gain.exponentialRampToValueAtTime(0.01, when+offset+0.1);
-    src.start(when+offset); src.stop(when+offset+0.15);
+function stClap(when, tv=1) {
+  [0,.008,.016].forEach(off => {
+    const buf=stCtx.createBuffer(1,stCtx.sampleRate*0.12,stCtx.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    const src=stCtx.createBufferSource(); src.buffer=buf;
+    const bp=stCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1100; bp.Q.value=0.6;
+    const g=stOut(.38 * tv);
+    src.connect(bp); bp.connect(g);
+    g.gain.setValueAtTime(1,when+off); g.gain.exponentialRampToValueAtTime(0.001,when+off+0.12);
+    src.start(when+off); src.stop(when+off+0.14);
   });
 }
 
-function stPerc(when) {
-  const osc = stCtx.createOscillator();
-  const g = stGain(.4);
-  osc.type = 'triangle';
+function stOpenHat(when, tv=1) {
+  const buf=stCtx.createBuffer(1,stCtx.sampleRate*0.25,stCtx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  const src=stCtx.createBufferSource(); src.buffer=buf;
+  const hp=stCtx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=7500;
+  const g=stOut(.22 * tv);
+  src.connect(hp); hp.connect(g);
+  g.gain.setValueAtTime(1,when); g.gain.exponentialRampToValueAtTime(0.001,when+0.22);
+  src.start(when); src.stop(when+0.25);
+}
+
+function st808(when, tv=1) {
+  const osc=stCtx.createOscillator();
+  osc.type='sine';
+  const g=stOut(1.1 * tv);
   osc.connect(g);
-  osc.frequency.setValueAtTime(400, when);
-  osc.frequency.exponentialRampToValueAtTime(80, when + 0.15);
-  g.gain.setValueAtTime(1, when);
-  g.gain.exponentialRampToValueAtTime(0.01, when + 0.15);
-  osc.start(when); osc.stop(when + 0.2);
+  osc.frequency.setValueAtTime(58,when);
+  osc.frequency.exponentialRampToValueAtTime(38,when+0.9);
+  g.gain.setValueAtTime(1.4,when);
+  g.gain.exponentialRampToValueAtTime(0.001,when+1.1);
+  osc.start(when); osc.stop(when+1.2);
+  // slight distortion click
+  const osc2=stCtx.createOscillator(); osc2.type='square';
+  const g2=stOut(.1 * tv);
+  osc2.frequency.value=58; osc2.connect(g2);
+  g2.gain.setValueAtTime(.4,when); g2.gain.exponentialRampToValueAtTime(0.001,when+0.03);
+  osc2.start(when); osc2.stop(when+0.04);
+}
+
+function stPerc(when, tv=1) {
+  const osc=stCtx.createOscillator(); osc.type='triangle';
+  const g=stOut(.42 * tv);
+  osc.connect(g);
+  osc.frequency.setValueAtTime(420,when);
+  osc.frequency.exponentialRampToValueAtTime(80,when+0.12);
+  g.gain.setValueAtTime(1,when); g.gain.exponentialRampToValueAtTime(0.001,when+0.15);
+  osc.start(when); osc.stop(when+0.18);
+}
+
+function stShaker(when, tv=1) {
+  const buf=stCtx.createBuffer(1,stCtx.sampleRate*0.04,stCtx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  const src=stCtx.createBufferSource(); src.buffer=buf;
+  const bp=stCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=5800; bp.Q.value=2.5;
+  const g=stOut(.18 * tv);
+  src.connect(bp); bp.connect(g);
+  g.gain.setValueAtTime(1,when); g.gain.exponentialRampToValueAtTime(0.001,when+0.04);
+  src.start(when); src.stop(when+0.05);
 }
 
 function stClear() {
-  stPattern = ST_TRACKS.map(() => Array(ST_STEPS).fill(false));
-  document.querySelectorAll('.st-btn').forEach(b => {
-    const si = parseInt(b.dataset.s);
-    b.style.background = si%4===0 ? 'rgba(255,255,255,.03)' : 'transparent';
-  });
+  stPattern = ST_TRACKS.map(() => Array(32).fill(false));
+  stRenderGrid();
+}
+
+// ── ARTIST FACES WALL ─────────────────────────────────────────────────────────
+const ST_FACE_ARTISTS = [
+  {id:390,name:'Booba'},{id:1519461,name:'PNL'},{id:9197980,name:'Damso'},
+  {id:1412564,name:'Nekfeu'},{id:162665,name:'SCH'},{id:388973,name:'Kaaris'},
+  {id:259467,name:'Orelsan'},{id:1191615,name:'Jul'},{id:5542343,name:'Ninho'},
+  {id:8873540,name:'Gazo'},{id:13755123,name:'Freeze'},{id:4510044,name:'Laylow'},
+  {id:5175734,name:'Vald'},{id:121672292,name:'Werenoi'},{id:1479842,name:'PLK'},
+  {id:259729,name:'Alonzo'},{id:4842061,name:'Naps'},{id:5288900,name:'Niska'},
+];
+let stFacesLoaded = false;
+
+async function stLoadArtistFaces() {
+  if (stFacesLoaded) return;
+  stFacesLoaded = true;
+  const wall = document.getElementById('st-faces');
+  for (const a of ST_FACE_ARTISTS) {
+    try {
+      const data = await deezerFetch(`artist/${a.id}`);
+      const pic = data.picture_xl || data.picture_big || data.picture_medium;
+      if (!pic) continue;
+      const item = document.createElement('div');
+      item.className = 'st-face-item';
+      item.innerHTML = `<img src="${pic}" alt="${a.name}" loading="lazy"><div class="st-face-name">${a.name}</div>`;
+      wall.appendChild(item);
+    } catch {}
+  }
 }
 </script>
 </body>
