@@ -470,6 +470,172 @@ header {
   .reveal-row-label { width: 72px; }
 }
 
+/* ── MULTIJOUEUR ── */
+#page-multi {
+  align-items: center; justify-content: center; padding: 40px 16px;
+  min-height: calc(100vh - 56px);
+}
+.multi-wrap { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 0; }
+
+/* Lobby screens */
+.multi-screen { display: none; flex-direction: column; }
+.multi-screen.active { display: flex; }
+
+.multi-hero {
+  border: 1px solid var(--line); padding: 48px 40px;
+  display: flex; flex-direction: column; gap: 24px;
+}
+.multi-title {
+  font-family: var(--ff-head); font-size: 4rem; letter-spacing: 5px; line-height: .9;
+}
+.multi-title .acc { color: var(--red); }
+.multi-sub { font-size: .72rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--ink3); }
+.multi-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-multi-create {
+  flex: 1; min-width: 160px; height: 52px;
+  background: var(--red); border: none; color: #fff;
+  font-family: var(--ff-head); font-size: 1.1rem; letter-spacing: 3px;
+  cursor: pointer; transition: background .15s;
+}
+.btn-multi-create:hover { background: #ff4427; }
+.btn-multi-join {
+  flex: 1; min-width: 160px; height: 52px;
+  background: transparent; border: 1px solid var(--line); color: var(--ink2);
+  font-family: var(--ff-head); font-size: 1.1rem; letter-spacing: 3px;
+  cursor: pointer; transition: all .2s;
+}
+.btn-multi-join:hover { border-color: var(--ink); color: var(--ink); }
+
+/* Join/create form */
+.multi-form { border: 1px solid var(--line); border-top: none; padding: 28px 40px; display: flex; flex-direction: column; gap: 16px; }
+.multi-input {
+  width: 100%; padding: 13px 16px;
+  background: var(--card2); border: 1px solid var(--line);
+  color: var(--ink); font-family: var(--ff-body); font-size: 1rem;
+  outline: none; text-transform: uppercase; letter-spacing: 3px;
+  transition: border-color .2s;
+}
+.multi-input:focus { border-color: var(--ink3); }
+.multi-input.name { text-transform: none; letter-spacing: 0; }
+.multi-form-row { display: flex; gap: 10px; }
+.btn-confirm {
+  flex: 1; height: 50px; background: var(--red); border: none; color: #fff;
+  font-family: var(--ff-head); font-size: 1.1rem; letter-spacing: 3px;
+  cursor: pointer;
+}
+.btn-cancel-form {
+  height: 50px; padding: 0 20px; background: transparent; border: 1px solid var(--line);
+  color: var(--ink3); font-family: var(--ff-body); font-size: .8rem; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+}
+
+/* Lobby waiting */
+.lobby-wrap { border: 1px solid var(--line); display: flex; flex-direction: column; }
+.lobby-header { padding: 24px 32px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 20px; }
+.lobby-code {
+  font-family: var(--ff-head); font-size: 3rem; letter-spacing: 8px; color: var(--red);
+  text-shadow: 2px 2px 0 rgba(232,50,26,.2);
+}
+.lobby-code-label { font-size: .6rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--ink3); }
+.lobby-players { display: flex; flex-direction: column; }
+.lobby-player-row {
+  padding: 14px 32px; border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 600; font-size: .9rem;
+}
+.lobby-player-row:last-child { border-bottom: none; }
+.lobby-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.lobby-host-badge {
+  margin-left: auto; font-size: .6rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gold); border: 1px solid rgba(212,160,23,.3);
+  padding: 2px 8px;
+}
+.lobby-footer { padding: 20px 32px; border-top: 1px solid var(--line); display: flex; gap: 12px; }
+.btn-start {
+  flex: 1; height: 52px; background: var(--red); border: none; color: #fff;
+  font-family: var(--ff-head); font-size: 1.2rem; letter-spacing: 3px;
+  cursor: pointer;
+}
+.btn-start:disabled { opacity: .3; cursor: default; }
+.lobby-waiting-txt { color: var(--ink3); font-size: .8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; align-self: center; }
+
+/* Multi game view — same layout as solo but with leaderboard sidebar */
+.multi-game { display: flex; min-height: calc(100vh - 56px); }
+.multi-game .panel-player { flex: 0 0 360px; }
+.multi-game .panel-guess { flex: 1; }
+.multi-sidebar {
+  flex: 0 0 260px; border-left: 1px solid var(--line);
+  display: flex; flex-direction: column;
+}
+.sidebar-title {
+  padding: 16px 20px; border-bottom: 1px solid var(--line);
+  font-size: .6rem; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--ink3);
+}
+.leaderboard { flex: 1; overflow-y: auto; }
+.lb-row {
+  padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,.04);
+  display: flex; align-items: center; gap: 10px;
+}
+.lb-rank { font-family: var(--ff-head); font-size: 1.2rem; color: var(--ink3); width: 24px; }
+.lb-rank.gold { color: var(--gold); }
+.lb-name { flex: 1; font-size: .88rem; font-weight: 600; }
+.lb-score { font-family: var(--ff-head); font-size: 1.3rem; color: var(--ink); }
+.lb-answered { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.lb-answered.done { background: var(--green); }
+.lb-answered.me { background: var(--red); }
+.multi-timer {
+  padding: 16px 20px; border-top: 1px solid var(--line);
+  font-family: var(--ff-head); font-size: 2.5rem; letter-spacing: 2px;
+  text-align: center; color: var(--ink);
+  transition: color .3s;
+}
+.multi-timer.urgent { color: var(--red); }
+
+/* Round result overlay */
+.result-full {
+  display: none; flex-direction: column;
+  border: 1px solid var(--line);
+}
+.result-full.active { display: flex; }
+.result-verdict {
+  padding: 32px 40px; border-bottom: 1px solid var(--line);
+}
+.result-verdict .v-word {
+  font-family: var(--ff-head); font-size: 4rem; letter-spacing: 5px; line-height: .9;
+}
+.result-verdict .v-pts {
+  font-family: var(--ff-head); font-size: 1.3rem; letter-spacing: 3px; color: var(--ink3); margin-top: 4px;
+}
+.result-track-row {
+  display: flex; align-items: stretch; border-bottom: 1px solid var(--line);
+}
+.result-cover { width: 80px; height: 80px; object-fit: cover; flex-shrink: 0; border-right: 1px solid var(--line); }
+.result-meta { flex: 1; padding: 16px 20px; }
+.result-meta .rt { font-size: 1rem; font-weight: 700; }
+.result-meta .ra { font-size: .85rem; color: var(--ink2); font-weight: 600; }
+.result-meta .rf { font-size: .75rem; color: var(--ink3); }
+.result-lb { display: flex; flex-direction: column; }
+.result-lb-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 24px; border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.result-lb-row .rlb-rank { font-family: var(--ff-head); font-size: 1.5rem; color: var(--ink3); width: 32px; }
+.result-lb-row .rlb-rank.gold { color: var(--gold); }
+.result-lb-row .rlb-name { flex: 1; font-weight: 700; }
+.result-lb-row .rlb-gained { font-family: var(--ff-head); font-size: 1.2rem; color: var(--green); }
+.result-lb-row .rlb-gained.zero { color: var(--red); }
+.result-lb-row .rlb-total { font-family: var(--ff-head); font-size: 1.5rem; }
+.result-lb-row .rlb-ans { font-size: .75rem; color: var(--ink3); }
+.result-footer { padding: 20px 24px; border-top: 1px solid var(--line); display: flex; gap: 12px; }
+.btn-next-round {
+  flex: 1; height: 52px; background: var(--red); border: none; color: #fff;
+  font-family: var(--ff-head); font-size: 1.2rem; letter-spacing: 3px;
+  cursor: pointer;
+}
+.btn-next-round:disabled { opacity: .3; cursor: default; }
+.waiting-next { color: var(--ink3); font-size: .8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; align-self: center; }
+
 /* ── STUDIO ── */
 #page-studio {
   align-items: center; justify-content: center; padding: 60px 24px;
@@ -549,6 +715,7 @@ header {
   </div>
   <nav class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('blindtest')">Blind Test</button>
+    <button class="nav-tab" onclick="showPage('multi')">Multijoueur</button>
     <button class="nav-tab" onclick="showPage('studio')">Studio</button>
   </nav>
 </header>
@@ -712,41 +879,206 @@ header {
 
 </div>
 
+<!-- ── MULTIJOUEUR ── -->
+<div id="page-multi" class="page">
+  <div class="multi-wrap">
+
+    <!-- Screen 1: accueil -->
+    <div id="ms-home" class="multi-screen active">
+      <div class="multi-hero">
+        <div>
+          <div class="multi-sub">Mode</div>
+          <div class="multi-title">MULTI<span class="acc">JOUEUR</span></div>
+        </div>
+        <div class="multi-actions">
+          <button class="btn-multi-create" onclick="showMultiForm('create')">Créer un salon</button>
+          <button class="btn-multi-join" onclick="showMultiForm('join')">Rejoindre</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 1b: formulaire create/join -->
+    <div id="ms-form" class="multi-screen">
+      <div class="multi-hero">
+        <div>
+          <div class="multi-sub" id="mf-label">Créer un salon</div>
+          <div class="multi-title" id="mf-title">NOUVEAU<span class="acc"> SALON</span></div>
+        </div>
+      </div>
+      <div class="multi-form">
+        <input type="text" id="mf-name" class="multi-input name" placeholder="Ton pseudo..." maxlength="20">
+        <input type="text" id="mf-code" class="multi-input" placeholder="CODE DU SALON" maxlength="4" style="display:none">
+        <div class="multi-form-row">
+          <button class="btn-confirm" id="mf-btn" onclick="submitMultiForm()">Entrer</button>
+          <button class="btn-cancel-form" onclick="showMultiScreen('home')">Retour</button>
+        </div>
+        <div id="mf-error" style="color:var(--red);font-size:.8rem;font-weight:600;letter-spacing:1px;min-height:16px;"></div>
+      </div>
+    </div>
+
+    <!-- Screen 2: lobby -->
+    <div id="ms-lobby" class="multi-screen">
+      <div class="lobby-wrap">
+        <div class="lobby-header">
+          <div>
+            <div class="lobby-code-label">Code du salon</div>
+            <div class="lobby-code" id="lobby-code">----</div>
+          </div>
+          <div style="color:var(--ink3);font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-left:auto;">
+            Partage ce code à tes potes
+          </div>
+        </div>
+        <div class="lobby-players" id="lobby-players"></div>
+        <div class="lobby-footer">
+          <button class="btn-start" id="btn-start-game" onclick="startMultiGame()" disabled>Lancer la partie</button>
+          <div class="lobby-waiting-txt" id="lobby-status">En attente...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 3: jeu multijoueur -->
+    <div id="ms-game" class="multi-screen">
+      <div class="multi-game" id="multi-game-layout">
+
+        <!-- Player panel (réutilise le style solo) -->
+        <div class="panel-player" style="flex:0 0 340px;">
+          <div class="art-hero" id="m-art-hero">
+            <img id="m-cover-blur" src="" alt="">
+            <div class="art-overlay"></div>
+          </div>
+          <div class="loader-wrap" id="m-loader">
+            <div class="loader-line"></div>
+            <div class="loader-txt">Chargement</div>
+          </div>
+          <div id="m-player-ui" class="hidden">
+            <div class="player-controls">
+              <div class="tier-tag mainstream" id="m-tier-tag">
+                <span class="dot"></span><span>Round <span id="m-round-num">1</span></span>
+              </div>
+              <div class="waveform" id="m-waveform" onclick="mTogglePlay()"></div>
+              <div class="ctrl-row">
+                <button class="btn-play" id="m-btn-play" onclick="mTogglePlay()">
+                  <svg viewBox="0 0 24 24" id="m-ico-play"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div style="color:var(--ink3);font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;align-self:center;">
+                  <span id="m-answered-count">0</span>/<span id="m-total-count">0</span> répondu
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guess panel -->
+        <div class="panel-guess" id="m-guess-panel">
+          <div class="guess-header">
+            <div class="guess-headline">QUI C'EST ?</div>
+            <div class="guess-sub">Artiste · Titre · Feats</div>
+          </div>
+          <div class="guess-body">
+            <div class="field-block">
+              <div class="field-label">Artiste <span class="field-pts">+1 PT</span></div>
+              <div class="sug-anchor">
+                <input type="text" id="m-inp-artist" class="field-input" placeholder="Nom de l'artiste..."
+                  autocomplete="off" oninput="mOnInput('artist')" onkeydown="mOnKey(event,'artist')">
+                <div class="sug-box hidden" id="m-sug-artist"></div>
+              </div>
+            </div>
+            <div class="field-block">
+              <div class="field-label">Titre <span class="field-pts">+1 PT</span></div>
+              <div class="sug-anchor">
+                <input type="text" id="m-inp-title" class="field-input" placeholder="Nom du son..."
+                  autocomplete="off" oninput="mOnInput('title')" onkeydown="mOnKey(event,'title')">
+                <div class="sug-box hidden" id="m-sug-title"></div>
+              </div>
+            </div>
+            <div class="field-block">
+              <div class="field-label">Feats <span class="field-pts">+1 PT / FEAT</span></div>
+              <div class="feat-tags-wrap" id="m-feat-wrap" onclick="document.getElementById('m-inp-feat').focus()"></div>
+              <input type="text" id="m-inp-feat" class="field-input" placeholder="Feat..."
+                autocomplete="off" oninput="mOnFeatInput()" onkeydown="mOnFeatKey(event)"
+                style="margin-top:6px;">
+              <div class="feat-hint">Entre / Virgule pour ajouter un feat</div>
+            </div>
+            <button class="btn-validate" id="m-btn-validate" onclick="mValidate()">Valider</button>
+          </div>
+        </div>
+
+        <!-- Sidebar leaderboard -->
+        <div class="multi-sidebar">
+          <div class="sidebar-title">Classement</div>
+          <div class="leaderboard" id="m-leaderboard"></div>
+          <div class="multi-timer" id="m-timer">--</div>
+        </div>
+      </div>
+
+      <!-- Result overlay -->
+      <div class="result-full" id="m-result">
+        <div class="result-verdict">
+          <div class="v-word" id="mr-verdict-word"></div>
+          <div class="v-pts" id="mr-verdict-pts"></div>
+        </div>
+        <div class="result-track-row">
+          <img class="result-cover" id="mr-cover" src="" alt="">
+          <div class="result-meta">
+            <div class="rt" id="mr-title"></div>
+            <div class="ra" id="mr-artist"></div>
+            <div class="rf" id="mr-feat"></div>
+          </div>
+        </div>
+        <div class="result-lb" id="mr-leaderboard"></div>
+        <div class="result-footer">
+          <button class="btn-next-round" id="mr-btn-next" onclick="mNextRound()" disabled>Son suivant</button>
+          <div class="waiting-next" id="mr-waiting">En attente du host...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ── STUDIO ── -->
 <div id="page-studio" class="page">
-  <div class="studio-inner">
-    <div class="studio-top">
-      <div class="studio-eyebrow">Phase 2</div>
-      <div class="studio-name">STU<span class="accent">DIO</span></div>
-    </div>
-    <div class="studio-bottom">
-      <div class="studio-desc">
-        Crée tes propres instrus de rap directement dans le navigateur.
-        Beats, basslines, samples — tout depuis FRAP.
+  <div style="width:100%;max-width:900px;margin:0 auto;padding:28px 16px;display:flex;flex-direction:column;gap:0;">
+
+    <!-- Header -->
+    <div style="border:1px solid var(--line);padding:24px 32px;border-bottom:none;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;">Beatmaker</div>
+        <div style="font-family:var(--ff-head);font-size:3rem;letter-spacing:5px;line-height:1;">STU<span style="color:var(--red);">DIO</span></div>
       </div>
-      <div class="studio-features">
-        <div class="studio-feat-row">
-          <div class="feat-icon">DR</div>
-          Drum machine — programmation de batteries
-          <span class="feat-soon">Bientôt</span>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);">BPM</span>
+          <input type="range" id="st-bpm" min="60" max="180" value="90"
+            style="width:100px;accent-color:var(--red);" oninput="stBpmChange()">
+          <span id="st-bpm-val" style="font-family:var(--ff-head);font-size:1.3rem;letter-spacing:1px;min-width:36px;">90</span>
         </div>
-        <div class="studio-feat-row">
-          <div class="feat-icon">BS</div>
-          Bassline sequencer
-          <span class="feat-soon">Bientôt</span>
-        </div>
-        <div class="studio-feat-row">
-          <div class="feat-icon">SP</div>
-          Sampler — chargement de sons
-          <span class="feat-soon">Bientôt</span>
-        </div>
-        <div class="studio-feat-row">
-          <div class="feat-icon">FX</div>
-          Effets — reverb, delay, distorsion
-          <span class="feat-soon">Bientôt</span>
-        </div>
+        <button id="st-play-btn" onclick="stToggle()"
+          style="height:44px;padding:0 24px;background:var(--red);border:none;color:#fff;font-family:var(--ff-head);font-size:1rem;letter-spacing:3px;cursor:pointer;">
+          PLAY
+        </button>
+        <button onclick="stClear()"
+          style="height:44px;padding:0 16px;background:transparent;border:1px solid var(--line);color:var(--ink3);font-family:var(--ff-body);font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">
+          Clear
+        </button>
       </div>
     </div>
+
+    <!-- Sequencer grid -->
+    <div style="border:1px solid var(--line);" id="st-grid">
+      <!-- Injected by JS -->
+    </div>
+
+    <!-- FX row -->
+    <div style="border:1px solid var(--line);border-top:none;padding:16px 20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+      <span style="font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);">Volume</span>
+      <input type="range" id="st-vol" min="0" max="1" step=".05" value=".8"
+        style="width:120px;accent-color:var(--red);" oninput="stVolChange()">
+      <span style="font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-left:auto;">
+        Web Audio API — Sons synthétisés
+      </span>
+    </div>
+
   </div>
 </div>
 
@@ -923,10 +1255,15 @@ function cleanTitle(title) {
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach((t, i) => {
-    t.classList.toggle('active', (i === 0 && name === 'blindtest') || (i === 1 && name === 'studio'));
+    t.classList.toggle('active',
+      (i===0 && name==='blindtest') ||
+      (i===1 && name==='multi') ||
+      (i===2 && name==='studio')
+    );
   });
   document.getElementById(`page-${name}`).classList.add('active');
   if (name === 'blindtest' && S.round === 0) nextTrack();
+  if (name === 'studio') stInit();
 }
 
 // ── WAVEFORM ─────────────────────────────────────────────────────────────────
@@ -1333,11 +1670,572 @@ nextTrack();
 
 document.addEventListener('click', e => {
   if (!e.target.closest('.sug-anchor') && !e.target.closest('.field-block')) {
-    ['sug-artist','sug-title','sug-feat'].forEach(id =>
-      document.getElementById(id).classList.add('hidden')
-    );
+    ['sug-artist','sug-title','sug-feat','m-sug-artist','m-sug-title'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    });
   }
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── MULTIJOUEUR ──────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+const MS = {
+  mode: null,     // 'create' | 'join'
+  code: null,
+  playerId: null,
+  isHost: false,
+  sse: null,
+  featTags: [],
+  answered: false,
+  timerInterval: null,
+  audio: new Audio(),
+};
+
+function showMultiScreen(name) {
+  document.querySelectorAll('.multi-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(`ms-${name}`).classList.add('active');
+}
+
+function showMultiForm(mode) {
+  MS.mode = mode;
+  document.getElementById('mf-label').textContent = mode === 'create' ? 'Créer un salon' : 'Rejoindre un salon';
+  document.getElementById('mf-title').innerHTML = mode === 'create'
+    ? 'NOUVEAU<span class="acc"> SALON</span>'
+    : 'REJOINDRE<span class="acc"> UN SALON</span>';
+  document.getElementById('mf-code').style.display = mode === 'join' ? '' : 'none';
+  document.getElementById('mf-code').value = '';
+  document.getElementById('mf-name').value = '';
+  document.getElementById('mf-error').textContent = '';
+  showMultiScreen('form');
+}
+
+async function submitMultiForm() {
+  const name = document.getElementById('mf-name').value.trim();
+  if (!name) { document.getElementById('mf-error').textContent = 'Entre un pseudo'; return; }
+
+  try {
+    let res, data;
+    if (MS.mode === 'create') {
+      res = await fetch('/api/room/create', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({name})
+      });
+    } else {
+      const code = document.getElementById('mf-code').value.trim().toUpperCase();
+      if (code.length < 2) { document.getElementById('mf-error').textContent = 'Entre le code du salon'; return; }
+      res = await fetch('/api/room/join', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({name, code})
+      });
+    }
+    data = await res.json();
+    if (!res.ok) { document.getElementById('mf-error').textContent = data.error || 'Erreur'; return; }
+    MS.code = data.code;
+    MS.playerId = data.player_id;
+    MS.isHost = MS.mode === 'create';
+    enterLobby();
+  } catch(e) {
+    document.getElementById('mf-error').textContent = 'Erreur réseau';
+  }
+}
+
+function enterLobby() {
+  document.getElementById('lobby-code').textContent = MS.code;
+  showMultiScreen('lobby');
+  connectSSE();
+}
+
+function connectSSE() {
+  if (MS.sse) MS.sse.close();
+  MS.sse = new EventSource(`/api/room/events?room=${MS.code}&player=${MS.playerId}`);
+  MS.sse.onmessage = e => {
+    try { handleEvent(JSON.parse(e.data)); } catch {}
+  };
+  MS.sse.onerror = () => {
+    setTimeout(connectSSE, 3000);
+  };
+}
+
+function handleEvent(ev) {
+  switch(ev.type) {
+    case 'init':
+    case 'player_joined':
+      renderLobby(ev.room || ev);
+      break;
+    case 'round_start':
+      startMultiRound(ev);
+      break;
+    case 'player_answered':
+      updateLeaderboard(ev.players);
+      break;
+    case 'round_result':
+      showMultiResult(ev);
+      break;
+  }
+}
+
+function renderLobby(room) {
+  const pl = document.getElementById('lobby-players');
+  pl.innerHTML = room.players.map(p => `
+    <div class="lobby-player-row">
+      <div class="lobby-dot"></div>
+      <span>${esc(p.name)}</span>
+      ${p.id === room.host ? '<span class="lobby-host-badge">Host</span>' : ''}
+    </div>
+  `).join('');
+  const btn = document.getElementById('btn-start-game');
+  const status = document.getElementById('lobby-status');
+  if (MS.isHost) {
+    btn.style.display = '';
+    btn.disabled = room.players.length < 1;
+    status.style.display = 'none';
+  } else {
+    btn.style.display = 'none';
+    status.style.display = '';
+    status.textContent = `${room.players.length} joueur${room.players.length>1?'s':''} connecté${room.players.length>1?'s':''}`;
+  }
+}
+
+async function startMultiGame() {
+  await fetch('/api/room/start', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({code: MS.code, player_id: MS.playerId})
+  });
+}
+
+function startMultiRound(ev) {
+  showMultiScreen('game');
+  MS.answered = false;
+  MS.featTags = [];
+
+  // Reset UI
+  document.getElementById('m-result').classList.remove('active');
+  document.getElementById('m-guess-panel').style.display = '';
+  ['m-inp-artist','m-inp-title','m-inp-feat'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = ''; el.disabled = false; el.className = 'field-input';
+  });
+  document.getElementById('m-btn-validate').disabled = false;
+  renderMFeatTags();
+  document.getElementById('m-feat-wrap').className = 'feat-tags-wrap';
+
+  // Cover
+  document.getElementById('m-cover-blur').src = ev.cover_blur || '';
+  document.getElementById('m-cover-blur').classList.remove('revealed');
+  document.getElementById('m-loader').style.display = 'none';
+  document.getElementById('m-player-ui').classList.remove('hidden');
+  document.getElementById('m-round-num').textContent = ev.round;
+
+  // Audio
+  MS.audio.pause();
+  MS.audio.src = ev.preview;
+  MS.audio.load();
+  setTimeout(() => MS.audio.play().catch(()=>{}), 300);
+  buildMWaveform();
+  document.getElementById('m-waveform').classList.add('playing');
+  document.getElementById('m-ico-play').innerHTML = '<path d="M6 19h4V5H6zm8-14v14h4V5z"/>';
+
+  // Timer
+  clearInterval(MS.timerInterval);
+  let t = 35;
+  const timerEl = document.getElementById('m-timer');
+  MS.timerInterval = setInterval(() => {
+    t--;
+    timerEl.textContent = t + 's';
+    timerEl.classList.toggle('urgent', t <= 10);
+    if (t <= 0) { clearInterval(MS.timerInterval); timerEl.textContent = ''; }
+  }, 1000);
+}
+
+function buildMWaveform() {
+  const wf = document.getElementById('m-waveform');
+  wf.innerHTML = '';
+  for (let i = 0; i < 32; i++) {
+    const b = document.createElement('div');
+    b.className = 'wf-bar';
+    b.style.setProperty('--d', (.25 + Math.random() * .65) + 's');
+    b.style.height = (4 + Math.random() * 32) + 'px';
+    wf.appendChild(b);
+  }
+}
+
+function mTogglePlay() {
+  if (MS.audio.paused) {
+    MS.audio.play().catch(()=>{});
+    document.getElementById('m-waveform').classList.add('playing');
+    document.getElementById('m-ico-play').innerHTML = '<path d="M6 19h4V5H6zm8-14v14h4V5z"/>';
+  } else {
+    MS.audio.pause();
+    document.getElementById('m-waveform').classList.remove('playing');
+    document.getElementById('m-ico-play').innerHTML = '<path d="M8 5v14l11-7z"/>';
+  }
+}
+
+function updateLeaderboard(players) {
+  const sorted = [...players].sort((a,b) => b.score - a.score);
+  const answered = players.filter(p => p.answered).length;
+  document.getElementById('m-answered-count').textContent = answered;
+  document.getElementById('m-total-count').textContent = players.length;
+  const lb = document.getElementById('m-leaderboard');
+  lb.innerHTML = sorted.map((p, i) => `
+    <div class="lb-row">
+      <div class="lb-rank ${i===0?'gold':''}">${i+1}</div>
+      <div class="lb-name">${esc(p.name)}${p.id===MS.playerId?' (toi)':''}</div>
+      <div class="lb-score">${p.score}</div>
+      <div class="lb-answered ${p.answered?(p.id===MS.playerId?'me':'done'):''}"></div>
+    </div>
+  `).join('');
+}
+
+function renderMFeatTags(disabled=false) {
+  const wrap = document.getElementById('m-feat-wrap');
+  wrap.innerHTML = MS.featTags.map((tag, i) => `
+    <div class="feat-tag">
+      <span>${esc(tag)}</span>
+      ${!disabled ? `<span class="rm" onclick="removeMFeatTag(${i})">x</span>` : ''}
+    </div>
+  `).join('');
+}
+function removeMFeatTag(i) { MS.featTags.splice(i,1); renderMFeatTags(); }
+function addMFeatTag(v) {
+  const val = v.trim().replace(/,+$/,'').trim();
+  if (val && !MS.featTags.includes(val)) MS.featTags.push(val);
+  document.getElementById('m-inp-feat').value = '';
+  renderMFeatTags();
+}
+function onMFeatInput() {
+  const q = document.getElementById('m-inp-feat').value.trim();
+  if (q.length >= 2) mLoadSug('feat', q);
+}
+function onMFeatKey(e) {
+  if (e.key==='Enter'||e.key===',') { e.preventDefault(); addMFeatTag(document.getElementById('m-inp-feat').value); }
+}
+
+async function mValidate() {
+  if (MS.answered) return;
+  const pending = document.getElementById('m-inp-feat').value.trim();
+  if (pending) addMFeatTag(pending);
+
+  MS.answered = true;
+  MS.audio.pause();
+  clearInterval(MS.timerInterval);
+  document.getElementById('m-btn-validate').disabled = true;
+  ['m-inp-artist','m-inp-title','m-inp-feat'].forEach(id => document.getElementById(id).disabled = true);
+
+  const res = await fetch('/api/room/answer', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      code: MS.code, player_id: MS.playerId,
+      artist: document.getElementById('m-inp-artist').value.trim(),
+      title:  document.getElementById('m-inp-title').value.trim(),
+      feats:  MS.featTags,
+    })
+  });
+  const data = await res.json();
+  if (data.gained > 0) {
+    document.getElementById('m-btn-validate').textContent = `+${data.gained} pt${data.gained>1?'s':''}`;
+    document.getElementById('m-btn-validate').style.background = 'var(--green)';
+  } else {
+    document.getElementById('m-btn-validate').textContent = 'Raté';
+    document.getElementById('m-btn-validate').style.background = 'var(--red)';
+  }
+}
+
+function showMultiResult(ev) {
+  clearInterval(MS.timerInterval);
+  MS.audio.pause();
+  document.getElementById('m-cover-blur').classList.add('revealed');
+  document.getElementById('m-guess-panel').style.display = 'none';
+
+  // Verdict perso
+  const myAns = ev.answers[MS.playerId];
+  const gained = myAns ? myAns.gained : 0;
+  const max = 2 + (ev.feats || []).length;
+  const vw = document.getElementById('mr-verdict-word');
+  if (gained === 0) { vw.textContent = 'RATÉ'; vw.style.color = 'var(--red)'; }
+  else if (gained === max) { vw.textContent = 'PARFAIT'; vw.style.color = 'var(--green)'; }
+  else { vw.textContent = 'PAS MAL'; vw.style.color = 'var(--gold)'; }
+  document.getElementById('mr-verdict-pts').textContent = `${gained} / ${max} POINTS`;
+
+  document.getElementById('mr-cover').src = ev.cover || '';
+  document.getElementById('mr-title').textContent = ev.title || '';
+  document.getElementById('mr-artist').textContent = ev.artist || '';
+  document.getElementById('mr-feat').textContent = ev.feats?.length ? 'feat. '+ev.feats.join(', ') : '';
+
+  // Leaderboard
+  const lb = document.getElementById('mr-leaderboard');
+  lb.innerHTML = ev.leaderboard.map((p, i) => {
+    const ans = ev.answers[p.id];
+    const g = ans ? ans.gained : 0;
+    return `<div class="result-lb-row">
+      <div class="rlb-rank ${i===0?'gold':''}">${i+1}</div>
+      <div class="rlb-name">${esc(p.name)}${p.id===MS.playerId?' (toi)':''}</div>
+      <div class="rlb-gained ${g===0?'zero':''}">+${g}</div>
+      <div class="rlb-total">${p.score}</div>
+    </div>`;
+  }).join('');
+
+  const btnNext = document.getElementById('mr-btn-next');
+  const waiting = document.getElementById('mr-waiting');
+  if (MS.isHost) {
+    btnNext.disabled = false;
+    waiting.style.display = 'none';
+  } else {
+    btnNext.disabled = true;
+    waiting.style.display = '';
+  }
+
+  document.getElementById('m-result').classList.add('active');
+  document.getElementById('m-loader').style.display = 'none';
+}
+
+async function mNextRound() {
+  document.getElementById('mr-btn-next').disabled = true;
+  await fetch('/api/room/next', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({code: MS.code, player_id: MS.playerId})
+  });
+}
+
+// Multi autocomplete
+const mST = {};
+function mOnInput(field) {
+  clearTimeout(mST[field]);
+  const q = document.getElementById(`m-inp-${field}`).value.trim();
+  if (q.length < 2) { const b = document.getElementById(`m-sug-${field}`); if(b) b.classList.add('hidden'); return; }
+  mST[field] = setTimeout(() => mLoadSug(field, q), 280);
+}
+async function mLoadSug(field, q) {
+  let items = [];
+  if (field === 'artist' || field === 'feat') {
+    items = ARTISTS.filter(a => a.name.toLowerCase().includes(q.toLowerCase()))
+      .slice(0,5).map(a => ({label: a.name, sub: a.tier}));
+  } else if (field === 'title') {
+    try {
+      const d = await deezerFetch(`search/track?q=${encodeURIComponent(q)}&limit=6`);
+      items = (d.data||[]).filter(t=>t.preview).slice(0,5).map(t=>({label:cleanTitle(t.title),sub:t.artist.name}));
+    } catch {}
+  }
+  const boxId = field === 'feat' ? null : `m-sug-${field}`;
+  if (!boxId) return;
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  if (!items.length) { box.classList.add('hidden'); return; }
+  box.innerHTML = items.map(it => `<div class="sug-row" onclick="mPickSug('${field}','${esc(it.label)}')">${esc(it.label)}<div class="sr-sub">${esc(it.sub)}</div></div>`).join('');
+  box.classList.remove('hidden');
+}
+function mPickSug(field, val) {
+  if (field==='feat') { addMFeatTag(val); return; }
+  document.getElementById(`m-inp-${field}`).value = val;
+  document.getElementById(`m-sug-${field}`).classList.add('hidden');
+}
+function mOnKey(e, field) {
+  if (e.key==='Enter') {
+    const next = {artist:'title',title:'feat'};
+    const sug = document.getElementById(`m-sug-${field}`);
+    if (sug) sug.classList.add('hidden');
+    if (next[field]) document.getElementById(`m-inp-${next[field]}`)?.focus();
+    else mValidate();
+  }
+}
+function mOnFeatInput() { onMFeatInput(); }
+function mOnFeatKey(e) { onMFeatKey(e); }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── STUDIO BEATMAKER ─────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+let stCtx = null, stScheduler = null, stNextNote = 0, stStep = 0;
+let stBpm = 90, stVol = 0.8, stPlaying = false;
+const ST_STEPS = 16;
+const ST_TRACKS = [
+  { name: 'KICK',  color: '#e8321a', fn: stKick  },
+  { name: 'SNARE', color: '#d4a017', fn: stSnare },
+  { name: 'HI-HAT',color: '#8b5cf6', fn: stHat   },
+  { name: 'CLAP',  color: '#2ec27e', fn: stClap  },
+  { name: 'OPEN HAT', color: '#06b6d4', fn: stOpenHat },
+  { name: 'PERC',  color: '#f59e0b', fn: stPerc  },
+];
+let stPattern = ST_TRACKS.map(() => Array(ST_STEPS).fill(false));
+let stInited = false;
+
+function stInit() {
+  if (stInited) return;
+  stInited = true;
+  const grid = document.getElementById('st-grid');
+  grid.innerHTML = ST_TRACKS.map((t, ti) => `
+    <div style="display:flex;align-items:center;border-bottom:1px solid var(--line);">
+      <div style="width:80px;flex-shrink:0;padding:0 16px;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${t.color};border-right:1px solid var(--line);height:52px;display:flex;align-items:center;">
+        ${t.name}
+      </div>
+      ${Array.from({length:ST_STEPS},(_,si) => `
+        <div class="st-btn" data-t="${ti}" data-s="${si}"
+          onclick="stToggleStep(${ti},${si})"
+          style="flex:1;height:52px;border-right:1px solid var(--line);cursor:pointer;
+                 background:${si%4===0?'rgba(255,255,255,.03)':'transparent'};
+                 transition:background .1s;
+                 ${si===ST_STEPS-1?'border-right:none;':''}">
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function stToggleStep(ti, si) {
+  stPattern[ti][si] = !stPattern[ti][si];
+  const btn = document.querySelector(`.st-btn[data-t="${ti}"][data-s="${si}"]`);
+  if (btn) btn.style.background = stPattern[ti][si]
+    ? ST_TRACKS[ti].color
+    : (si%4===0?'rgba(255,255,255,.03)':'transparent');
+}
+
+function stBpmChange() {
+  stBpm = parseInt(document.getElementById('st-bpm').value);
+  document.getElementById('st-bpm-val').textContent = stBpm;
+}
+function stVolChange() {
+  stVol = parseFloat(document.getElementById('st-vol').value);
+}
+
+function stToggle() {
+  if (!stCtx) stCtx = new (window.AudioContext || window.webkitAudioContext)();
+  stPlaying = !stPlaying;
+  document.getElementById('st-play-btn').textContent = stPlaying ? 'STOP' : 'PLAY';
+  document.getElementById('st-play-btn').style.background = stPlaying ? '#333' : 'var(--red)';
+  if (stPlaying) {
+    stStep = 0; stNextNote = stCtx.currentTime;
+    stSchedulerLoop();
+  } else {
+    clearTimeout(stScheduler);
+    document.querySelectorAll('.st-btn').forEach(b => b.style.outline = '');
+  }
+}
+
+function stSchedulerLoop() {
+  if (!stPlaying) return;
+  const lookahead = 0.1, scheduleAhead = 0.15;
+  while (stNextNote < stCtx.currentTime + scheduleAhead) {
+    stScheduleStep(stStep, stNextNote);
+    stNextNote += (60 / stBpm) / 4;
+    stStep = (stStep + 1) % ST_STEPS;
+  }
+  stScheduler = setTimeout(stSchedulerLoop, lookahead * 1000);
+}
+
+function stScheduleStep(step, when) {
+  // Visual highlight
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.st-btn').forEach(b => b.style.outline = '');
+    document.querySelectorAll(`.st-btn[data-s="${step}"]`).forEach(b =>
+      b.style.outline = '2px solid rgba(255,255,255,.25)');
+  });
+  ST_TRACKS.forEach((t, ti) => {
+    if (stPattern[ti][step]) t.fn(when);
+  });
+}
+
+// Sound synthesis
+function stGain(vol=1) {
+  const g = stCtx.createGain();
+  g.gain.value = stVol * vol;
+  g.connect(stCtx.destination);
+  return g;
+}
+
+function stKick(when) {
+  const osc = stCtx.createOscillator();
+  const g = stGain(.9);
+  osc.connect(g);
+  osc.frequency.setValueAtTime(150, when);
+  osc.frequency.exponentialRampToValueAtTime(0.01, when + 0.4);
+  g.gain.setValueAtTime(1, when);
+  g.gain.exponentialRampToValueAtTime(0.01, when + 0.4);
+  osc.start(when); osc.stop(when + 0.5);
+}
+
+function stSnare(when) {
+  const buf = stCtx.createBuffer(1, stCtx.sampleRate * 0.2, stCtx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  const src = stCtx.createBufferSource();
+  src.buffer = buf;
+  const filt = stCtx.createBiquadFilter();
+  filt.type = 'highpass'; filt.frequency.value = 1000;
+  const g = stGain(.5);
+  src.connect(filt); filt.connect(g);
+  g.gain.setValueAtTime(1, when);
+  g.gain.exponentialRampToValueAtTime(0.01, when + 0.18);
+  src.start(when); src.stop(when + 0.2);
+
+  const osc = stCtx.createOscillator();
+  const g2 = stGain(.3);
+  osc.connect(g2);
+  osc.frequency.value = 200;
+  g2.gain.setValueAtTime(1, when);
+  g2.gain.exponentialRampToValueAtTime(0.01, when + 0.1);
+  osc.start(when); osc.stop(when + 0.15);
+}
+
+function stHat(when) {
+  const buf = stCtx.createBuffer(1, stCtx.sampleRate * 0.05, stCtx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  const src = stCtx.createBufferSource(); src.buffer = buf;
+  const filt = stCtx.createBiquadFilter(); filt.type = 'highpass'; filt.frequency.value = 8000;
+  const g = stGain(.3);
+  src.connect(filt); filt.connect(g);
+  g.gain.setValueAtTime(1, when);
+  g.gain.exponentialRampToValueAtTime(0.01, when + 0.05);
+  src.start(when); src.stop(when + 0.06);
+}
+
+function stOpenHat(when) {
+  const buf = stCtx.createBuffer(1, stCtx.sampleRate * 0.2, stCtx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  const src = stCtx.createBufferSource(); src.buffer = buf;
+  const filt = stCtx.createBiquadFilter(); filt.type = 'highpass'; filt.frequency.value = 7000;
+  const g = stGain(.25);
+  src.connect(filt); filt.connect(g);
+  g.gain.setValueAtTime(1, when);
+  g.gain.exponentialRampToValueAtTime(0.01, when + 0.18);
+  src.start(when); src.stop(when + 0.2);
+}
+
+function stClap(when) {
+  [0, 0.01, 0.02].forEach(offset => {
+    const buf = stCtx.createBuffer(1, stCtx.sampleRate * 0.1, stCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const src = stCtx.createBufferSource(); src.buffer = buf;
+    const filt = stCtx.createBiquadFilter(); filt.type = 'bandpass'; filt.frequency.value = 1200; filt.Q.value = 0.5;
+    const g = stGain(.35);
+    src.connect(filt); filt.connect(g);
+    g.gain.setValueAtTime(1, when+offset);
+    g.gain.exponentialRampToValueAtTime(0.01, when+offset+0.1);
+    src.start(when+offset); src.stop(when+offset+0.15);
+  });
+}
+
+function stPerc(when) {
+  const osc = stCtx.createOscillator();
+  const g = stGain(.4);
+  osc.type = 'triangle';
+  osc.connect(g);
+  osc.frequency.setValueAtTime(400, when);
+  osc.frequency.exponentialRampToValueAtTime(80, when + 0.15);
+  g.gain.setValueAtTime(1, when);
+  g.gain.exponentialRampToValueAtTime(0.01, when + 0.15);
+  osc.start(when); osc.stop(when + 0.2);
+}
+
+function stClear() {
+  stPattern = ST_TRACKS.map(() => Array(ST_STEPS).fill(false));
+  document.querySelectorAll('.st-btn').forEach(b => {
+    const si = parseInt(b.dataset.s);
+    b.style.background = si%4===0 ? 'rgba(255,255,255,.03)' : 'transparent';
+  });
+}
 </script>
 </body>
 </html>
