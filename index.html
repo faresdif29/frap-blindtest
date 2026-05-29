@@ -104,6 +104,237 @@ header {
 .page { display: none; flex: 1; flex-direction: column; }
 .page.active { display: flex; }
 
+/* ── HOME PAGE ── */
+#page-home {
+  position: relative;
+  min-height: calc(100vh - 56px);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#page-home.active { display: flex; }
+
+/* Background faces mosaic */
+.home-faces-bg {
+  position: absolute; inset: 0; z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+.home-face-cell {
+  overflow: hidden; background: var(--card);
+}
+.home-face-cell img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top; display: block;
+  filter: grayscale(100%) contrast(1.5) brightness(0.5);
+  transition: filter 6s ease;
+}
+.home-face-cell img.loaded {
+  filter: grayscale(100%) contrast(1.4) brightness(0.35);
+}
+
+/* Multi-layer overlay: radial fade + top/bottom bars */
+.home-bg-overlay {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 45%, transparent 10%, rgba(3,8,14,.82) 65%, var(--paper) 100%),
+    linear-gradient(to bottom, var(--paper) 0%, transparent 18%, transparent 75%, var(--paper) 100%);
+}
+
+/* Graffiti tag lines in background */
+.home-tag-line {
+  position: absolute; z-index: 1;
+  font-family: var(--ff-tag);
+  color: var(--blue);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Scanline overlay */
+.home-scanlines {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,.06) 3px, rgba(0,0,0,.06) 6px
+  );
+}
+
+/* Main content */
+.home-content {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  padding: 20px 20px 110px;
+  max-width: 820px; width: 100%;
+}
+
+/* Giant logo */
+.home-logo-eyebrow {
+  font-family: var(--ff-tag); font-size: .95rem;
+  color: var(--blue); opacity: .85;
+  transform: rotate(-1.5deg); display: inline-block;
+  margin-bottom: 6px;
+}
+.home-logo-main {
+  font-family: var(--ff-head);
+  font-size: clamp(5.5rem, 20vw, 15rem);
+  letter-spacing: clamp(8px, 3vw, 28px);
+  line-height: .85;
+  color: var(--ink);
+  text-shadow:
+    5px 5px 0 rgba(20,97,255,.4),
+    0 0 100px rgba(20,97,255,.1);
+  user-select: none;
+}
+.home-logo-main .acc { color: var(--blue); }
+.home-logo-sub {
+  font-family: var(--ff-alt); font-size: .62rem; font-weight: 700;
+  letter-spacing: clamp(4px, 2vw, 12px); text-transform: uppercase;
+  color: var(--ink3); margin-top: 14px;
+}
+
+/* Symbols strip */
+.home-symbols {
+  display: flex; align-items: center; gap: 14px;
+  margin: 22px 0 18px; flex-wrap: wrap; justify-content: center;
+}
+.home-sym {
+  font-family: var(--ff-alt); font-size: .7rem; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--ink3); opacity: .55;
+}
+.home-sym.hi { color: var(--blue); opacity: .9; font-size: .9rem; }
+.home-sym.sep { color: var(--blue); opacity: .35; }
+
+/* Dropdown CTA */
+.home-cta-wrap {
+  position: relative; width: 100%; max-width: 400px;
+  margin-top: 6px;
+}
+.home-enter-btn {
+  width: 100%; height: 66px;
+  background: var(--blue); border: none; color: #fff;
+  font-family: var(--ff-head); font-size: 1.9rem; letter-spacing: 10px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  transition: background .15s;
+}
+.home-enter-btn:hover { background: var(--blue2); }
+.home-enter-btn .arrow {
+  font-size: 1rem; transition: transform .2s; display: inline-block;
+}
+.home-enter-btn.open .arrow { transform: rotate(180deg); }
+
+.home-menu {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+  background: var(--card); border: 1px solid var(--blue);
+  border-top: 2px solid var(--blue);
+  display: none; flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,.8);
+}
+.home-menu.open { display: flex; }
+.home-menu-item {
+  display: flex; align-items: center; gap: 18px;
+  padding: 18px 24px; border-bottom: 1px solid var(--line);
+  cursor: pointer; transition: background .12s;
+}
+.home-menu-item:last-child { border-bottom: none; }
+.home-menu-item:hover { background: var(--card2); }
+.hmi-icon {
+  font-family: var(--ff-head); font-size: 1.8rem;
+  color: var(--blue); width: 36px; text-align: center; flex-shrink: 0;
+  line-height: 1;
+}
+.hmi-text { flex: 1; text-align: left; }
+.hmi-name {
+  font-family: var(--ff-head); font-size: 1.15rem;
+  letter-spacing: 4px; color: var(--ink);
+}
+.hmi-desc {
+  font-size: .62rem; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--ink3); margin-top: 3px;
+}
+.hmi-badge {
+  font-size: .58rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 9px; border: 1px solid; flex-shrink: 0;
+}
+.hmi-badge.solo   { color: var(--green);  border-color: rgba(0,232,122,.35); }
+.hmi-badge.multi  { color: var(--gold);   border-color: rgba(255,184,48,.35); }
+.hmi-badge.studio { color: var(--blue2);  border-color: rgba(64,128,255,.35); }
+
+/* Stats row */
+.home-stats-bar {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 28px; flex-wrap: wrap; justify-content: center;
+}
+.home-stat {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+}
+.home-stat-val {
+  font-family: var(--ff-head); font-size: 1.7rem;
+  letter-spacing: 2px; color: var(--ink);
+}
+.home-stat-lbl {
+  font-size: .55rem; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--ink3);
+}
+.home-stat-sep { color: var(--blue); font-size: .7rem; opacity: .35; }
+
+/* Scrolling artist strip at bottom */
+.home-strip-outer {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  height: 90px; overflow: hidden;
+  border-top: 1px solid var(--line);
+}
+.home-strip-outer::before, .home-strip-outer::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 3;
+  pointer-events: none;
+}
+.home-strip-outer::before { left: 0; background: linear-gradient(to right, var(--paper), transparent); }
+.home-strip-outer::after  { right: 0; background: linear-gradient(to left,  var(--paper), transparent); }
+
+.home-strip-track {
+  display: flex; height: 100%;
+  animation: homeStripScroll 36s linear infinite;
+  will-change: transform;
+}
+.home-strip-track:hover { animation-play-state: paused; }
+@keyframes homeStripScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.home-strip-face {
+  flex-shrink: 0; width: 90px; height: 90px;
+  overflow: hidden; position: relative; cursor: pointer;
+}
+.home-strip-face img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
+  filter: grayscale(80%) contrast(1.2) brightness(.65);
+  transition: filter .3s;
+}
+.home-strip-face:hover img { filter: grayscale(0%) brightness(.9); }
+.home-strip-face-name {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 3px 6px;
+  font-family: var(--ff-alt); font-size: .52rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: transparent;
+  background: linear-gradient(transparent, rgba(0,0,0,.85));
+  transition: color .2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.home-strip-face:hover .home-strip-face-name { color: var(--ink); }
+
+@media (max-width: 600px) {
+  .home-logo-main { letter-spacing: 6px; }
+  .home-enter-btn { font-size: 1.5rem; letter-spacing: 6px; height: 58px; }
+  .home-content { padding-bottom: 100px; }
+}
+
 /* ── BLIND TEST ── */
 #page-blindtest {
   display: none;
@@ -1083,14 +1314,114 @@ header {
     </div>
   </div>
   <nav class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('blindtest')">Blind Test</button>
+    <button class="nav-tab active" onclick="showPage('home')">Accueil</button>
+    <button class="nav-tab" onclick="showPage('blindtest')">Blind Test</button>
     <button class="nav-tab" onclick="showPage('multi')">Multijoueur</button>
     <button class="nav-tab" onclick="showPage('studio')">Studio</button>
   </nav>
 </header>
 
+<!-- ── HOME ── -->
+<div id="page-home" class="page active">
+
+  <!-- Background: 6×3 rapper faces mosaic -->
+  <div class="home-faces-bg" id="home-faces-bg"></div>
+  <div class="home-bg-overlay"></div>
+  <div class="home-scanlines"></div>
+
+  <!-- Graffiti tag watermarks -->
+  <div class="home-tag-line" style="top:10%;left:-2%;font-size:2.8rem;transform:rotate(-3deg);opacity:.05;">SHÉGUÉ AUTHENTIK</div>
+  <div class="home-tag-line" style="top:38%;right:-3%;font-size:2.2rem;transform:rotate(2deg);opacity:.04;">VALIDÉ PAR LA STREET</div>
+  <div class="home-tag-line" style="bottom:22%;left:3%;font-size:3.5rem;transform:rotate(-1.5deg);opacity:.05;">BRONX 1973 → PARIS 1991</div>
+  <div class="home-tag-line" style="top:62%;left:10%;font-size:1.8rem;transform:rotate(1deg);opacity:.03;">RAP C'EST UNE CULTURE PAS UN GENRE</div>
+
+  <!-- Main content -->
+  <div class="home-content">
+
+    <div class="home-logo-eyebrow">// le blind test ultime</div>
+    <div class="home-logo-main">F<span class="acc">RAP</span></div>
+    <div class="home-logo-sub">Rap Français &nbsp;·&nbsp; Blind Test &nbsp;·&nbsp; Culture Hip-Hop</div>
+
+    <div class="home-symbols">
+      <span class="home-sym hi">♪</span>
+      <span class="home-sym">PARIS</span>
+      <span class="home-sym sep">◆</span>
+      <span class="home-sym">93</span>
+      <span class="home-sym sep">◆</span>
+      <span class="home-sym">HIP-HOP</span>
+      <span class="home-sym sep">◆</span>
+      <span class="home-sym">STREET</span>
+      <span class="home-sym sep">◆</span>
+      <span class="home-sym">RAP FR</span>
+      <span class="home-sym hi">♫</span>
+    </div>
+
+    <!-- Dropdown CTA -->
+    <div class="home-cta-wrap">
+      <button class="home-enter-btn" id="home-enter-btn" onclick="toggleHomeMenu(event)">
+        ENTRER <span class="arrow">▼</span>
+      </button>
+      <div class="home-menu" id="home-menu">
+        <div class="home-menu-item" onclick="showPage('blindtest')">
+          <div class="hmi-icon">◈</div>
+          <div class="hmi-text">
+            <div class="hmi-name">BLIND TEST</div>
+            <div class="hmi-desc">Identifie les sons — teste ta culture</div>
+          </div>
+          <div class="hmi-badge solo">SOLO</div>
+        </div>
+        <div class="home-menu-item" onclick="showPage('multi')">
+          <div class="hmi-icon">◉</div>
+          <div class="hmi-text">
+            <div class="hmi-name">MULTIJOUEUR</div>
+            <div class="hmi-desc">Affronte tes potes en live</div>
+          </div>
+          <div class="hmi-badge multi">LIVE</div>
+        </div>
+        <div class="home-menu-item" onclick="showPage('studio')">
+          <div class="hmi-icon">♫</div>
+          <div class="hmi-text">
+            <div class="hmi-name">STUDIO</div>
+            <div class="hmi-desc">Crée ton propre beat rap</div>
+          </div>
+          <div class="hmi-badge studio">BEAT</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-stats-bar">
+      <div class="home-stat">
+        <div class="home-stat-val">500+</div>
+        <div class="home-stat-lbl">Sons</div>
+      </div>
+      <div class="home-stat-sep">◆</div>
+      <div class="home-stat">
+        <div class="home-stat-val">3</div>
+        <div class="home-stat-lbl">Ères</div>
+      </div>
+      <div class="home-stat-sep">◆</div>
+      <div class="home-stat">
+        <div class="home-stat-val">100+</div>
+        <div class="home-stat-lbl">Artistes</div>
+      </div>
+      <div class="home-stat-sep">◆</div>
+      <div class="home-stat">
+        <div class="home-stat-val">∞</div>
+        <div class="home-stat-lbl">Culture</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scrolling artist strip at bottom -->
+  <div class="home-strip-outer">
+    <div class="home-strip-track" id="home-strip-track"></div>
+  </div>
+
+</div>
+
 <!-- ── BLIND TEST ── -->
-<div id="page-blindtest" class="page active">
+<div id="page-blindtest" class="page">
 
   <!-- LEFT: player -->
   <div class="panel-player">
@@ -1726,19 +2057,89 @@ function cleanTitle(title) {
   return title.replace(/\s*\((?:feat|ft|avec|with)\.?[^)]*\)/gi, '').trim();
 }
 
+// ── HOME PAGE ─────────────────────────────────────────────────────────────────
+const HOME_ARTISTS = [
+  {id:390,name:'Booba'},{id:1519461,name:'PNL'},{id:9197980,name:'Damso'},
+  {id:1412564,name:'Nekfeu'},{id:162665,name:'SCH'},{id:388973,name:'Kaaris'},
+  {id:259467,name:'Orelsan'},{id:1191615,name:'Jul'},{id:5542343,name:'Ninho'},
+  {id:8873540,name:'Gazo'},{id:13755123,name:'Freeze Corleone'},{id:4510044,name:'Laylow'},
+  {id:5175734,name:'Vald'},{id:121672292,name:'Werenoi'},{id:1479842,name:'PLK'},
+  {id:259729,name:'Alonzo'},{id:4842061,name:'Naps'},{id:5288900,name:'Niska'},
+];
+let homeFacesLoaded = false;
+
+async function loadHomePage() {
+  if (homeFacesLoaded) return;
+  homeFacesLoaded = true;
+
+  const bg = document.getElementById('home-faces-bg');
+  const strip = document.getElementById('home-strip-track');
+
+  const pics = [];
+  await Promise.all(HOME_ARTISTS.map(async a => {
+    try {
+      const data = await deezerFetch(`artist/${a.id}`);
+      const pic = data.picture_xl || data.picture_big || data.picture_medium;
+      if (pic) pics.push({pic, name: a.name});
+    } catch {}
+  }));
+
+  // 6×3 background mosaic (18 cells)
+  for (let i = 0; i < 18; i++) {
+    const p = pics[i % pics.length];
+    if (!p) continue;
+    const cell = document.createElement('div');
+    cell.className = 'home-face-cell';
+    const img = document.createElement('img');
+    img.alt = p.name;
+    img.onload = () => img.classList.add('loaded');
+    img.src = p.pic;
+    cell.appendChild(img);
+    bg.appendChild(cell);
+  }
+
+  // Scrolling strip — duplicate for seamless loop
+  const allPics = [...pics, ...pics];
+  allPics.forEach(p => {
+    const face = document.createElement('div');
+    face.className = 'home-strip-face';
+    face.innerHTML = `<img src="${p.pic}" alt="${p.name}" loading="lazy"><div class="home-strip-face-name">${p.name}</div>`;
+    strip.appendChild(face);
+  });
+}
+
+function toggleHomeMenu(e) {
+  e.stopPropagation();
+  const btn  = document.getElementById('home-enter-btn');
+  const menu = document.getElementById('home-menu');
+  const open = menu.classList.toggle('open');
+  btn.classList.toggle('open', open);
+}
+
+document.addEventListener('click', () => {
+  document.getElementById('home-menu')?.classList.remove('open');
+  document.getElementById('home-enter-btn')?.classList.remove('open');
+});
+
 // ── NAV ──────────────────────────────────────────────────────────────────────
 function showPage(name) {
+  // Close home dropdown if open
+  document.getElementById('home-menu')?.classList.remove('open');
+  document.getElementById('home-enter-btn')?.classList.remove('open');
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach((t, i) => {
     t.classList.toggle('active',
-      (i===0 && name==='blindtest') ||
-      (i===1 && name==='multi') ||
-      (i===2 && name==='studio')
+      (i===0 && name==='home') ||
+      (i===1 && name==='blindtest') ||
+      (i===2 && name==='multi') ||
+      (i===3 && name==='studio')
     );
   });
   document.getElementById(`page-${name}`).classList.add('active');
   if (name === 'blindtest' && S.round === 0) nextTrack();
   if (name === 'studio') stInit();
+  if (name === 'home') loadHomePage();
 }
 
 // ── WAVEFORM ─────────────────────────────────────────────────────────────────
@@ -2192,7 +2593,7 @@ function esc(s) {
 }
 
 // ── BOOT ─────────────────────────────────────────────────────────────────────
-nextTrack();
+loadHomePage();
 
 document.addEventListener('click', e => {
   if (!e.target.closest('.sug-anchor') && !e.target.closest('.field-block')) {
