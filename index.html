@@ -2499,7 +2499,10 @@ function startTimer() {
       bar.style.width = pct + '%';
       bar.classList.toggle('urgent', timerRemaining < 8);
     }
-    if (timerRemaining <= 0) stopTimer();
+    if (timerRemaining <= 0) {
+      stopTimer();
+      if (!S.answered) validate();
+    }
   }, 100);
 }
 
