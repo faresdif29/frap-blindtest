@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRAP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:     #f2ede8;
+  --ink2:    #a09a92;
+  --ink3:    #5a544e;
+  --paper:   #0c0b09;
+  --card:    #111009;
+  --card2:   #1a1915;
+  --line:    #262420;
+  --red:     #e8321a;
+  --red2:    #ff4427;
+  --green:   #2ec27e;
+  --gold:    #d4a017;
+  --ff-head: 'Bebas Neue', 'Impact', sans-serif;
+  --ff-body: 'Space Grotesk', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ff-body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* Halftone grain overlay */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23g)' opacity='0.055'/%3E%3C/svg%3E");
+}
+
+/* ── NAV ── */
+header {
+  display: flex; align-items: stretch;
+  height: 56px;
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(12,11,9,.96);
+  backdrop-filter: blur(10px);
+}
+
+.logo-block {
+  display: flex; align-items: center; gap: 0;
+  padding: 0 24px;
+  border-right: 1px solid var(--line);
+}
+.logo {
+  display: flex; flex-direction: column; line-height: 1; gap: 1px;
+}
+.logo-main {
+  font-family: var(--ff-head);
+  font-size: 2rem;
+  letter-spacing: 5px;
+  color: var(--ink);
+  line-height: 1;
+}
+.logo-main .rap { color: var(--red); }
+.logo-sub-line {
+  font-size: .5rem; font-weight: 700; letter-spacing: 5px;
+  text-transform: uppercase; color: var(--ink3);
+  padding-left: 2px;
+}
+
+.nav-tabs {
+  display: flex; margin-left: auto;
+}
+.nav-tab {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 28px;
+  font-family: var(--ff-body); font-size: .72rem; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  cursor: pointer; border: none; background: transparent;
+  color: var(--ink3); border-left: 1px solid var(--line);
+  transition: color .2s, background .2s;
+  position: relative;
+}
+.nav-tab::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--red); transform: scaleX(0);
+  transition: transform .25s;
+}
+.nav-tab:hover { color: var(--ink); }
+.nav-tab.active { color: var(--ink); background: rgba(232,50,26,.07); }
+.nav-tab.active::after { transform: scaleX(1); }
+
+/* ── PAGES ── */
+.page { display: none; flex: 1; flex-direction: column; }
+.page.active { display: flex; }
+
+/* ── BLIND TEST ── */
+#page-blindtest {
+  display: none;
+  flex-direction: row;
+  align-items: stretch;
+  min-height: calc(100vh - 56px);
+}
+#page-blindtest.active { display: flex; }
+
+/* Left panel: player */
+.panel-player {
+  flex: 0 0 420px;
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+
+/* Album art hero */
+.art-hero {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  overflow: hidden;
+  background: #0a0a09;
+}
+.art-hero img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  filter: blur(28px) brightness(.18) saturate(1.6);
+  transition: filter 1s ease;
+  transform: scale(1.08);
+}
+.art-hero img.revealed {
+  filter: blur(0) brightness(1) saturate(1);
+  transform: scale(1);
+}
+.art-hero .art-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, var(--card) 100%);
+  pointer-events: none;
+}
+
+/* Controls strip */
+.player-controls {
+  padding: 20px 24px;
+  display: flex; flex-direction: column; gap: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.tier-tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: .68rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  padding: 4px 12px; border: 1px solid;
+  width: fit-content;
+}
+.tier-tag.mainstream { color: var(--gold);  border-color: rgba(212,160,23,.35); }
+.tier-tag.mid        { color: var(--ink2);  border-color: var(--line); }
+.tier-tag.underground{ color: var(--red);   border-color: rgba(232,50,26,.35); }
+.tier-tag .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+.waveform {
+  height: 44px; display: flex; align-items: center; gap: 2px; cursor: pointer;
+}
+.wf-bar {
+  flex: 1; border-radius: 1px;
+  background: var(--line); min-height: 3px; max-height: 36px;
+  transition: background .3s;
+}
+.waveform.playing .wf-bar {
+  background: var(--red);
+  animation: wfpulse var(--d) ease-in-out infinite alternate;
+}
+@keyframes wfpulse { from { transform: scaleY(.2); } to { transform: scaleY(1); } }
+
+.ctrl-row {
+  display: flex; align-items: center; gap: 12px;
+}
+.btn-play {
+  width: 52px; height: 52px; border-radius: 0;
+  background: var(--red); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; flex-shrink: 0;
+  transition: background .15s, transform .1s;
+}
+.btn-play svg { width: 18px; height: 18px; fill: currentColor; }
+.btn-play:hover { background: var(--red2); }
+.btn-play:disabled { opacity: .3; cursor: default; }
+
+.btn-skip {
+  flex: 1; padding: 0 18px; height: 52px;
+  background: transparent; border: 1px solid var(--line);
+  color: var(--ink3); cursor: pointer;
+  font-family: var(--ff-body); font-size: .72rem;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  transition: border-color .2s, color .2s;
+}
+.btn-skip:hover { border-color: var(--ink3); color: var(--ink); }
+
+/* Points tracker */
+.pts-row {
+  display: flex; border-top: 1px solid var(--line);
+}
+.pts-cell {
+  flex: 1; padding: 14px 16px;
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.pts-cell:last-child { border-right: none; }
+.pts-label {
+  font-size: .6rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink3);
+}
+.pts-val {
+  font-family: var(--ff-head); font-size: 1.6rem; letter-spacing: 1px;
+  color: var(--ink);
+}
+.pts-cell.hit  .pts-val { color: var(--green); }
+.pts-cell.miss .pts-val { color: var(--red); }
+.pts-cell.bonus .pts-val { color: var(--gold); }
+
+/* HUD bottom */
+.hud-row {
+  margin-top: auto;
+  display: flex; border-top: 1px solid var(--line);
+}
+.hud-cell {
+  flex: 1; padding: 14px 16px;
+  border-right: 1px solid var(--line);
+}
+.hud-cell:last-child { border-right: none; }
+.hud-label {
+  font-size: .6rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 2px;
+}
+.hud-val {
+  font-family: var(--ff-head); font-size: 1.8rem; letter-spacing: 1px;
+  color: var(--ink);
+}
+
+/* Loader */
+.loader-wrap {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 10px;
+}
+.loader-line {
+  width: 180px; height: 1px; background: var(--line); position: relative; overflow: hidden;
+}
+.loader-line::after {
+  content: ''; position: absolute; top: 0; left: -40%;
+  width: 40%; height: 100%; background: var(--red);
+  animation: scan 1.2s ease-in-out infinite;
+}
+@keyframes scan { to { left: 100%; } }
+.loader-txt {
+  font-size: .65rem; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--ink3);
+}
+
+/* ── Right panel: guess ── */
+.panel-guess {
+  flex: 1;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+
+.guess-header {
+  padding: 28px 36px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.guess-headline {
+  font-family: var(--ff-head);
+  font-size: 3.2rem; letter-spacing: 4px; line-height: 1;
+  color: var(--ink);
+}
+.guess-sub {
+  font-size: .7rem; font-weight: 600; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--ink3); margin-top: 6px;
+}
+
+.guess-body {
+  flex: 1; padding: 28px 36px;
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+/* Field */
+.field-block { display: flex; flex-direction: column; gap: 8px; }
+.field-label {
+  font-size: .65rem; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--ink3);
+  display: flex; align-items: center; gap: 10px;
+}
+.field-pts {
+  font-family: var(--ff-head); font-size: .95rem; letter-spacing: 1px;
+  color: var(--ink2);
+}
+.field-input {
+  width: 100%; padding: 13px 16px;
+  background: var(--card2); border: 1px solid var(--line);
+  color: var(--ink); font-family: var(--ff-body); font-size: .95rem;
+  outline: none; border-radius: 0;
+  transition: border-color .2s;
+}
+.field-input:focus { border-color: var(--ink3); }
+.field-input.hit  { border-color: var(--green); background: rgba(46,194,126,.05); }
+.field-input.miss { border-color: var(--red);   background: rgba(232,50,26,.04); }
+.field-input:disabled { opacity: .65; cursor: default; }
+
+/* Feat tags */
+.feat-tags-wrap {
+  min-height: 48px; padding: 8px 12px;
+  background: var(--card2); border: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; gap: 7px; align-items: center;
+  cursor: text; transition: border-color .2s;
+}
+.feat-tags-wrap:focus-within { border-color: var(--ink3); }
+.feat-tags-wrap.hit  { border-color: var(--green); background: rgba(46,194,126,.05); }
+.feat-tags-wrap.miss { border-color: var(--red);   background: rgba(232,50,26,.04); }
+.feat-tag {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--card); border: 1px solid var(--line);
+  padding: 4px 10px; font-size: .82rem; font-weight: 600;
+  color: var(--ink2);
+}
+.feat-tag .rm {
+  cursor: pointer; color: var(--ink3); font-size: .75rem;
+  line-height: 1; transition: color .15s;
+}
+.feat-tag .rm:hover { color: var(--red); }
+.feat-tag-input {
+  flex: 1; min-width: 120px; border: none; background: transparent;
+  color: var(--ink); font-family: var(--ff-body); font-size: .9rem;
+  outline: none; padding: 4px 0;
+}
+.feat-hint {
+  font-size: .62rem; color: var(--ink3); letter-spacing: 1px;
+  font-weight: 600; text-transform: uppercase;
+}
+
+/* Suggestions */
+.sug-anchor { position: relative; }
+.sug-box {
+  position: absolute; top: 2px; left: 0; right: 0; z-index: 50;
+  background: var(--card); border: 1px solid var(--line);
+  max-height: 200px; overflow-y: auto;
+}
+.sug-row {
+  padding: 10px 16px; cursor: pointer; font-size: .88rem;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  transition: background .12s;
+}
+.sug-row:last-child { border: none; }
+.sug-row:hover { background: var(--card2); }
+.sug-row .sr-sub { font-size: .72rem; color: var(--ink3); margin-top: 2px; }
+
+.btn-validate {
+  width: 100%; height: 54px;
+  background: var(--red); border: none;
+  color: #fff; font-family: var(--ff-head);
+  font-size: 1.3rem; letter-spacing: 4px;
+  cursor: pointer; transition: background .15s;
+}
+.btn-validate:hover { background: var(--red2); }
+.btn-validate:disabled { opacity: .3; cursor: default; }
+
+/* ── RESULT OVERLAY ── */
+.result-overlay {
+  display: none;
+  flex-direction: column;
+}
+.result-overlay.active { display: flex; }
+
+/* Big verdict */
+.verdict-block {
+  padding: 32px 36px 24px;
+  border-bottom: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.verdict-word {
+  font-family: var(--ff-head);
+  font-size: 5rem; letter-spacing: 6px; line-height: .9;
+}
+.verdict-word.v-perfect { color: var(--green); }
+.verdict-word.v-partial  { color: var(--gold); }
+.verdict-word.v-miss     { color: var(--red); }
+.verdict-pts {
+  font-family: var(--ff-head); font-size: 1.4rem; letter-spacing: 3px;
+  color: var(--ink3);
+}
+
+/* Reveal rows */
+.reveal-rows {
+  display: flex; flex-direction: column;
+}
+.reveal-row {
+  display: flex; align-items: stretch;
+  border-bottom: 1px solid var(--line);
+}
+.reveal-row-label {
+  width: 90px; flex-shrink: 0;
+  padding: 16px;
+  font-size: .6rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink3);
+  border-right: 1px solid var(--line);
+  display: flex; align-items: center;
+}
+.reveal-row-content {
+  flex: 1; padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.reveal-answer {
+  font-size: 1.05rem; font-weight: 700; color: var(--ink);
+}
+.reveal-guess {
+  font-size: .8rem; color: var(--ink3);
+}
+.reveal-guess .hit-txt  { color: var(--green); font-weight: 600; }
+.reveal-guess .miss-txt { color: var(--red);   font-weight: 600; }
+.reveal-status {
+  margin-left: auto; flex-shrink: 0;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; font-weight: 900;
+}
+.reveal-status.ok   { background: var(--green); color: var(--paper); }
+.reveal-status.ko   { background: var(--red);   color: #fff; }
+.reveal-status.skip { background: var(--line);  color: var(--ink3); }
+
+/* Cover strip */
+.cover-strip {
+  display: flex; align-items: stretch;
+  border-bottom: 1px solid var(--line);
+}
+.cover-img {
+  width: 90px; height: 90px; flex-shrink: 0;
+  object-fit: cover; display: block;
+  border-right: 1px solid var(--line);
+}
+.cover-meta {
+  flex: 1; padding: 16px 20px; display: flex; flex-direction: column; justify-content: center; gap: 3px;
+}
+.cover-title { font-size: 1.1rem; font-weight: 700; }
+.cover-artist { font-size: .85rem; color: var(--ink2); font-weight: 600; }
+.cover-feat { font-size: .78rem; color: var(--ink3); }
+.cover-album { font-size: .72rem; color: var(--ink3); font-style: italic; }
+
+.btn-next {
+  margin: 24px 36px;
+  width: calc(100% - 72px);
+  height: 54px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink2); font-family: var(--ff-head);
+  font-size: 1.2rem; letter-spacing: 4px;
+  cursor: pointer; transition: border-color .2s, color .2s;
+  display: none;
+}
+.btn-next:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 720px) {
+  #page-blindtest { flex-direction: column; }
+  .panel-player { flex: none; border-right: none; border-bottom: 1px solid var(--line); }
+  .art-hero { padding-bottom: 55%; }
+  .vinyl-wrap { width: 120px; height: 120px; }
+  .vinyl { width: 120px; height: 120px; }
+  .guess-header { padding: 20px 20px 14px; }
+  .guess-headline { font-size: 2.2rem; }
+  .guess-body { padding: 20px; gap: 18px; }
+  .verdict-word { font-size: 3.5rem; }
+  .btn-next { margin: 16px 20px; width: calc(100% - 40px); }
+  .reveal-row-label { width: 72px; }
+}
+
+/* ── STUDIO ── */
+#page-studio {
+  align-items: center; justify-content: center; padding: 60px 24px;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0px, rgba(255,255,255,.02) 1px, transparent 1px, transparent 56px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.02) 0px, rgba(255,255,255,.02) 1px, transparent 1px, transparent 56px);
+}
+.studio-inner {
+  max-width: 520px; width: 100%;
+  border: 1px solid var(--line);
+}
+.studio-top {
+  padding: 40px 40px 32px;
+  border-bottom: 1px solid var(--line);
+}
+.studio-eyebrow {
+  font-size: .6rem; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.studio-eyebrow::before {
+  content: ''; display: inline-block;
+  width: 20px; height: 1px; background: var(--red);
+}
+.studio-name {
+  font-family: var(--ff-head);
+  font-size: 4.5rem; letter-spacing: 6px; line-height: .85;
+  color: var(--ink);
+}
+.studio-name .accent { color: var(--red); }
+.studio-bottom {
+  padding: 24px 40px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.studio-desc {
+  font-size: .88rem; color: var(--ink3); line-height: 1.8;
+}
+.studio-features {
+  display: flex; flex-direction: column; gap: 0;
+}
+.studio-feat-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: .82rem; font-weight: 600; color: var(--ink2);
+  letter-spacing: .5px;
+}
+.studio-feat-row:last-child { border-bottom: none; }
+.studio-feat-row .feat-icon {
+  width: 28px; height: 28px; background: var(--card2);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .7rem; flex-shrink: 0; color: var(--ink3);
+  font-family: var(--ff-head); letter-spacing: 1px;
+}
+.studio-feat-row .feat-soon {
+  margin-left: auto; font-size: .6rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--red);
+  border: 1px solid rgba(232,50,26,.3); padding: 2px 8px;
+}
+
+/* Misc */
+.hidden { display: none !important; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-block">
+    <div class="logo">
+      <div class="logo-main">FA<span class="rap">RES</span></div>
+      <div class="logo-sub-line">× RAP</div>
+    </div>
+  </div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('blindtest')">Blind Test</button>
+    <button class="nav-tab" onclick="showPage('studio')">Studio</button>
+  </nav>
+</header>
+
+<!-- ── BLIND TEST ── -->
+<div id="page-blindtest" class="page active">
+
+  <!-- LEFT: player -->
+  <div class="panel-player">
+
+    <!-- Art hero -->
+    <div class="art-hero" id="art-hero">
+      <img id="cover-blur" src="" alt="">
+      <div class="art-overlay"></div>
+    </div>
+
+    <!-- Loading state -->
+    <div class="loader-wrap" id="loader">
+      <div class="loader-line"></div>
+      <div class="loader-txt">Chargement</div>
+    </div>
+
+    <!-- Player controls (hidden until track loaded) -->
+    <div id="player-ui" class="hidden">
+      <div class="player-controls">
+        <div class="tier-tag mainstream" id="tier-tag">
+          <span class="dot"></span>
+          <span id="tier-txt">Mainstream</span>
+        </div>
+        <div class="waveform" id="waveform" onclick="togglePlay()"></div>
+        <div class="ctrl-row">
+          <button class="btn-play" id="btn-play" onclick="togglePlay()">
+            <svg viewBox="0 0 24 24" id="ico-play"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <button class="btn-skip" onclick="nextTrack()">Passer</button>
+        </div>
+      </div>
+
+      <div class="pts-row" id="pts-row">
+        <div class="pts-cell" id="pc-artist">
+          <div class="pts-label">Artiste</div>
+          <div class="pts-val">+1</div>
+        </div>
+        <div class="pts-cell" id="pc-title">
+          <div class="pts-label">Titre</div>
+          <div class="pts-val">+1</div>
+        </div>
+        <div class="pts-cell" id="pc-feat">
+          <div class="pts-label">Feats</div>
+          <div class="pts-val" id="pc-feat-val">—</div>
+        </div>
+      </div>
+
+      <div class="hud-row">
+        <div class="hud-cell">
+          <div class="hud-label">Score</div>
+          <div class="hud-val" id="hud-score">0</div>
+        </div>
+        <div class="hud-cell">
+          <div class="hud-label">Streak</div>
+          <div class="hud-val" id="hud-streak">0</div>
+        </div>
+        <div class="hud-cell">
+          <div class="hud-label">Round</div>
+          <div class="hud-val" id="hud-round">0</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: guess + result -->
+  <div class="panel-guess">
+
+    <!-- Guess form -->
+    <div id="guess-panel">
+      <div class="guess-header">
+        <div class="guess-headline">QUI C'EST ?</div>
+        <div class="guess-sub">Identifie l'artiste, le titre et les feats</div>
+      </div>
+
+      <div class="guess-body">
+
+        <div class="field-block">
+          <div class="field-label">
+            Artiste
+            <span class="field-pts">+1 PT</span>
+          </div>
+          <div class="sug-anchor">
+            <input type="text" id="inp-artist" class="field-input"
+              placeholder="Nom de l'artiste..."
+              autocomplete="off"
+              oninput="onInput('artist')"
+              onkeydown="onKey(event,'artist')">
+            <div class="sug-box hidden" id="sug-artist"></div>
+          </div>
+        </div>
+
+        <div class="field-block">
+          <div class="field-label">
+            Titre
+            <span class="field-pts">+1 PT</span>
+          </div>
+          <div class="sug-anchor">
+            <input type="text" id="inp-title" class="field-input"
+              placeholder="Nom du son..."
+              autocomplete="off"
+              oninput="onInput('title')"
+              onkeydown="onKey(event,'title')">
+            <div class="sug-box hidden" id="sug-title"></div>
+          </div>
+        </div>
+
+        <div class="field-block">
+          <div class="field-label">
+            Feats
+            <span class="field-pts">+1 PT / FEAT</span>
+          </div>
+          <div class="feat-tags-wrap" id="feat-wrap" onclick="focusFeatInput()">
+            <!-- tags injected here -->
+            <input type="text" id="inp-feat" class="feat-tag-input"
+              placeholder="Ajoute un feat..."
+              autocomplete="off"
+              oninput="onFeatInput()"
+              onkeydown="onFeatKey(event)">
+          </div>
+          <div class="feat-hint">Entre / Virgule pour valider un feat</div>
+          <div class="sug-box hidden" id="sug-feat" style="position:relative;top:0;"></div>
+        </div>
+
+        <button class="btn-validate" id="btn-validate" onclick="validate()">Valider</button>
+
+      </div>
+    </div>
+
+    <!-- Result (replaces form after answer) -->
+    <div id="result-panel" class="result-overlay hidden">
+
+      <div class="verdict-block">
+        <div class="verdict-word" id="verdict-word">—</div>
+        <div class="verdict-pts" id="verdict-pts"></div>
+      </div>
+
+      <div class="cover-strip">
+        <img class="cover-img" id="reveal-cover" src="" alt="">
+        <div class="cover-meta">
+          <div class="cover-title" id="reveal-title2"></div>
+          <div class="cover-artist" id="reveal-artist2"></div>
+          <div class="cover-feat hidden" id="reveal-feat2"></div>
+          <div class="cover-album" id="reveal-album2"></div>
+        </div>
+      </div>
+
+      <div class="reveal-rows" id="reveal-rows"></div>
+
+      <button class="btn-next" id="btn-next" onclick="nextTrack()">Son suivant</button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ── STUDIO ── -->
+<div id="page-studio" class="page">
+  <div class="studio-inner">
+    <div class="studio-top">
+      <div class="studio-eyebrow">Phase 2</div>
+      <div class="studio-name">STU<span class="accent">DIO</span></div>
+    </div>
+    <div class="studio-bottom">
+      <div class="studio-desc">
+        Crée tes propres instrus de rap directement dans le navigateur.
+        Beats, basslines, samples — tout depuis FRAP.
+      </div>
+      <div class="studio-features">
+        <div class="studio-feat-row">
+          <div class="feat-icon">DR</div>
+          Drum machine — programmation de batteries
+          <span class="feat-soon">Bientôt</span>
+        </div>
+        <div class="studio-feat-row">
+          <div class="feat-icon">BS</div>
+          Bassline sequencer
+          <span class="feat-soon">Bientôt</span>
+        </div>
+        <div class="studio-feat-row">
+          <div class="feat-icon">SP</div>
+          Sampler — chargement de sons
+          <span class="feat-soon">Bientôt</span>
+        </div>
+        <div class="studio-feat-row">
+          <div class="feat-icon">FX</div>
+          Effets — reverb, delay, distorsion
+          <span class="feat-soon">Bientôt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<audio id="audio-player" preload="auto"></audio>
+
+<script>
+// ── ARTISTS ──────────────────────────────────────────────────────────────────
+// ── CURATED TRACKS (sons populaires 2023-2026, IDs vérifiés) ──────────────
+// Ces sons s'ajoutent au pool random par artiste.
+// Chaque entrée = { id: deezer_track_id }
+const CURATED_TRACKS = [
+  // Top 2025-2026
+  3314018771, // Phénoménal — Jul
+  3102004051, // NANANI NANANA — Gazo
+  2659306652, // Pyramide — Werenoi
+  3045111081, // La famine — Werenoi (feat. Gazo)
+  1759430967, // Meuda — Tiakola
+  3000573421, // PONA NINI — Tiakola
+  3282889891, // Freestyle CKO — L2B
+  2872998762, // Monaco — Guy2bezbar
+  3728009502, // JACK HONEY — Niaks
+  4002471911, // Cat Stevens — ZKR
+  3411610351, // COACHELLA — Gambi
+  3484456821, // FDT — Timar
+  3713170282, // Angela — Hatik
+  // 2023-2024
+  2635800932, // Chambre 140 — PLK
+  991623302,  // Drill FR 4 (feat. Freeze Corleone) — Gazo
+  3058139731, // Collabo — Ninho
+  2527530731, // Petit génie — Jungeli
+  // Classiques récents
+  653159322,  // Au DD — PNL
+  882365842,  // TRINITYVILLE — Laylow
+  354918041,  // Macarena — Damso
+  414838122,  // Basique — Orelsan
+  133165774,  // DKR — Booba
+  135203382,  // Chocolat — Lartiste (feat. Awa Imani)
+  602971012,  // La force — Rohff
+  463794542,  // Guerilla — Soolking
+  84310967,   // Corleone — Lacrim
+];
+
+const ARTISTS = [
+  // ── TOP STREAMING 2024/2025/2026 ──
+  { name: 'Jul',               id: 1191615,   tier: 'mainstream' },
+  { name: 'GIMS',              id: 4429712,   tier: 'mainstream' },
+  { name: 'Ninho',             id: 5542343,   tier: 'mainstream' },
+  { name: 'Gazo',              id: 8873540,   tier: 'mainstream' },
+  { name: 'Naps',              id: 4842061,   tier: 'mainstream' },
+  { name: 'Werenoi',           id: 121672292, tier: 'mainstream' },
+  { name: 'PLK',               id: 1479842,   tier: 'mainstream' },
+  { name: 'Koba LaD',          id: 14621667,  tier: 'mainstream' },
+  { name: 'Soprano',           id: 13011,     tier: 'mainstream' },
+  { name: 'Niska',             id: 5288900,   tier: 'mainstream' },
+  { name: 'SDM',               id: 604107,    tier: 'mainstream' },
+  { name: 'Niro',              id: 58624,     tier: 'mainstream' },
+  { name: 'Tayc',              id: 12526056,  tier: 'mainstream' },
+  { name: 'KeBlack',           id: 7459268,   tier: 'mainstream' },
+  { name: 'Naza',              id: 7459270,   tier: 'mainstream' },
+  { name: 'Tiakola',           id: 13918545,  tier: 'mainstream' },
+  { name: 'Hamza',             id: 171998,    tier: 'mainstream' },
+  { name: 'Leto',              id: 455796,    tier: 'mainstream' },
+  { name: 'L2B',               id: 13790723,  tier: 'mainstream' },
+  { name: 'Franglish',         id: 10695573,  tier: 'mainstream' },
+  { name: 'Hatik',             id: 12422192,  tier: 'mainstream' },
+  { name: 'Niaks',             id: 52937632,  tier: 'mainstream' },
+  { name: 'Guy2Bezbar',        id: 11026886,  tier: 'mainstream' },
+  { name: 'Ziak',              id: 7668530,   tier: 'mainstream' },
+  { name: 'Gradur',            id: 5876247,   tier: 'mainstream' },
+  { name: 'Lartiste',          id: 1670355,   tier: 'mainstream' },
+  { name: "Heuss L'Enfoiré",   id: 13645509,  tier: 'mainstream' },
+  { name: 'Hornet La Frappe',  id: 6545727,   tier: 'mainstream' },
+  { name: 'Zola',              id: 13962203,  tier: 'mainstream' },
+  { name: 'Sofiane',           id: 89657,     tier: 'mainstream' },
+  { name: 'La Fouine',         id: 12778,     tier: 'mainstream' },
+  { name: 'Josman',            id: 7365500,   tier: 'mainstream' },
+  { name: 'ZKR',               id: 14240131,  tier: 'mainstream' },
+  { name: 'Gambi',             id: 65303292,  tier: 'mainstream' },
+  { name: 'Siboy',             id: 6311908,   tier: 'mainstream' },
+  { name: 'Lyna Mahyem',       id: 7995536,   tier: 'mainstream' },
+  { name: 'Jungeli',           id: 220540115, tier: 'mainstream' },
+  { name: 'Rohff',             id: 750,       tier: 'mainstream' },
+  // ── CLASSIQUES / PILIERS ──
+  { name: 'PNL',               id: 1519461,   tier: 'mainstream' },
+  { name: 'Damso',             id: 9197980,   tier: 'mainstream' },
+  { name: 'Booba',             id: 390,       tier: 'mainstream' },
+  { name: 'Nekfeu',            id: 1412564,   tier: 'mainstream' },
+  { name: 'SCH',               id: 162665,    tier: 'mainstream' },
+  { name: 'Kaaris',            id: 388973,    tier: 'mainstream' },
+  { name: 'Lacrim',            id: 4087782,   tier: 'mainstream' },
+  { name: 'Freeze Corleone',   id: 13755123,  tier: 'mainstream' },
+  { name: 'Orelsan',           id: 259467,    tier: 'mainstream' },
+  { name: 'Bigflo & Oli',      id: 5497121,   tier: 'mainstream' },
+  { name: 'Laylow',            id: 4510044,   tier: 'mainstream' },
+  { name: 'Soolking',          id: 10189104,  tier: 'mainstream' },
+  { name: 'Alonzo',            id: 259729,    tier: 'mainstream' },
+  { name: "Rim'K",             id: 256080,    tier: 'mainstream' },
+  { name: 'Guizmo',            id: 162815,    tier: 'mainstream' },
+  { name: 'Sadek',             id: 1270444,   tier: 'mainstream' },
+  { name: 'Soso Maness',       id: 5594859,   tier: 'mainstream' },
+  { name: 'Youssoupha',        id: 13020,     tier: 'mainstream' },
+  { name: 'IAM',               id: 48,        tier: 'mainstream' },
+  // ── MID — reconnus, scène active ──
+  { name: 'Vald',              id: 5175734,   tier: 'mid' },
+  { name: 'Dinos',             id: 292949,    tier: 'mid' },
+  { name: 'Lomepal',           id: 5111084,   tier: 'mid' },
+  { name: 'Alpha Wann',        id: 4428187,   tier: 'mid' },
+  { name: 'Kofs',              id: 5593078,   tier: 'mid' },
+  { name: 'Lefa',              id: 1473902,   tier: 'mid' },
+  { name: 'Da Uzi',            id: 11884111,  tier: 'mid' },
+  { name: 'Benjamin Epps',     id: 88464372,  tier: 'mid' },
+  { name: 'Ven1',              id: 243505001, tier: 'mid' },
+  { name: 'La Rvfleuze',       id: 174484227, tier: 'mid' },
+  { name: 'HOUDI',             id: 48443532,  tier: 'mid' },
+  { name: 'Chilla',            id: 4121259,   tier: 'mid' },
+  { name: 'Morad',             id: 111130212, tier: 'mid' },
+  { name: 'Abou Debeing',      id: 6329070,   tier: 'mid' },
+  { name: 'Rsko',              id: 9976422,   tier: 'mid' },
+  { name: 'Timal',             id: 74463,     tier: 'mid' },
+  { name: 'Bello & Dallas',    id: 144701542, tier: 'mid' },
+  { name: 'WIXO & LA2S',       id: 145561382, tier: 'mid' },
+  { name: 'Landy',             id: 14447309,  tier: 'mid' },
+  { name: 'Bramsito',          id: 10930872,  tier: 'mid' },
+  { name: 'Kekra',             id: 8352118,   tier: 'mid' },
+  { name: 'Carbonne',          id: 98775702,  tier: 'mid' },
+  { name: 'Moha K',            id: 73205432,  tier: 'mid' },
+  { name: '4Keus',             id: 13918541,  tier: 'mid' },
+  { name: 'Maska',             id: 4438831,   tier: 'mid' },
+  { name: 'Casseurs Flowters', id: 4944278,   tier: 'mid' },
+  { name: 'Disiz',             id: 292,       tier: 'mid' },
+  { name: 'Dosseh',            id: 158083,    tier: 'mid' },
+  { name: 'Poison Kid',        id: 65246912,  tier: 'mid' },
+  { name: 'Timar',             id: 6354270,   tier: 'mid' },
+  { name: 'KLN',               id: 274705721, tier: 'mid' },
+  { name: 'iDS',               id: 239541711, tier: 'mid' },
+  // ── UNDERGROUND / CULTURE ──
+  { name: 'Ichon',             id: 5157545,   tier: 'underground' },
+  { name: 'Georgio',           id: 183727,    tier: 'underground' },
+  { name: 'Zed Yun Pavarotti', id: 14082715,  tier: 'underground' },
+  { name: 'Kerchak',           id: 162070292, tier: 'underground' },
+  { name: 'Kery James',        id: 5025,      tier: 'underground' },
+  { name: 'Oxmo Puccino',      id: 7983,      tier: 'underground' },
+  { name: 'Lino',              id: 6568,      tier: 'underground' },
+  { name: 'Médine',            id: 14289,     tier: 'underground' },
+  { name: 'Akhenaton',         id: 49,        tier: 'underground' },
+  { name: 'Tunisiano',         id: 64085,     tier: 'underground' },
+  { name: 'Hologram Lo',       id: 4450096,   tier: 'underground' },
+  { name: 'Demi Portion',      id: 89172,     tier: 'underground' },
+  { name: 'Nessbeal',          id: 74095,     tier: 'underground' },
+  { name: 'Scylla',            id: 104154,    tier: 'underground' },
+  { name: 'Sefyu',             id: 12984,     tier: 'underground' },
+];
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+const S = {
+  score: 0, streak: 0, round: 0,
+  current: null,   // { track, artist, feats[] }
+  answered: false, playing: false,
+  featTags: [],
+};
+const audio = document.getElementById('audio-player');
+
+// ── FEAT PARSER ──────────────────────────────────────────────────────────────
+function parseFeats(title) {
+  const m = title.match(/\((?:feat|ft|avec|with)\.?\s+([^)]+)\)/i);
+  if (!m) return [];
+  return m[1].split(/[,&]/).map(s => s.trim()).filter(Boolean);
+}
+function cleanTitle(title) {
+  return title.replace(/\s*\((?:feat|ft|avec|with)\.?[^)]*\)/gi, '').trim();
+}
+
+// ── NAV ──────────────────────────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach((t, i) => {
+    t.classList.toggle('active', (i === 0 && name === 'blindtest') || (i === 1 && name === 'studio'));
+  });
+  document.getElementById(`page-${name}`).classList.add('active');
+  if (name === 'blindtest' && S.round === 0) nextTrack();
+}
+
+// ── WAVEFORM ─────────────────────────────────────────────────────────────────
+function buildWaveform() {
+  const wf = document.getElementById('waveform');
+  wf.innerHTML = '';
+  for (let i = 0; i < 48; i++) {
+    const b = document.createElement('div');
+    b.className = 'wf-bar';
+    b.style.setProperty('--d', (.25 + Math.random() * .65) + 's');
+    b.style.height = (4 + Math.random() * 32) + 'px';
+    wf.appendChild(b);
+  }
+}
+
+// ── PLAYBACK ─────────────────────────────────────────────────────────────────
+const icoPlay  = '<path d="M8 5v14l11-7z"/>';
+const icoPause = '<path d="M6 19h4V5H6zm8-14v14h4V5z"/>';
+
+function setPlay(on) {
+  S.playing = on;
+  document.getElementById('waveform').classList.toggle('playing', on);
+  document.getElementById('ico-play').innerHTML = on ? icoPause : icoPlay;
+}
+
+function togglePlay() {
+  if (!S.current) return;
+  if (audio.paused) { audio.play().catch(()=>{}); setPlay(true); }
+  else              { audio.pause(); setPlay(false); }
+}
+audio.addEventListener('ended', () => setPlay(false));
+
+// ── FETCH ────────────────────────────────────────────────────────────────────
+const PROXY = 'https://corsproxy.io/?';
+async function deezerFetch(path) {
+  try {
+    const r = await fetch(`/api/deezer/${path}`, { signal: AbortSignal.timeout(4000) });
+    if (!r.ok) throw 0;
+    return r.json();
+  } catch {
+    return fetch(PROXY + encodeURIComponent(`https://api.deezer.com/${path}`)).then(r => r.json());
+  }
+}
+async function fetchTracks(id) {
+  const d = await deezerFetch(`artist/${id}/top?limit=50`);
+  return (d.data || []).filter(t => t.preview);
+}
+async function fetchTrackById(id) {
+  const d = await deezerFetch(`track/${id}`);
+  return d.preview ? d : null;
+}
+async function fetchSearch(q) {
+  const d = await deezerFetch(`search/track?q=${encodeURIComponent(q)}&limit=8`);
+  return (d.data || []).filter(t => t.preview);
+}
+
+// ── NEXT TRACK ───────────────────────────────────────────────────────────────
+async function nextTrack() {
+  audio.pause(); setPlay(false);
+  S.answered = false; S.featTags = [];
+
+  // Reset cover blur
+  const coverBlur = document.getElementById('cover-blur');
+  coverBlur.src = ''; coverBlur.classList.remove('revealed');
+
+  // UI state
+  document.getElementById('loader').style.display = 'flex';
+  document.getElementById('player-ui').classList.add('hidden');
+  document.getElementById('guess-panel').classList.remove('hidden');
+  document.getElementById('result-panel').classList.remove('active');
+  document.getElementById('result-panel').classList.add('hidden');
+  document.getElementById('btn-next').style.display = 'none';
+
+  // Reset inputs
+  ['inp-artist','inp-title'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = ''; el.disabled = false;
+    el.className = 'field-input';
+  });
+  document.getElementById('btn-validate').disabled = false;
+  renderFeatTags();
+  document.getElementById('inp-feat').value = '';
+  document.getElementById('inp-feat').disabled = false;
+  document.getElementById('feat-wrap').className = 'feat-tags-wrap';
+  ['sug-artist','sug-title','sug-feat'].forEach(id =>
+    document.getElementById(id).classList.add('hidden')
+  );
+
+  // Reset pts chips
+  ['pc-artist','pc-title','pc-feat'].forEach(id => {
+    document.getElementById(id).className = 'pts-cell';
+  });
+
+  // 40% chance: pick from curated tracks, 60%: random artist
+  const useCurated = Math.random() < 0.4 && CURATED_TRACKS.length > 0;
+
+  try {
+    let track, artist, feats;
+
+    if (useCurated) {
+      const trackId = CURATED_TRACKS[Math.floor(Math.random() * CURATED_TRACKS.length)];
+      track = await fetchTrackById(trackId);
+      if (!track) { nextTrack(); return; }
+      // Try to match artist from ARTISTS list, fallback to Deezer artist name
+      const deezerArtistName = track.artist?.name || '';
+      artist = ARTISTS.find(a => matches(a.name, deezerArtistName))
+             || { name: deezerArtistName, id: track.artist?.id, tier: 'mainstream' };
+      feats = parseFeats(track.title);
+    } else {
+      const weights = { mainstream: 3, mid: 2, underground: 1 };
+      const pool = ARTISTS.flatMap(a => Array(weights[a.tier]).fill(a));
+      artist = pool[Math.floor(Math.random() * pool.length)];
+      const tracks = await fetchTracks(artist.id);
+      if (!tracks.length) { nextTrack(); return; }
+      track = tracks[Math.floor(Math.random() * tracks.length)];
+      feats = parseFeats(track.title);
+    }
+
+    S.current = { track, artist, feats };
+
+    audio.src = track.preview;
+    audio.load();
+
+    // Cover (blurred)
+    const cover = track.album?.cover_xl || track.album?.cover_big || track.album?.cover_medium || '';
+    coverBlur.src = cover;
+
+    buildWaveform();
+
+    // Tier
+    const tierTxt = { mainstream: 'Mainstream', mid: 'Mid-game', underground: 'Underground' };
+    document.getElementById('tier-txt').textContent = tierTxt[artist.tier];
+    const tag = document.getElementById('tier-tag');
+    tag.className = 'tier-tag ' + artist.tier;
+
+    // Feat chip
+    const pcFeat = document.getElementById('pc-feat');
+    const pcFeatVal = document.getElementById('pc-feat-val');
+    if (feats.length) {
+      pcFeatVal.textContent = `+${feats.length}`;
+      pcFeat.style.opacity = '1';
+    } else {
+      pcFeatVal.textContent = '—';
+      pcFeat.style.opacity = '.4';
+    }
+
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('player-ui').classList.remove('hidden');
+    S.round++;
+    updateHUD();
+
+    setTimeout(() => { audio.play().catch(()=>{}); setPlay(true); }, 350);
+
+  } catch(e) {
+    console.error(e);
+    document.getElementById('loader').innerHTML = '<div class="loader-txt">Erreur reseau — reessaie</div>';
+  }
+}
+
+// ── FEAT TAGS ─────────────────────────────────────────────────────────────────
+function renderFeatTags(disabled = false) {
+  const wrap = document.getElementById('feat-wrap');
+  // Keep the input
+  const inp = document.getElementById('inp-feat');
+  wrap.innerHTML = '';
+  S.featTags.forEach((tag, i) => {
+    const el = document.createElement('div');
+    el.className = 'feat-tag';
+    el.innerHTML = `<span>${esc(tag)}</span>${!disabled ? `<span class="rm" onclick="removeFeatTag(${i})">x</span>` : ''}`;
+    wrap.appendChild(el);
+  });
+  wrap.appendChild(inp);
+}
+
+function addFeatTag(val) {
+  const v = val.trim().replace(/,+$/, '').trim();
+  if (!v) return;
+  if (!S.featTags.includes(v)) S.featTags.push(v);
+  document.getElementById('inp-feat').value = '';
+  renderFeatTags();
+  document.getElementById('sug-feat').classList.add('hidden');
+}
+
+function removeFeatTag(i) {
+  S.featTags.splice(i, 1);
+  renderFeatTags();
+}
+
+function focusFeatInput() {
+  document.getElementById('inp-feat').focus();
+}
+
+function onFeatInput() {
+  const q = document.getElementById('inp-feat').value;
+  const clean = q.trim();
+  if (clean.length >= 2) loadSug('feat', clean);
+  else document.getElementById('sug-feat').classList.add('hidden');
+}
+
+function onFeatKey(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    addFeatTag(document.getElementById('inp-feat').value);
+  }
+  if (e.key === 'Escape') document.getElementById('sug-feat').classList.add('hidden');
+}
+
+// ── VALIDATE ─────────────────────────────────────────────────────────────────
+function validate() {
+  if (S.answered || !S.current) return;
+  S.answered = true;
+
+  // Flush pending feat tag
+  const pendingFeat = document.getElementById('inp-feat').value.trim();
+  if (pendingFeat) addFeatTag(pendingFeat);
+
+  audio.pause(); setPlay(false);
+  document.getElementById('btn-validate').disabled = true;
+  ['inp-artist','inp-title','inp-feat'].forEach(id =>
+    document.getElementById(id).disabled = true
+  );
+  ['sug-artist','sug-title','sug-feat'].forEach(id =>
+    document.getElementById(id).classList.add('hidden')
+  );
+
+  const { track, artist, feats } = S.current;
+  const gArtist = document.getElementById('inp-artist').value.trim();
+  const gTitle  = document.getElementById('inp-title').value.trim();
+
+  const artistOk = gArtist && matches(gArtist, artist.name);
+  const titleOk  = gTitle  && matches(gTitle, cleanTitle(track.title));
+
+  // Feat matching
+  const matchedFeats = feats.filter(f =>
+    S.featTags.some(g => matches(g, f))
+  );
+  const featScore = matchedFeats.length;
+  const totalGained = (artistOk ? 1 : 0) + (titleOk ? 1 : 0) + featScore;
+  const totalMax    = 2 + feats.length;
+
+  // Pts chips
+  document.getElementById('pc-artist').className = 'pts-cell ' + (artistOk ? 'hit' : (gArtist ? 'miss' : 'miss'));
+  document.getElementById('pc-title').className  = 'pts-cell ' + (titleOk  ? 'hit' : (gTitle  ? 'miss' : 'miss'));
+  if (feats.length)
+    document.getElementById('pc-feat').className = 'pts-cell ' + (featScore > 0 ? 'bonus' : (S.featTags.length ? 'miss' : 'miss'));
+
+  // Input feedback
+  document.getElementById('inp-artist').className = 'field-input ' + (artistOk ? 'hit' : (gArtist ? 'miss' : 'miss'));
+  document.getElementById('inp-title').className  = 'field-input ' + (titleOk  ? 'hit' : (gTitle  ? 'miss' : 'miss'));
+  if (S.featTags.length)
+    document.getElementById('feat-wrap').className = 'feat-tags-wrap ' + (featScore > 0 ? 'hit' : 'miss');
+
+  // Disable feat tag removal
+  renderFeatTags(true);
+
+  // Score
+  S.score += totalGained;
+  if (totalGained > 0) S.streak++;
+  else S.streak = 0;
+  updateHUD();
+
+  // Reveal cover
+  document.getElementById('cover-blur').classList.add('revealed');
+
+  // Build result panel
+  buildResult({ artistOk, titleOk, matchedFeats, feats, totalGained, totalMax, gArtist, gTitle });
+}
+
+function matches(g, a) {
+  const n = s => s.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+  const ng = n(g), na = n(a);
+  return ng.length >= 2 && (na.includes(ng) || ng.includes(na));
+}
+
+function buildResult({ artistOk, titleOk, matchedFeats, feats, totalGained, totalMax, gArtist, gTitle }) {
+  const { track, artist } = S.current;
+
+  // Verdict
+  const vWord = document.getElementById('verdict-word');
+  const vPts  = document.getElementById('verdict-pts');
+  if (totalGained === 0) {
+    vWord.textContent = 'RATÉ';
+    vWord.className = 'verdict-word v-miss';
+  } else if (totalGained === totalMax) {
+    vWord.textContent = S.streak > 1 ? `X${S.streak} STREAK` : 'PARFAIT';
+    vWord.className = 'verdict-word v-perfect';
+  } else {
+    vWord.textContent = 'PAS MAL';
+    vWord.className = 'verdict-word v-partial';
+  }
+  vPts.textContent = `${totalGained} / ${totalMax} POINT${totalMax > 1 ? 'S' : ''}`;
+
+  // Cover
+  const cover = track.album?.cover_medium || '';
+  document.getElementById('reveal-cover').src = cover;
+  document.getElementById('reveal-title2').textContent = cleanTitle(track.title);
+  document.getElementById('reveal-artist2').textContent = artist.name;
+  if (feats.length) {
+    const featEl = document.getElementById('reveal-feat2');
+    featEl.textContent = 'feat. ' + feats.join(', ');
+    featEl.classList.remove('hidden');
+  } else {
+    document.getElementById('reveal-feat2').classList.add('hidden');
+  }
+  document.getElementById('reveal-album2').textContent = track.album?.title || '';
+
+  // Rows
+  const rows = document.getElementById('reveal-rows');
+  rows.innerHTML = '';
+  const addRow = (label, answer, guessed, ok) => {
+    const r = document.createElement('div');
+    r.className = 'reveal-row';
+    r.innerHTML = `
+      <div class="reveal-row-label">${label}</div>
+      <div class="reveal-row-content">
+        <div>
+          <div class="reveal-answer">${esc(answer)}</div>
+          ${guessed ? `<div class="reveal-guess">
+            Ta réponse : <span class="${ok ? 'hit-txt' : 'miss-txt'}">${esc(guessed)}</span>
+          </div>` : `<div class="reveal-guess miss-txt">Pas répondu</div>`}
+        </div>
+        <div class="reveal-status ${ok ? 'ok' : (guessed ? 'ko' : 'skip')}">${ok ? '+' : (guessed ? 'x' : '—')}</div>
+      </div>`;
+    rows.appendChild(r);
+  };
+
+  addRow('Artiste', artist.name, gArtist, artistOk);
+  addRow('Titre', cleanTitle(track.title), gTitle, titleOk);
+
+  if (feats.length) {
+    feats.forEach(f => {
+      const guessed = S.featTags.find(g => matches(g, f));
+      addRow('Feat', f, guessed || (S.featTags.length ? S.featTags.join(', ') : ''), matchedFeats.includes(f));
+    });
+  }
+
+  // Switch panels
+  document.getElementById('guess-panel').classList.add('hidden');
+  document.getElementById('result-panel').classList.remove('hidden');
+  document.getElementById('result-panel').classList.add('active');
+  document.getElementById('btn-next').style.display = 'block';
+}
+
+// ── AUTOCOMPLETE ─────────────────────────────────────────────────────────────
+const sT = {};
+function onInput(field) {
+  clearTimeout(sT[field]);
+  const q = document.getElementById(`inp-${field}`).value.trim();
+  if (q.length < 2) { document.getElementById(`sug-${field}`).classList.add('hidden'); return; }
+  sT[field] = setTimeout(() => loadSug(field, q), 280);
+}
+async function loadSug(field, q) {
+  let items = [];
+  if (field === 'artist' || field === 'feat') {
+    items = ARTISTS.filter(a => a.name.toLowerCase().includes(q.toLowerCase()))
+      .slice(0, 5).map(a => ({ label: a.name, sub: a.tier }));
+  } else if (field === 'title') {
+    try {
+      const tracks = await fetchSearch(q);
+      items = tracks.slice(0, 6).map(t => ({ label: cleanTitle(t.title), sub: t.artist.name }));
+    } catch {}
+  }
+  renderSug(field, items);
+}
+function renderSug(field, items) {
+  const box = document.getElementById(`sug-${field}`);
+  if (!items.length) { box.classList.add('hidden'); return; }
+  box.innerHTML = items.map(it =>
+    `<div class="sug-row" onclick="pickSug('${field}','${esc(it.label)}')">${esc(it.label)}<div class="sr-sub">${esc(it.sub)}</div></div>`
+  ).join('');
+  box.classList.remove('hidden');
+}
+function pickSug(field, val) {
+  if (field === 'feat') {
+    addFeatTag(val);
+  } else {
+    document.getElementById(`inp-${field}`).value = val;
+    document.getElementById(`sug-${field}`).classList.add('hidden');
+  }
+}
+function onKey(e, field) {
+  if (e.key === 'Enter') {
+    const next = { artist: 'title', title: 'feat' };
+    document.getElementById(`sug-${field}`).classList.add('hidden');
+    if (next[field]) document.getElementById(`inp-${next[field]}`)?.focus();
+    else validate();
+  }
+  if (e.key === 'Escape') document.getElementById(`sug-${field}`).classList.add('hidden');
+}
+
+// ── HUD ──────────────────────────────────────────────────────────────────────
+function updateHUD() {
+  document.getElementById('hud-score').textContent  = S.score;
+  document.getElementById('hud-streak').textContent = S.streak;
+  document.getElementById('hud-round').textContent  = S.round;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+}
+
+// ── BOOT ─────────────────────────────────────────────────────────────────────
+nextTrack();
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.sug-anchor') && !e.target.closest('.field-block')) {
+    ['sug-artist','sug-title','sug-feat'].forEach(id =>
+      document.getElementById(id).classList.add('hidden')
+    );
+  }
+});
+</script>
+</body>
+</html>
