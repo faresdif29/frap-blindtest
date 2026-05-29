@@ -84,8 +84,8 @@ header {
 .nav-tab {
   display: flex; align-items: center; justify-content: center;
   padding: 0 28px;
-  font-family: var(--ff-tag); font-size: .95rem;
-  letter-spacing: 1px; text-transform: none;
+  font-family: var(--ff-alt); font-size: .72rem; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
   cursor: pointer; border: none; background: transparent;
   color: var(--ink3); border-left: 1px solid var(--line);
   transition: color .2s, background .2s;
@@ -93,7 +93,7 @@ header {
 }
 .nav-tab::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 2px; background: var(--gold); transform: scaleX(0);
+  height: 2px; background: var(--ink); transform: scaleX(0);
   transition: transform .25s;
 }
 .nav-tab:hover { color: var(--ink); }
@@ -250,8 +250,8 @@ header {
 }
 .home-logo-main .acc { color: var(--blue); }
 .home-logo-sub {
-  font-family: var(--ff-tag); font-size: .85rem;
-  letter-spacing: 2px;
+  font-family: var(--ff-alt); font-size: .6rem; font-weight: 700;
+  letter-spacing: 8px; text-transform: uppercase;
   color: var(--ink3); margin-top: 12px;
   border-top: 1px solid var(--line);
   padding-top: 10px;
@@ -266,22 +266,22 @@ header {
   overflow: hidden;
 }
 .home-sym {
-  padding: 7px 16px;
-  font-family: var(--ff-tag); font-size: .9rem;
-  letter-spacing: 1px;
+  padding: 8px 16px;
+  font-family: var(--ff-alt); font-size: .65rem; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
   color: var(--ink3);
   border-right: 1px solid var(--line);
 }
 .home-sym:last-child { border-right: none; }
 .home-sym.red { color: var(--red2); }
-.home-sym.gold { color: var(--gold); }
+.home-sym.gold { color: var(--ink2); }
 
 /* ── Scrolling rapper name ticker ── */
 .home-ticker {
   width: 100%; overflow: hidden;
-  border-top: 1px solid rgba(255,184,48,.18);
-  border-bottom: 1px solid rgba(255,184,48,.18);
-  background: rgba(255,184,48,.03);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
   margin: 16px 0;
   padding: 7px 0;
 }
@@ -295,11 +295,11 @@ header {
   to   { transform: translateX(-50%); }
 }
 .home-ticker-inner span {
-  font-family: var(--ff-head); font-size: .85rem; letter-spacing: 4px;
+  font-family: var(--ff-alt); font-size: .65rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
   color: var(--ink3); padding: 0 18px;
 }
 .home-ticker-inner .tick-sep {
-  color: var(--gold); opacity: .5; padding: 0 4px; letter-spacing: 0;
+  color: var(--ink3); opacity: .4; padding: 0 4px; letter-spacing: 0;
 }
 
 /* ── Rap culture floating objects ── */
@@ -345,7 +345,7 @@ header {
 .home-ref-item:last-child { border-right: none; }
 .home-ref-item:hover { background: rgba(20,97,255,.08); }
 .hri-val {
-  font-family: var(--ff-tag); font-size: 1rem; letter-spacing: 1px;
+  font-family: var(--ff-head); font-size: .9rem; letter-spacing: 2px;
   color: var(--ink2);
   transition: color .15s;
 }
@@ -363,16 +363,16 @@ header {
 }
 .home-enter-btn {
   width: 100%; height: 70px;
-  background: #0d0d0d; border: none; color: var(--gold);
-  font-family: var(--ff-tag); font-size: 2.2rem; letter-spacing: 6px;
+  background: #0d0d0d; border: none; color: #fff;
+  font-family: var(--ff-head); font-size: 2rem; letter-spacing: 10px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 14px;
   transition: background .15s;
-  border: 1px solid rgba(255,184,48,.35);
-  border-left: 4px solid var(--red2);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--red2);
   text-shadow: 1px 1px 0 rgba(0,0,0,.4);
 }
-.home-enter-btn:hover { background: #181818; border-color: var(--gold); border-left-color: var(--red2); }
+.home-enter-btn:hover { background: #181818; border-color: rgba(255,255,255,.15); border-left-color: var(--red2); }
 .home-enter-btn .arrow {
   font-size: 1rem; transition: transform .2s; display: inline-block;
 }
@@ -618,7 +618,7 @@ header {
   margin-top: 8px;
   font-family: var(--ff-head); font-size: .75rem;
   letter-spacing: 3px; text-transform: uppercase;
-  color: var(--gold);
+  color: #fff;
 }
 .home-best.visible { display: flex; }
 .home-best-val { font-size: 1.3rem; letter-spacing: 1px; }
