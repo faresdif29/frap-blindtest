@@ -112,38 +112,80 @@ header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-x: hidden;
 }
 #page-home.active { display: flex; }
 
-/* Background faces mosaic */
+/* ── Background: rapper faces mosaic ── */
 .home-faces-bg {
   position: absolute; inset: 0; z-index: 0;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(3, 1fr);
 }
-.home-face-cell {
-  overflow: hidden; background: var(--card);
-}
+.home-face-cell { overflow: hidden; background: #050810; }
 .home-face-cell img {
   width: 100%; height: 100%;
   object-fit: cover; object-position: top; display: block;
-  filter: grayscale(100%) contrast(1.5) brightness(0.5);
-  transition: filter 6s ease;
+  filter: grayscale(100%) contrast(1.6) brightness(0.22);
+  transition: filter 1.8s ease;
 }
 .home-face-cell img.loaded {
-  filter: grayscale(100%) contrast(1.4) brightness(0.35);
+  filter: grayscale(100%) contrast(1.5) brightness(0.55);
 }
 
-/* Multi-layer overlay: radial fade + top/bottom bars */
+/* Heavy vignette: edges show photos, center is dark */
 .home-bg-overlay {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
-    radial-gradient(ellipse 70% 60% at 50% 45%, transparent 10%, rgba(3,8,14,.82) 65%, var(--paper) 100%),
-    linear-gradient(to bottom, var(--paper) 0%, transparent 18%, transparent 75%, var(--paper) 100%);
+    radial-gradient(ellipse 55% 55% at 50% 46%,
+      rgba(3,8,14,.96) 0%,
+      rgba(3,8,14,.75) 45%,
+      rgba(3,8,14,.3) 70%,
+      transparent 100%),
+    linear-gradient(to bottom, var(--paper) 0%, transparent 12%, transparent 82%, var(--paper) 100%);
 }
 
-/* Graffiti tag lines in background */
+/* Scanlines */
+.home-scanlines {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,.07) 3px, rgba(0,0,0,.07) 6px
+  );
+}
+
+/* ── Side spotlight portraits ── */
+.home-spotlight {
+  position: absolute; top: 50%; z-index: 1;
+  width: clamp(140px, 18vw, 260px);
+  height: clamp(200px, 30vw, 400px);
+  transform: translateY(-50%);
+  overflow: hidden;
+}
+.home-spotlight.left  { left: 0; }
+.home-spotlight.right { right: 0; }
+.home-spotlight img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top center; display: block;
+  filter: grayscale(100%) contrast(1.4) brightness(0.7);
+}
+.home-spotlight.left::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to right, transparent 40%, var(--paper) 100%);
+}
+.home-spotlight.right::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to left, transparent 40%, var(--paper) 100%);
+}
+/* Top/bottom fade on each spotlight */
+.home-spotlight::before {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(to bottom, var(--paper) 0%, transparent 18%, transparent 78%, var(--paper) 100%);
+}
+
+/* ── Graffiti tag watermarks ── */
 .home-tag-line {
   position: absolute; z-index: 1;
   font-family: var(--ff-tag);
@@ -153,66 +195,92 @@ header {
   user-select: none;
 }
 
-/* Scanline overlay */
-.home-scanlines {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg, transparent, transparent 3px,
-    rgba(0,0,0,.06) 3px, rgba(0,0,0,.06) 6px
-  );
-}
-
-/* Main content */
+/* ── Main content ── */
 .home-content {
-  position: relative; z-index: 2;
+  position: relative; z-index: 3;
   display: flex; flex-direction: column;
   align-items: center; text-align: center;
-  padding: 20px 20px 110px;
-  max-width: 820px; width: 100%;
+  padding: 16px 20px 110px;
+  max-width: 760px; width: 100%;
 }
 
 /* Giant logo */
 .home-logo-eyebrow {
-  font-family: var(--ff-tag); font-size: .95rem;
-  color: var(--blue); opacity: .85;
+  font-family: var(--ff-tag); font-size: 1rem;
+  color: var(--blue); opacity: .9;
   transform: rotate(-1.5deg); display: inline-block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .home-logo-main {
   font-family: var(--ff-head);
-  font-size: clamp(5.5rem, 20vw, 15rem);
-  letter-spacing: clamp(8px, 3vw, 28px);
+  font-size: clamp(5rem, 18vw, 13rem);
+  letter-spacing: clamp(6px, 2.5vw, 24px);
   line-height: .85;
   color: var(--ink);
   text-shadow:
-    5px 5px 0 rgba(20,97,255,.4),
-    0 0 100px rgba(20,97,255,.1);
+    4px 4px 0 rgba(20,97,255,.5),
+    0 0 80px rgba(20,97,255,.15);
   user-select: none;
 }
 .home-logo-main .acc { color: var(--blue); }
 .home-logo-sub {
-  font-family: var(--ff-alt); font-size: .62rem; font-weight: 700;
-  letter-spacing: clamp(4px, 2vw, 12px); text-transform: uppercase;
-  color: var(--ink3); margin-top: 14px;
+  font-family: var(--ff-alt); font-size: .6rem; font-weight: 700;
+  letter-spacing: clamp(4px, 1.5vw, 10px); text-transform: uppercase;
+  color: var(--ink3); margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
 }
 
-/* Symbols strip */
+/* ── Rap symbols strip ── */
 .home-symbols {
-  display: flex; align-items: center; gap: 14px;
-  margin: 22px 0 18px; flex-wrap: wrap; justify-content: center;
+  display: flex; align-items: center; gap: 0;
+  margin: 16px 0 0;
+  border: 1px solid var(--line);
+  background: rgba(6,15,24,.7);
+  overflow: hidden;
 }
 .home-sym {
-  font-family: var(--ff-alt); font-size: .7rem; font-weight: 700;
+  padding: 8px 16px;
+  font-family: var(--ff-alt); font-size: .65rem; font-weight: 700;
   letter-spacing: 3px; text-transform: uppercase;
-  color: var(--ink3); opacity: .55;
+  color: var(--ink3);
+  border-right: 1px solid var(--line);
 }
-.home-sym.hi { color: var(--blue); opacity: .9; font-size: .9rem; }
-.home-sym.sep { color: var(--blue); opacity: .35; }
+.home-sym:last-child { border-right: none; }
+.home-sym.hi { color: var(--blue); font-size: 1rem; padding: 6px 14px; }
+.home-sym.red { color: var(--red2); }
+.home-sym.gold { color: var(--gold); }
 
-/* Dropdown CTA */
+/* ── Scrolling rapper name ticker ── */
+.home-ticker {
+  width: 100%; overflow: hidden;
+  border-top: 1px solid rgba(20,97,255,.25);
+  border-bottom: 1px solid rgba(20,97,255,.25);
+  background: rgba(20,97,255,.04);
+  margin: 16px 0;
+  padding: 7px 0;
+}
+.home-ticker-inner {
+  display: flex; gap: 0;
+  animation: tickerScroll 28s linear infinite;
+  white-space: nowrap; width: max-content;
+}
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.home-ticker-inner span {
+  font-family: var(--ff-head); font-size: .85rem; letter-spacing: 4px;
+  color: var(--ink3); padding: 0 18px;
+}
+.home-ticker-inner .tick-sep {
+  color: var(--blue); opacity: .6; padding: 0 4px; letter-spacing: 0;
+}
+
+/* ── Dropdown CTA ── */
 .home-cta-wrap {
-  position: relative; width: 100%; max-width: 400px;
-  margin-top: 6px;
+  position: relative; width: 100%; max-width: 420px;
+  margin-top: 4px;
 }
 .home-enter-btn {
   width: 100%; height: 66px;
@@ -221,6 +289,7 @@ header {
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 16px;
   transition: background .15s;
+  border-left: 4px solid var(--red2);
 }
 .home-enter-btn:hover { background: var(--blue2); }
 .home-enter-btn .arrow {
@@ -233,14 +302,20 @@ header {
   background: var(--card); border: 1px solid var(--blue);
   border-top: 2px solid var(--blue);
   display: none; flex-direction: column;
-  box-shadow: 0 20px 60px rgba(0,0,0,.8);
+  box-shadow: 0 24px 60px rgba(0,0,0,.9);
 }
 .home-menu.open { display: flex; }
 .home-menu-item {
   display: flex; align-items: center; gap: 18px;
   padding: 18px 24px; border-bottom: 1px solid var(--line);
   cursor: pointer; transition: background .12s;
+  position: relative;
 }
+.home-menu-item::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: transparent; transition: background .15s;
+}
+.home-menu-item:hover::before { background: var(--blue); }
 .home-menu-item:last-child { border-bottom: none; }
 .home-menu-item:hover { background: var(--card2); }
 .hmi-icon {
@@ -267,32 +342,38 @@ header {
 .hmi-badge.multi  { color: var(--gold);   border-color: rgba(255,184,48,.35); }
 .hmi-badge.studio { color: var(--blue2);  border-color: rgba(64,128,255,.35); }
 
-/* Stats row */
+/* ── Stats row ── */
 .home-stats-bar {
-  display: flex; align-items: center; gap: 16px;
-  margin-top: 28px; flex-wrap: wrap; justify-content: center;
+  display: flex; align-items: stretch;
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  background: rgba(6,15,24,.7);
+  width: 100%; max-width: 420px;
 }
 .home-stat {
-  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1px; padding: 12px 8px;
+  border-right: 1px solid var(--line);
 }
+.home-stat:last-child { border-right: none; }
 .home-stat-val {
-  font-family: var(--ff-head); font-size: 1.7rem;
-  letter-spacing: 2px; color: var(--ink);
+  font-family: var(--ff-head); font-size: 1.5rem;
+  letter-spacing: 1px; color: var(--ink);
 }
 .home-stat-lbl {
-  font-size: .55rem; font-weight: 700; letter-spacing: 3px;
+  font-size: .5rem; font-weight: 700; letter-spacing: 2.5px;
   text-transform: uppercase; color: var(--ink3);
 }
-.home-stat-sep { color: var(--blue); font-size: .7rem; opacity: .35; }
 
-/* Scrolling artist strip at bottom */
+/* ── Scrolling artist portrait strip ── */
 .home-strip-outer {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
-  height: 90px; overflow: hidden;
+  height: 110px; overflow: hidden;
   border-top: 1px solid var(--line);
 }
 .home-strip-outer::before, .home-strip-outer::after {
-  content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 3;
+  content: ''; position: absolute; top: 0; bottom: 0; width: 140px; z-index: 3;
   pointer-events: none;
 }
 .home-strip-outer::before { left: 0; background: linear-gradient(to right, var(--paper), transparent); }
@@ -300,7 +381,7 @@ header {
 
 .home-strip-track {
   display: flex; height: 100%;
-  animation: homeStripScroll 36s linear infinite;
+  animation: homeStripScroll 32s linear infinite;
   will-change: transform;
 }
 .home-strip-track:hover { animation-play-state: paused; }
@@ -309,29 +390,32 @@ header {
   to   { transform: translateX(-50%); }
 }
 .home-strip-face {
-  flex-shrink: 0; width: 90px; height: 90px;
+  flex-shrink: 0; width: 110px; height: 110px;
   overflow: hidden; position: relative; cursor: pointer;
+  border-right: 1px solid var(--line);
 }
 .home-strip-face img {
   width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
-  filter: grayscale(80%) contrast(1.2) brightness(.65);
+  filter: grayscale(70%) contrast(1.2) brightness(.7);
   transition: filter .3s;
 }
 .home-strip-face:hover img { filter: grayscale(0%) brightness(.9); }
 .home-strip-face-name {
   position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 3px 6px;
-  font-family: var(--ff-alt); font-size: .52rem; font-weight: 700;
+  padding: 4px 6px;
+  font-family: var(--ff-alt); font-size: .55rem; font-weight: 700;
   letter-spacing: 2px; text-transform: uppercase; color: transparent;
-  background: linear-gradient(transparent, rgba(0,0,0,.85));
-  transition: color .2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  background: linear-gradient(transparent, rgba(0,0,0,.9));
+  transition: color .2s;
 }
 .home-strip-face:hover .home-strip-face-name { color: var(--ink); }
 
-@media (max-width: 600px) {
+@media (max-width: 720px) {
+  .home-spotlight { display: none; }
   .home-logo-main { letter-spacing: 6px; }
   .home-enter-btn { font-size: 1.5rem; letter-spacing: 6px; height: 58px; }
-  .home-content { padding-bottom: 100px; }
+  .home-content { padding-bottom: 120px; }
+  .home-symbols .home-sym { padding: 7px 10px; font-size: .58rem; }
 }
 
 /* ── BLIND TEST ── */
@@ -1328,11 +1412,13 @@ header {
   <div class="home-bg-overlay"></div>
   <div class="home-scanlines"></div>
 
-  <!-- Graffiti tag watermarks -->
-  <div class="home-tag-line" style="top:10%;left:-2%;font-size:2.8rem;transform:rotate(-3deg);opacity:.05;">SHÉGUÉ AUTHENTIK</div>
-  <div class="home-tag-line" style="top:38%;right:-3%;font-size:2.2rem;transform:rotate(2deg);opacity:.04;">VALIDÉ PAR LA STREET</div>
-  <div class="home-tag-line" style="bottom:22%;left:3%;font-size:3.5rem;transform:rotate(-1.5deg);opacity:.05;">BRONX 1973 → PARIS 1991</div>
-  <div class="home-tag-line" style="top:62%;left:10%;font-size:1.8rem;transform:rotate(1deg);opacity:.03;">RAP C'EST UNE CULTURE PAS UN GENRE</div>
+  <!-- Side spotlight portraits (loaded via JS) -->
+  <div class="home-spotlight left"  id="home-spot-left"></div>
+  <div class="home-spotlight right" id="home-spot-right"></div>
+
+  <!-- Graffiti watermarks -->
+  <div class="home-tag-line" style="top:8%;left:2%;font-size:2.6rem;transform:rotate(-3deg);opacity:.06;">SHÉGUÉ AUTHENTIK</div>
+  <div class="home-tag-line" style="bottom:18%;right:2%;font-size:2rem;transform:rotate(1.5deg);opacity:.05;">BRONX 1973 → PARIS 1991</div>
 
   <!-- Main content -->
   <div class="home-content">
@@ -1341,18 +1427,67 @@ header {
     <div class="home-logo-main">F<span class="acc">RAP</span></div>
     <div class="home-logo-sub">Rap Français &nbsp;·&nbsp; Blind Test &nbsp;·&nbsp; Culture Hip-Hop</div>
 
+    <!-- Rap symbols bar -->
     <div class="home-symbols">
       <span class="home-sym hi">♪</span>
       <span class="home-sym">PARIS</span>
-      <span class="home-sym sep">◆</span>
-      <span class="home-sym">93</span>
-      <span class="home-sym sep">◆</span>
+      <span class="home-sym gold">93</span>
       <span class="home-sym">HIP-HOP</span>
-      <span class="home-sym sep">◆</span>
-      <span class="home-sym">STREET</span>
-      <span class="home-sym sep">◆</span>
+      <span class="home-sym red">STREET</span>
       <span class="home-sym">RAP FR</span>
+      <span class="home-sym">1991</span>
       <span class="home-sym hi">♫</span>
+    </div>
+
+    <!-- Scrolling artist name ticker -->
+    <div class="home-ticker">
+      <div class="home-ticker-inner" id="home-ticker-inner">
+        <span>BOOBA</span><span class="tick-sep">·</span>
+        <span>PNL</span><span class="tick-sep">·</span>
+        <span>DAMSO</span><span class="tick-sep">·</span>
+        <span>NEKFEU</span><span class="tick-sep">·</span>
+        <span>SCH</span><span class="tick-sep">·</span>
+        <span>KAARIS</span><span class="tick-sep">·</span>
+        <span>ORELSAN</span><span class="tick-sep">·</span>
+        <span>JUL</span><span class="tick-sep">·</span>
+        <span>NINHO</span><span class="tick-sep">·</span>
+        <span>GAZO</span><span class="tick-sep">·</span>
+        <span>FREEZE CORLEONE</span><span class="tick-sep">·</span>
+        <span>LAYLOW</span><span class="tick-sep">·</span>
+        <span>VALD</span><span class="tick-sep">·</span>
+        <span>WERENOI</span><span class="tick-sep">·</span>
+        <span>PLK</span><span class="tick-sep">·</span>
+        <span>NISKA</span><span class="tick-sep">·</span>
+        <span>NAPS</span><span class="tick-sep">·</span>
+        <span>ALONZO</span><span class="tick-sep">·</span>
+        <span>LACRIM</span><span class="tick-sep">·</span>
+        <span>HAMZA</span><span class="tick-sep">·</span>
+        <span>ROHFF</span><span class="tick-sep">·</span>
+        <span>SINIK</span><span class="tick-sep">·</span>
+        <!-- duplicate for seamless loop -->
+        <span>BOOBA</span><span class="tick-sep">·</span>
+        <span>PNL</span><span class="tick-sep">·</span>
+        <span>DAMSO</span><span class="tick-sep">·</span>
+        <span>NEKFEU</span><span class="tick-sep">·</span>
+        <span>SCH</span><span class="tick-sep">·</span>
+        <span>KAARIS</span><span class="tick-sep">·</span>
+        <span>ORELSAN</span><span class="tick-sep">·</span>
+        <span>JUL</span><span class="tick-sep">·</span>
+        <span>NINHO</span><span class="tick-sep">·</span>
+        <span>GAZO</span><span class="tick-sep">·</span>
+        <span>FREEZE CORLEONE</span><span class="tick-sep">·</span>
+        <span>LAYLOW</span><span class="tick-sep">·</span>
+        <span>VALD</span><span class="tick-sep">·</span>
+        <span>WERENOI</span><span class="tick-sep">·</span>
+        <span>PLK</span><span class="tick-sep">·</span>
+        <span>NISKA</span><span class="tick-sep">·</span>
+        <span>NAPS</span><span class="tick-sep">·</span>
+        <span>ALONZO</span><span class="tick-sep">·</span>
+        <span>LACRIM</span><span class="tick-sep">·</span>
+        <span>HAMZA</span><span class="tick-sep">·</span>
+        <span>ROHFF</span><span class="tick-sep">·</span>
+        <span>SINIK</span><span class="tick-sep">·</span>
+      </div>
     </div>
 
     <!-- Dropdown CTA -->
@@ -1388,22 +1523,20 @@ header {
       </div>
     </div>
 
+    <!-- Stats bar -->
     <div class="home-stats-bar">
       <div class="home-stat">
         <div class="home-stat-val">500+</div>
         <div class="home-stat-lbl">Sons</div>
       </div>
-      <div class="home-stat-sep">◆</div>
       <div class="home-stat">
         <div class="home-stat-val">3</div>
         <div class="home-stat-lbl">Ères</div>
       </div>
-      <div class="home-stat-sep">◆</div>
       <div class="home-stat">
         <div class="home-stat-val">100+</div>
         <div class="home-stat-lbl">Artistes</div>
       </div>
-      <div class="home-stat-sep">◆</div>
       <div class="home-stat">
         <div class="home-stat-val">∞</div>
         <div class="home-stat-lbl">Culture</div>
@@ -1412,7 +1545,7 @@ header {
 
   </div>
 
-  <!-- Scrolling artist strip at bottom -->
+  <!-- Scrolling portrait strip at bottom -->
   <div class="home-strip-outer">
     <div class="home-strip-track" id="home-strip-track"></div>
   </div>
@@ -2096,6 +2229,17 @@ async function loadHomePage() {
     cell.appendChild(img);
     bg.appendChild(cell);
   }
+
+  // Side spotlight portraits — pick 2 different random artists
+  const shuffled = [...pics].sort(() => Math.random() - .5);
+  ['home-spot-left', 'home-spot-right'].forEach((id, i) => {
+    const p = shuffled[i];
+    if (!p) return;
+    const el = document.getElementById(id);
+    const img = document.createElement('img');
+    img.alt = p.name; img.src = p.pic;
+    el.appendChild(img);
+  });
 
   // Scrolling strip — duplicate for seamless loop
   const allPics = [...pics, ...pics];
