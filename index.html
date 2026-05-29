@@ -300,21 +300,33 @@ header {
 .home-rap-el.el-bx    { top: 50%; left: clamp(10px,4vw,60px); transform: translateY(-50%); }
 .home-rap-el.el-hat   { top: 50%; right: clamp(10px,4vw,60px); transform: translateY(-50%); }
 
-/* ── Flag row ── */
-.home-flags {
-  display: flex; align-items: center; gap: 10px;
+/* ── Rap refs row ── */
+.home-rap-refs {
+  display: flex; align-items: center; gap: 0;
   margin: 10px 0 0;
   flex-wrap: wrap; justify-content: center;
+  border: 1px solid var(--line);
+  background: rgba(6,15,24,.6);
+  overflow: hidden;
 }
-.home-flag {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  opacity: .65; transition: opacity .2s;
+.home-ref-item {
+  padding: 6px 14px;
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  transition: background .15s;
+  cursor: default;
 }
-.home-flag:hover { opacity: 1; }
-.home-flag-emoji { font-size: 1.3rem; line-height: 1; }
-.home-flag-city {
-  font-family: var(--ff-alt); font-size: .45rem; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink3);
+.home-ref-item:last-child { border-right: none; }
+.home-ref-item:hover { background: rgba(20,97,255,.08); }
+.hri-val {
+  font-family: var(--ff-head); font-size: .9rem; letter-spacing: 2px;
+  color: var(--ink2);
+  transition: color .15s;
+}
+.home-ref-item:hover .hri-val { color: var(--blue); }
+.hri-sub {
+  font-family: var(--ff-alt); font-size: .42rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--ink3);
 }
 
 /* ── Dropdown CTA ── */
@@ -1506,16 +1518,16 @@ header {
       <span class="home-sym hi">♫</span>
     </div>
 
-    <!-- Origines du rap français — drapeaux -->
-    <div class="home-flags">
-      <div class="home-flag"><div class="home-flag-emoji">🇫🇷</div><div class="home-flag-city">Paris</div></div>
-      <div class="home-flag"><div class="home-flag-emoji">🇩🇿</div><div class="home-flag-city">Alger</div></div>
-      <div class="home-flag"><div class="home-flag-emoji">🇲🇦</div><div class="home-flag-city">Rabat</div></div>
-      <div class="home-flag"><div class="home-flag-emoji">🇹🇳</div><div class="home-flag-city">Tunis</div></div>
-      <div class="home-flag"><div class="home-flag-emoji">🇸🇳</div><div class="home-flag-city">Dakar</div></div>
-      <div class="home-flag"><div class="home-flag-emoji">🇨🇩</div><div class="home-flag-city">Kinshasa</div></div>
-      <div class="home-flag"><div class="home-flag-emoji">🇨🇮</div><div class="home-flag-city">Abidjan</div></div>
-      <div class="home-flag"><div class="home-flag-emoji">🇬🇳</div><div class="home-flag-city">Conakry</div></div>
+    <!-- Références rap niche -->
+    <div class="home-rap-refs">
+      <div class="home-ref-item"><div class="hri-val">92i</div><div class="hri-sub">Label</div></div>
+      <div class="home-ref-item"><div class="hri-val">667</div><div class="hri-sub">Crew</div></div>
+      <div class="home-ref-item"><div class="hri-val">OKLM</div><div class="hri-sub">Slang</div></div>
+      <div class="home-ref-item"><div class="hri-val">LCA</div><div class="hri-sub">Collectif</div></div>
+      <div class="home-ref-item"><div class="hri-val">1995</div><div class="hri-sub">Crew</div></div>
+      <div class="home-ref-item"><div class="hri-val">NTM</div><div class="hri-sub">Légende</div></div>
+      <div class="home-ref-item"><div class="hri-val">IAM</div><div class="hri-sub">Marseille</div></div>
+      <div class="home-ref-item"><div class="hri-val">BLOCK</div><div class="hri-sub">Culture</div></div>
     </div>
 
     <!-- Scrolling artist name ticker -->
@@ -2270,7 +2282,7 @@ function cleanTitle(title) {
 
 // ── HOME PAGE ─────────────────────────────────────────────────────────────────
 const HOME_ARTISTS = [
-  {id:390,name:'Booba'},{id:1519461,name:'PNL'},{id:9197980,name:'Damso'},
+  {id:13790723,name:'L2B'},{id:390,name:'Booba'},{id:1519461,name:'PNL'},{id:9197980,name:'Damso'},
   {id:1412564,name:'Nekfeu'},{id:162665,name:'SCH'},{id:388973,name:'Kaaris'},
   {id:259467,name:'Orelsan'},{id:1191615,name:'Jul'},{id:5542343,name:'Ninho'},
   {id:8873540,name:'Gazo'},{id:13755123,name:'Freeze Corleone'},{id:4510044,name:'Laylow'},
