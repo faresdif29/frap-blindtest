@@ -84,8 +84,8 @@ header {
 .nav-tab {
   display: flex; align-items: center; justify-content: center;
   padding: 0 28px;
-  font-family: var(--ff-body); font-size: .72rem; font-weight: 700;
-  letter-spacing: 2.5px; text-transform: uppercase;
+  font-family: var(--ff-tag); font-size: .95rem;
+  letter-spacing: 1px; text-transform: none;
   cursor: pointer; border: none; background: transparent;
   color: var(--ink3); border-left: 1px solid var(--line);
   transition: color .2s, background .2s;
@@ -250,8 +250,8 @@ header {
 }
 .home-logo-main .acc { color: var(--blue); }
 .home-logo-sub {
-  font-family: var(--ff-alt); font-size: .6rem; font-weight: 700;
-  letter-spacing: clamp(4px, 1.5vw, 10px); text-transform: uppercase;
+  font-family: var(--ff-tag); font-size: .85rem;
+  letter-spacing: 2px;
   color: var(--ink3); margin-top: 12px;
   border-top: 1px solid var(--line);
   padding-top: 10px;
@@ -266,14 +266,13 @@ header {
   overflow: hidden;
 }
 .home-sym {
-  padding: 8px 16px;
-  font-family: var(--ff-alt); font-size: .65rem; font-weight: 700;
-  letter-spacing: 3px; text-transform: uppercase;
+  padding: 7px 16px;
+  font-family: var(--ff-tag); font-size: .9rem;
+  letter-spacing: 1px;
   color: var(--ink3);
   border-right: 1px solid var(--line);
 }
 .home-sym:last-child { border-right: none; }
-.home-sym.hi { color: var(--blue); font-size: 1rem; padding: 6px 14px; }
 .home-sym.red { color: var(--red2); }
 .home-sym.gold { color: var(--gold); }
 
@@ -346,7 +345,7 @@ header {
 .home-ref-item:last-child { border-right: none; }
 .home-ref-item:hover { background: rgba(20,97,255,.08); }
 .hri-val {
-  font-family: var(--ff-head); font-size: .9rem; letter-spacing: 2px;
+  font-family: var(--ff-tag); font-size: 1rem; letter-spacing: 1px;
   color: var(--ink2);
   transition: color .15s;
 }
@@ -363,13 +362,14 @@ header {
   isolation: isolate; z-index: 10;
 }
 .home-enter-btn {
-  width: 100%; height: 66px;
-  background: var(--blue); border: none; color: #fff;
-  font-family: var(--ff-head); font-size: 1.9rem; letter-spacing: 10px;
+  width: 100%; height: 70px;
+  background: var(--blue); border: none; color: var(--gold);
+  font-family: var(--ff-tag); font-size: 2.2rem; letter-spacing: 6px;
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 16px;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
   transition: background .15s;
   border-left: 4px solid var(--red2);
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
 }
 .home-enter-btn:hover { background: var(--blue2); }
 .home-enter-btn .arrow {
