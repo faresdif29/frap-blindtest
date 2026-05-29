@@ -498,6 +498,130 @@ header {
   .home-symbols .home-sym { padding: 7px 10px; font-size: .58rem; }
 }
 
+/* ── SPLASH SCREEN ── */
+#splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--paper);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; pointer-events: all;
+  animation: splashFadeOut 0.45s ease 2.1s forwards;
+}
+#splash.gone { display: none; }
+@keyframes splashFadeOut { to { opacity: 0; pointer-events: none; } }
+.splash-mic {
+  width: 72px; height: auto;
+  animation: splashMicIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+  filter: drop-shadow(0 0 20px rgba(20,97,255,.6));
+}
+@keyframes splashMicIn {
+  from { transform: scale(0.3) translateY(40px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+.splash-word {
+  font-family: var(--ff-head); font-size: clamp(4rem,10vw,7rem);
+  letter-spacing: 18px; color: var(--ink); line-height: 1;
+  animation: splashWordIn 0.55s ease 0.55s both;
+}
+.splash-word .acc { color: var(--blue); }
+@keyframes splashWordIn {
+  from { opacity: 0; letter-spacing: 50px; }
+  to   { opacity: 1; letter-spacing: 18px; }
+}
+.splash-sub {
+  font-family: var(--ff-alt); font-size: .58rem; font-weight: 700;
+  letter-spacing: 6px; text-transform: uppercase; color: var(--ink3);
+  animation: splashWordIn 0.4s ease 1s both;
+}
+
+/* ── PAGE TRANSITIONS ── */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page.active { animation: pageIn 0.22s ease; }
+
+/* ── TIMER BAR ── */
+.bt-timer-wrap {
+  height: 3px; background: var(--line); flex-shrink: 0; overflow: hidden;
+}
+.bt-timer-bar {
+  height: 100%; width: 100%; background: var(--blue);
+  transition: width 0.1s linear;
+}
+.bt-timer-bar.urgent { background: var(--red); }
+
+/* ── DIFFICULTY TOGGLE ── */
+.difficulty-row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.btn-difficulty {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border: 1px solid var(--line);
+  background: transparent; cursor: pointer;
+  font-family: var(--ff-alt); font-size: .58rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--ink3);
+  transition: all .15s;
+}
+.btn-difficulty:hover { border-color: var(--ink3); color: var(--ink); }
+.btn-difficulty.hard  { border-color: var(--red2); color: var(--red2); background: rgba(232,50,26,.06); }
+.btn-difficulty .diff-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* ── TIER TAG — masqué ── */
+.tier-tag { display: none !important; }
+
+/* ── SUGGESTIONS AVEC PHOTO ── */
+.sug-box {
+  position: absolute; top: 2px; left: 0; right: 0; z-index: 50;
+  background: var(--card); border: 1px solid var(--line);
+  max-height: 280px; overflow-y: auto;
+}
+.sug-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  transition: background .12s;
+}
+.sug-row:last-child { border: none; }
+.sug-row:hover { background: var(--card2); }
+.sug-photo {
+  width: 36px; height: 36px; flex-shrink: 0;
+  object-fit: cover; object-position: top center;
+  background: var(--card2);
+}
+.sug-photo-placeholder {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: var(--card2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-head); font-size: 1rem; letter-spacing: 0; color: var(--ink3);
+}
+.sug-text { flex: 1; min-width: 0; }
+.sug-main { font-size: .9rem; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sug-sub  { font-size: .68rem; color: var(--ink3); margin-top: 2px; }
+
+/* ── MOSAIC HOVER NAME ── */
+.home-face-cell { position: relative; }
+.home-face-name {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 4px 6px 5px;
+  font-family: var(--ff-alt); font-size: .52rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: transparent; background: linear-gradient(transparent, rgba(0,0,0,.9));
+  transition: color .2s; pointer-events: none;
+}
+.home-face-cell:hover img { filter: grayscale(50%) contrast(1.3) brightness(0.65) !important; }
+.home-face-cell:hover .home-face-name { color: var(--ink); }
+
+/* ── MEILLEUR SCORE HOME ── */
+.home-best {
+  display: none; align-items: center; gap: 8px;
+  margin-top: 8px;
+  font-family: var(--ff-head); font-size: .75rem;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--gold);
+}
+.home-best.visible { display: flex; }
+.home-best-val { font-size: 1.3rem; letter-spacing: 1px; }
+
 /* ── BLIND TEST ── */
 #page-blindtest {
   display: none;
@@ -1469,6 +1593,23 @@ header {
 </head>
 <body>
 
+<!-- ── SPLASH ── -->
+<div id="splash">
+  <svg class="splash-mic" viewBox="0 0 48 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="13" y="2" width="22" height="34" rx="11" stroke="#1461ff" stroke-width="2.5"/>
+    <line x1="13" y1="16" x2="35" y2="16" stroke="#1461ff" stroke-width="1.2" stroke-dasharray="2 3"/>
+    <line x1="13" y1="23" x2="35" y2="23" stroke="#1461ff" stroke-width="1.2" stroke-dasharray="2 3"/>
+    <circle cx="24" cy="10" r="2" fill="#1461ff" opacity="0.5"/>
+    <path d="M6 28 Q6 50 24 50 Q42 50 42 28" stroke="#1461ff" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="24" y1="50" x2="24" y2="62" stroke="#1461ff" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="10" y1="62" x2="38" y2="62" stroke="#1461ff" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="10" y1="62" x2="10" y2="68" stroke="#1461ff" stroke-width="2" stroke-linecap="round"/>
+    <line x1="38" y1="62" x2="38" y2="68" stroke="#1461ff" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  <div class="splash-word">F<span class="acc">RAP</span></div>
+  <div class="splash-sub">Blind Test Rap Français</div>
+</div>
+
 <header>
   <div class="logo-block">
     <span class="logo-mark-mini">
@@ -1482,8 +1623,8 @@ header {
       </svg>
     </span>
     <div class="logo">
-      <div class="logo-main">FA<span class="rap">RES</span></div>
-      <div class="logo-sub-line">× RAP</div>
+      <div class="logo-main">F<span class="rap">RAP</span></div>
+      <div class="logo-sub-line">BLIND TEST</div>
     </div>
   </div>
   <nav class="nav-tabs">
@@ -1668,6 +1809,10 @@ header {
       </div>
     </div>
 
+    <div class="home-best" id="home-best">
+      🏆 &nbsp;RECORD &nbsp;<span class="home-best-val" id="home-best-val">0</span>&nbsp; PTS
+    </div>
+
   </div>
 
   <!-- Scrolling portrait strip at bottom -->
@@ -1682,6 +1827,9 @@ header {
 
   <!-- LEFT: player -->
   <div class="panel-player">
+
+    <!-- Timer bar -->
+    <div class="bt-timer-wrap"><div class="bt-timer-bar" id="bt-timer-bar"></div></div>
 
     <!-- Sélecteur d'ère -->
     <div class="era-selector" id="era-selector">
@@ -1729,14 +1877,19 @@ header {
     <!-- Player controls (hidden until track loaded) -->
     <div id="player-ui" class="hidden">
       <div class="player-controls">
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <div class="tier-tag mainstream" id="tier-tag">
-            <span class="dot"></span>
-            <span id="tier-txt">Mainstream</span>
+        <div class="difficulty-row">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div class="tier-tag mainstream" id="tier-tag">
+              <span class="dot"></span>
+              <span id="tier-txt">Mainstream</span>
+            </div>
+            <div class="era-badge actuel" id="era-badge" style="display:none;">
+              <span id="era-badge-txt">ACTUEL</span>
+            </div>
           </div>
-          <div class="era-badge actuel" id="era-badge" style="display:none;">
-            <span id="era-badge-txt">ACTUEL</span>
-          </div>
+          <button class="btn-difficulty" id="btn-difficulty" onclick="toggleDifficulty()">
+            <span class="diff-dot"></span>NORMAL
+          </button>
         </div>
         <div class="waveform" id="waveform" onclick="togglePlay()"></div>
         <div class="ctrl-row">
@@ -2276,7 +2429,8 @@ const S = {
   current: null,
   answered: false, playing: false,
   featTags: [],
-  era: 'all',  // 'all' | 'actuel' | 'classique' | 'oldschool'
+  era: 'all',
+  hardMode: false,
 };
 
 // ── ÈRE SELECTOR ─────────────────────────────────────────────────────────────
@@ -2314,6 +2468,63 @@ function cleanTitle(title) {
   return title.replace(/\s*\((?:feat|ft|avec|with)\.?[^)]*\)/gi, '').trim();
 }
 
+// ── SPLASH ───────────────────────────────────────────────────────────────────
+(function() {
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+  splash.addEventListener('animationend', () => {
+    splash.classList.add('gone');
+  });
+  // Fallback: remove after 3s
+  setTimeout(() => splash.classList.add('gone'), 3000);
+})();
+
+// ── ARTIST PHOTO CACHE ────────────────────────────────────────────────────────
+const artistPhotoCache = {};
+
+// ── TIMER ─────────────────────────────────────────────────────────────────────
+const TIMER_DURATION = 30; // secondes
+let timerInterval = null;
+let timerRemaining = TIMER_DURATION;
+let timerRunning = false;
+
+function startTimer() {
+  stopTimer();
+  timerRemaining = TIMER_DURATION;
+  timerRunning = true;
+  const bar = document.getElementById('bt-timer-bar');
+  if (bar) { bar.style.width = '100%'; bar.classList.remove('urgent'); }
+  timerInterval = setInterval(() => {
+    timerRemaining = Math.max(0, timerRemaining - 0.1);
+    const pct = (timerRemaining / TIMER_DURATION) * 100;
+    if (bar) {
+      bar.style.width = pct + '%';
+      bar.classList.toggle('urgent', timerRemaining < 8);
+    }
+    if (timerRemaining <= 0) stopTimer();
+  }, 100);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+}
+
+function getTimerBonus() {
+  if (timerRemaining > 20) return 2;
+  if (timerRemaining > 10) return 1;
+  return 0;
+}
+
+// ── DIFFICULTY MODE ───────────────────────────────────────────────────────────
+function toggleDifficulty() {
+  S.hardMode = !S.hardMode;
+  const btn = document.getElementById('btn-difficulty');
+  if (!btn) return;
+  btn.classList.toggle('hard', S.hardMode);
+  btn.innerHTML = `<span class="diff-dot"></span>${S.hardMode ? 'DIFFICILE' : 'NORMAL'}`;
+}
+
 // ── HOME PAGE ─────────────────────────────────────────────────────────────────
 const HOME_ARTISTS = [
   {id:13790723,name:'L2B'},{id:390,name:'Booba'},{id:1519461,name:'PNL'},{id:9197980,name:'Damso'},
@@ -2348,9 +2559,14 @@ async function loadHomePage() {
     } catch {}
   }));
 
+  // Populate artist photo cache for suggestions
+  artistPics.forEach(p => {
+    artistPhotoCache[p.name.toLowerCase()] = p.pic;
+  });
+
   // 6×3 background mosaic — alternate artist photos and album covers
   for (let i = 0; i < 18; i++) {
-    const useAlbum = albumPics.length && (i % 3 === 1); // every 3rd cell is an album cover
+    const useAlbum = albumPics.length && (i % 3 === 1);
     const pool = useAlbum ? albumPics : artistPics;
     const p = pool[i % pool.length];
     if (!p) continue;
@@ -2361,7 +2577,22 @@ async function loadHomePage() {
     img.onload = () => img.classList.add('loaded');
     img.src = p.pic;
     cell.appendChild(img);
+    // Hover name overlay
+    if (!useAlbum) {
+      const nameEl = document.createElement('div');
+      nameEl.className = 'home-face-name';
+      nameEl.textContent = p.name;
+      cell.appendChild(nameEl);
+    }
     bg.appendChild(cell);
+  }
+
+  // Show best score if exists
+  const best = parseInt(localStorage.getItem('frap_best') || '0');
+  if (best > 0) {
+    const el = document.getElementById('home-best');
+    const val = document.getElementById('home-best-val');
+    if (el && val) { val.textContent = best; el.classList.add('visible'); }
   }
 
   // Side spotlight portraits — pick 2 different random artists
@@ -2570,6 +2801,8 @@ async function nextTrack() {
         bg.style.backgroundImage = `url(${pic})`;
         S.current.artistPhoto = pic;
         S.current.artistName = aData.name || artist.name;
+        // Cache pour suggestions
+        artistPhotoCache[(aData.name || artist.name).toLowerCase()] = pic;
       }
     } catch {}
 
@@ -2612,6 +2845,7 @@ async function nextTrack() {
       audio.play().catch(()=>{});
       setPlay(true);
       document.getElementById('vinyl-wrap').classList.add('visible','spinning');
+      startTimer();
     }, 350);
 
   } catch(e) {
@@ -2716,10 +2950,21 @@ function validate() {
   // Disable feat tag removal
   renderFeatTags(true);
 
-  // Score
-  S.score += totalGained;
+  // Score + bonus timer
+  stopTimer();
+  const timerBonus = totalGained > 0 ? getTimerBonus() : 0;
+  S.score += totalGained + timerBonus;
   if (totalGained > 0) S.streak++;
   else S.streak = 0;
+  // Sauvegarder meilleur score
+  const prev = parseInt(localStorage.getItem('frap_best') || '0');
+  if (S.score > prev) {
+    localStorage.setItem('frap_best', S.score);
+    const val = document.getElementById('home-best-val');
+    const el = document.getElementById('home-best');
+    if (val) val.textContent = S.score;
+    if (el) el.classList.add('visible');
+  }
   updateHUD();
 
   // Reveal cover + artist
@@ -2816,18 +3061,30 @@ const sT = {};
 function onInput(field) {
   clearTimeout(sT[field]);
   const q = document.getElementById(`inp-${field}`).value.trim();
-  if (q.length < 2) { document.getElementById(`sug-${field}`).classList.add('hidden'); return; }
+  if (q.length < 2 || S.hardMode) {
+    document.getElementById(`sug-${field}`).classList.add('hidden');
+    return;
+  }
   sT[field] = setTimeout(() => loadSug(field, q), 280);
 }
 async function loadSug(field, q) {
   let items = [];
   if (field === 'artist' || field === 'feat') {
+    const eraLabels = { actuel: 'Actuel', classique: 'Classique', oldschool: 'Old School' };
     items = ARTISTS.filter(a => a.name.toLowerCase().includes(q.toLowerCase()))
-      .slice(0, 5).map(a => ({ label: a.name, sub: a.tier }));
+      .slice(0, 5).map(a => ({
+        label: a.name,
+        sub: eraLabels[a.era] || a.era,
+        photo: artistPhotoCache[a.name.toLowerCase()] || null
+      }));
   } else if (field === 'title') {
     try {
       const tracks = await fetchSearch(q);
-      items = tracks.slice(0, 6).map(t => ({ label: cleanTitle(t.title), sub: t.artist.name }));
+      items = tracks.slice(0, 6).map(t => ({
+        label: cleanTitle(t.title),
+        sub: t.artist?.name || '',
+        photo: t.artist?.picture_small || t.artist?.picture_medium || null
+      }));
     } catch {}
   }
   renderSug(field, items);
@@ -2835,9 +3092,18 @@ async function loadSug(field, q) {
 function renderSug(field, items) {
   const box = document.getElementById(`sug-${field}`);
   if (!items.length) { box.classList.add('hidden'); return; }
-  box.innerHTML = items.map(it =>
-    `<div class="sug-row" onclick="pickSug('${field}','${esc(it.label)}')">${esc(it.label)}<div class="sr-sub">${esc(it.sub)}</div></div>`
-  ).join('');
+  box.innerHTML = items.map(it => {
+    const photoEl = it.photo
+      ? `<img class="sug-photo" src="${esc(it.photo)}" alt="" loading="lazy">`
+      : `<div class="sug-photo-placeholder">${esc(it.label[0] || '?')}</div>`;
+    return `<div class="sug-row" onclick="pickSug('${field}','${esc(it.label)}')">
+      ${photoEl}
+      <div class="sug-text">
+        <div class="sug-main">${esc(it.label)}</div>
+        <div class="sug-sub">${esc(it.sub)}</div>
+      </div>
+    </div>`;
+  }).join('');
   box.classList.remove('hidden');
 }
 function pickSug(field, val) {
