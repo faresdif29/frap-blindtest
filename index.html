@@ -277,10 +277,51 @@ header {
   color: var(--blue); opacity: .6; padding: 0 4px; letter-spacing: 0;
 }
 
+/* ── Rap culture floating elements ── */
+.home-rap-el {
+  position: absolute; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  pointer-events: none; user-select: none;
+}
+.hre-icon {
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
+  line-height: 1;
+  opacity: .55;
+}
+.hre-label {
+  font-family: var(--ff-head); font-size: .5rem; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--ink3); opacity: .4;
+}
+/* Positions */
+.home-rap-el.el-mic   { top: 20%; left: clamp(20px,8vw,140px); }
+.home-rap-el.el-vinyl { top: 18%; right: clamp(20px,8vw,140px); }
+.home-rap-el.el-spray { bottom: 24%; left: clamp(16px,6vw,100px); }
+.home-rap-el.el-chain { bottom: 22%; right: clamp(16px,6vw,100px); }
+.home-rap-el.el-bx    { top: 50%; left: clamp(10px,4vw,60px); transform: translateY(-50%); }
+.home-rap-el.el-hat   { top: 50%; right: clamp(10px,4vw,60px); transform: translateY(-50%); }
+
+/* ── Flag row ── */
+.home-flags {
+  display: flex; align-items: center; gap: 10px;
+  margin: 10px 0 0;
+  flex-wrap: wrap; justify-content: center;
+}
+.home-flag {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  opacity: .65; transition: opacity .2s;
+}
+.home-flag:hover { opacity: 1; }
+.home-flag-emoji { font-size: 1.3rem; line-height: 1; }
+.home-flag-city {
+  font-family: var(--ff-alt); font-size: .45rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink3);
+}
+
 /* ── Dropdown CTA ── */
 .home-cta-wrap {
   position: relative; width: 100%; max-width: 420px;
-  margin-top: 4px;
+  margin-top: 12px;
+  isolation: isolate; z-index: 10;
 }
 .home-enter-btn {
   width: 100%; height: 66px;
@@ -298,7 +339,7 @@ header {
 .home-enter-btn.open .arrow { transform: rotate(180deg); }
 
 .home-menu {
-  position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 9999;
   background: var(--card); border: 1px solid var(--blue);
   border-top: 2px solid var(--blue);
   display: none; flex-direction: column;
@@ -1420,6 +1461,32 @@ header {
   <div class="home-tag-line" style="top:8%;left:2%;font-size:2.6rem;transform:rotate(-3deg);opacity:.06;">SHÉGUÉ AUTHENTIK</div>
   <div class="home-tag-line" style="bottom:18%;right:2%;font-size:2rem;transform:rotate(1.5deg);opacity:.05;">BRONX 1973 → PARIS 1991</div>
 
+  <!-- Rap culture floating icons -->
+  <div class="home-rap-el el-mic">
+    <div class="hre-icon">🎤</div>
+    <div class="hre-label">MIC</div>
+  </div>
+  <div class="home-rap-el el-vinyl">
+    <div class="hre-icon">💿</div>
+    <div class="hre-label">VINYL</div>
+  </div>
+  <div class="home-rap-el el-spray">
+    <div class="hre-icon">🖊️</div>
+    <div class="hre-label">GRAFFITI</div>
+  </div>
+  <div class="home-rap-el el-chain">
+    <div class="hre-icon">📻</div>
+    <div class="hre-label">RADIO</div>
+  </div>
+  <div class="home-rap-el el-bx">
+    <div class="hre-icon">🎧</div>
+    <div class="hre-label">BEAT</div>
+  </div>
+  <div class="home-rap-el el-hat">
+    <div class="hre-icon">🏆</div>
+    <div class="hre-label">CLASSIQUE</div>
+  </div>
+
   <!-- Main content -->
   <div class="home-content">
 
@@ -1437,6 +1504,18 @@ header {
       <span class="home-sym">RAP FR</span>
       <span class="home-sym">1991</span>
       <span class="home-sym hi">♫</span>
+    </div>
+
+    <!-- Origines du rap français — drapeaux -->
+    <div class="home-flags">
+      <div class="home-flag"><div class="home-flag-emoji">🇫🇷</div><div class="home-flag-city">Paris</div></div>
+      <div class="home-flag"><div class="home-flag-emoji">🇩🇿</div><div class="home-flag-city">Alger</div></div>
+      <div class="home-flag"><div class="home-flag-emoji">🇲🇦</div><div class="home-flag-city">Rabat</div></div>
+      <div class="home-flag"><div class="home-flag-emoji">🇹🇳</div><div class="home-flag-city">Tunis</div></div>
+      <div class="home-flag"><div class="home-flag-emoji">🇸🇳</div><div class="home-flag-city">Dakar</div></div>
+      <div class="home-flag"><div class="home-flag-emoji">🇨🇩</div><div class="home-flag-city">Kinshasa</div></div>
+      <div class="home-flag"><div class="home-flag-emoji">🇨🇮</div><div class="home-flag-city">Abidjan</div></div>
+      <div class="home-flag"><div class="home-flag-emoji">🇬🇳</div><div class="home-flag-city">Conakry</div></div>
     </div>
 
     <!-- Scrolling artist name ticker -->
@@ -2207,18 +2286,27 @@ async function loadHomePage() {
   const bg = document.getElementById('home-faces-bg');
   const strip = document.getElementById('home-strip-track');
 
-  const pics = [];
+  const artistPics = [];
+  const albumPics  = [];
   await Promise.all(HOME_ARTISTS.map(async a => {
     try {
       const data = await deezerFetch(`artist/${a.id}`);
       const pic = data.picture_xl || data.picture_big || data.picture_medium;
-      if (pic) pics.push({pic, name: a.name});
+      if (pic) artistPics.push({pic, name: a.name});
+      // Also grab a top track album cover
+      const top = await deezerFetch(`artist/${a.id}/top?limit=1`);
+      const track = top.data?.[0];
+      if (track?.album?.cover_xl || track?.album?.cover_big) {
+        albumPics.push({pic: track.album.cover_xl || track.album.cover_big, name: track.album.title});
+      }
     } catch {}
   }));
 
-  // 6×3 background mosaic (18 cells)
+  // 6×3 background mosaic — alternate artist photos and album covers
   for (let i = 0; i < 18; i++) {
-    const p = pics[i % pics.length];
+    const useAlbum = albumPics.length && (i % 3 === 1); // every 3rd cell is an album cover
+    const pool = useAlbum ? albumPics : artistPics;
+    const p = pool[i % pool.length];
     if (!p) continue;
     const cell = document.createElement('div');
     cell.className = 'home-face-cell';
