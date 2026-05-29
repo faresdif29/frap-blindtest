@@ -117,29 +117,125 @@ header {
   overflow: hidden;
 }
 
-/* Album art hero */
+/* ── BLIND TEST HERO — immersive ── */
 .art-hero {
   position: relative;
-  width: 100%;
-  padding-bottom: 100%;
+  width: 100%; flex-shrink: 0;
+  height: 340px;
   overflow: hidden;
-  background: #0a0a09;
+  background: #050504;
 }
-.art-hero img {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover;
-  filter: blur(28px) brightness(.18) saturate(1.6);
-  transition: filter 1s ease;
-  transform: scale(1.08);
+
+/* Artist photo — deep background, barely visible before reveal */
+.artist-bg {
+  position: absolute; inset: -10%; z-index: 0;
+  background-size: cover; background-position: center top;
+  filter: blur(22px) brightness(0.12) saturate(1.8) grayscale(40%);
+  transition: filter 2s ease, transform 2s ease;
+  transform: scale(1.12);
 }
-.art-hero img.revealed {
-  filter: blur(0) brightness(1) saturate(1);
-  transform: scale(1);
+.artist-bg.revealed {
+  filter: blur(4px) brightness(0.28) saturate(1.4) grayscale(20%);
+  transform: scale(1.06);
 }
-.art-hero .art-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom, transparent 50%, var(--card) 100%);
+
+/* Grain texture overlay */
+.hero-grain {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  opacity: .55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* Hip-hop watermark pattern */
+.hero-hh-pattern {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .06;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-head); font-size: 11rem; letter-spacing: -5px;
+  color: var(--ink); white-space: nowrap; overflow: hidden;
+  user-select: none;
+}
+
+/* Vinyl record */
+.vinyl-wrap {
+  position: absolute; right: 20px; bottom: 20px; z-index: 3;
+  width: 90px; height: 90px; opacity: 0;
+  transition: opacity .6s ease;
+}
+.vinyl-wrap.visible { opacity: 1; }
+.vinyl-disc {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%,
+    #e8321a 0%, #e8321a 18%,
+    #0c0b09 18.5%, #0c0b09 20%,
+    #1a1915 20%, #1a1915 24%,
+    #0c0b09 24%, #0c0b09 26%,
+    #1a1915 26%, #1a1915 32%,
+    #0c0b09 32%, #0c0b09 33%,
+    #1a1915 33%, #1a1915 40%,
+    #0c0b09 40%, #0c0b09 41%,
+    #1a1915 41%, #1a1915 50%,
+    #0c0b09 50%
+  );
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 8px 32px rgba(0,0,0,.8);
+}
+.vinyl-disc::after {
+  content: '●'; position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .3rem; color: #0c0b09;
+}
+.vinyl-wrap.spinning .vinyl-disc {
+  animation: vinylspin 2.4s linear infinite;
+}
+@keyframes vinylspin { to { transform: rotate(360deg); } }
+
+/* Album cover — hidden until reveal, shown as small inset */
+.cover-inset {
+  position: absolute; left: 20px; bottom: 20px; z-index: 3;
+  width: 80px; height: 80px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.1);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.cover-inset.visible { opacity: 1; transform: translateY(0); }
+.cover-inset img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Gradient overlay */
+.art-overlay {
+  position: absolute; inset: 0; z-index: 2;
+  background:
+    linear-gradient(to bottom, rgba(12,11,9,.55) 0%, transparent 35%, transparent 65%, rgba(12,11,9,.92) 100%),
+    linear-gradient(to right, rgba(12,11,9,.3) 0%, transparent 60%);
   pointer-events: none;
+}
+
+/* Culture strip */
+.hero-culture-strip {
+  position: absolute; bottom: 12px; left: 0; right: 0; z-index: 4;
+  text-align: center;
+  font-family: var(--ff-alt); font-size: .55rem; font-weight: 700;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(242,237,232,.18); pointer-events: none;
+}
+
+/* Artist name reveal */
+.hero-artist-name {
+  position: absolute; top: 16px; left: 20px; z-index: 4;
+  font-family: var(--ff-head); font-size: 2.2rem; letter-spacing: 3px;
+  color: var(--ink); line-height: 1;
+  text-shadow: 2px 2px 0 rgba(232,50,26,.4), 0 4px 24px rgba(0,0,0,.9);
+  opacity: 0; transform: translateY(-6px);
+  transition: opacity .6s ease .3s, transform .6s ease .3s;
+  pointer-events: none;
+}
+.hero-artist-name.visible { opacity: 1; transform: translateY(0); }
+
+/* Scanline overlay */
+.hero-scanlines {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,.08) 2px, rgba(0,0,0,.08) 4px
+  );
 }
 
 /* Controls strip */
@@ -265,17 +361,50 @@ header {
 }
 
 .guess-header {
-  padding: 28px 36px 20px;
+  padding: 24px 36px 18px;
   border-bottom: 1px solid var(--line);
+  position: relative; overflow: hidden;
+}
+/* Giant watermark behind the header */
+.guess-header::before {
+  content: 'RAP';
+  position: absolute; right: -10px; top: -12px;
+  font-family: var(--ff-head); font-size: 7rem; letter-spacing: -4px;
+  color: var(--red); opacity: .04; pointer-events: none; line-height: 1;
+  z-index: 0;
+}
+.guess-cultural-ref {
+  font-family: var(--ff-tag); font-size: .88rem;
+  color: var(--red); opacity: .7;
+  transform: rotate(-1deg); display: inline-block;
+  margin-bottom: 4px; position: relative; z-index: 1;
 }
 .guess-headline {
   font-family: var(--ff-head);
-  font-size: 3.2rem; letter-spacing: 4px; line-height: 1;
+  font-size: 4.2rem; letter-spacing: 5px; line-height: .88;
   color: var(--ink);
+  text-shadow: 3px 3px 0 rgba(232,50,26,.18);
+  position: relative; z-index: 1;
 }
 .guess-sub {
-  font-size: .7rem; font-weight: 600; letter-spacing: 2.5px;
-  text-transform: uppercase; color: var(--ink3); margin-top: 6px;
+  font-family: var(--ff-alt); font-size: .72rem; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--ink3); margin-top: 8px;
+  position: relative; z-index: 1;
+}
+/* Hip-hop reference strip */
+.guess-hh-strip {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 10px; flex-wrap: wrap;
+  position: relative; z-index: 1;
+}
+.guess-hh-strip span {
+  font-family: var(--ff-alt); font-size: .58rem; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink3);
+  opacity: .5;
+}
+.guess-hh-strip .sep {
+  color: var(--red); opacity: .4; font-size: .5rem;
 }
 
 .guess-body {
@@ -461,9 +590,9 @@ header {
 @media (max-width: 720px) {
   #page-blindtest { flex-direction: column; }
   .panel-player { flex: none; border-right: none; border-bottom: 1px solid var(--line); }
-  .art-hero { padding-bottom: 55%; }
-  .vinyl-wrap { width: 120px; height: 120px; }
-  .vinyl { width: 120px; height: 120px; }
+  .art-hero { height: 220px; }
+  .vinyl-wrap { width: 70px; height: 70px; }
+  .hero-hh-pattern { font-size: 7rem; }
   .guess-header { padding: 20px 20px 14px; }
   .guess-headline { font-size: 2.2rem; }
   .guess-body { padding: 20px; gap: 18px; }
@@ -895,8 +1024,15 @@ header {
 
     <!-- Art hero -->
     <div class="art-hero" id="art-hero">
-      <img id="cover-blur" src="" alt="">
+      <div class="artist-bg" id="artist-bg"></div>
+      <div class="hero-grain"></div>
+      <div class="hero-scanlines"></div>
+      <div class="hero-hh-pattern" id="hero-hh-pattern">RAP</div>
+      <div class="hero-artist-name" id="hero-artist-name"></div>
+      <div class="cover-inset" id="cover-inset"><img id="cover-blur" src="" alt=""></div>
+      <div class="vinyl-wrap" id="vinyl-wrap"><div class="vinyl-disc"></div></div>
       <div class="art-overlay"></div>
+      <div class="hero-culture-strip">RAP FRANÇAIS &nbsp;◆&nbsp; HIP-HOP &nbsp;◆&nbsp; BRONX 1973 → PARIS &nbsp;◆&nbsp; BLIND TEST</div>
     </div>
 
     <!-- Loading state -->
@@ -960,8 +1096,16 @@ header {
     <!-- Guess form -->
     <div id="guess-panel">
       <div class="guess-header">
-        <div class="guess-headline">QUI C'EST ?</div>
-        <div class="guess-sub">Identifie l'artiste, le titre et les feats</div>
+        <div class="guess-cultural-ref">// identifie le son</div>
+        <div class="guess-headline">QUI C'EST&nbsp;?</div>
+        <div class="guess-sub">Artiste · Titre · Feats — chaque seconde compte</div>
+        <div class="guess-hh-strip">
+          <span>RAP FRANÇAIS</span><span class="sep">◆</span>
+          <span>HIP-HOP</span><span class="sep">◆</span>
+          <span>BRONX 1973</span><span class="sep">◆</span>
+          <span>PARIS 1991</span><span class="sep">◆</span>
+          <span>CULTURE</span>
+        </div>
       </div>
 
       <div class="guess-body">
@@ -1495,6 +1639,7 @@ function setPlay(on) {
   S.playing = on;
   document.getElementById('waveform').classList.toggle('playing', on);
   document.getElementById('ico-play').innerHTML = on ? icoPause : icoPlay;
+  document.getElementById('vinyl-wrap')?.classList.toggle('spinning', on);
 }
 
 function togglePlay() {
@@ -1533,9 +1678,15 @@ async function nextTrack() {
   audio.pause(); setPlay(false);
   S.answered = false; S.featTags = [];
 
-  // Reset cover blur
+  // Reset hero
   const coverBlur = document.getElementById('cover-blur');
-  coverBlur.src = ''; coverBlur.classList.remove('revealed');
+  coverBlur.src = ''; coverBlur.removeAttribute('data-src');
+  document.getElementById('artist-bg').style.backgroundImage = '';
+  document.getElementById('artist-bg').classList.remove('revealed');
+  document.getElementById('hero-artist-name').classList.remove('visible');
+  document.getElementById('hero-artist-name').textContent = '';
+  document.getElementById('cover-inset').classList.remove('visible');
+  document.getElementById('vinyl-wrap').classList.remove('visible','spinning');
 
   // UI state
   document.getElementById('loader').style.display = 'flex';
@@ -1595,9 +1746,22 @@ async function nextTrack() {
     audio.src = track.preview;
     audio.load();
 
-    // Cover (blurred)
+    // Store cover for reveal — do NOT set src yet (spoiler fix)
     const cover = track.album?.cover_xl || track.album?.cover_big || track.album?.cover_medium || '';
-    coverBlur.src = cover;
+    coverBlur.dataset.src = cover;
+    coverBlur.src = '';
+
+    // Load artist photo as background
+    try {
+      const aData = await deezerFetch(`artist/${artist.id}`);
+      const pic = aData.picture_xl || aData.picture_big || '';
+      if (pic) {
+        const bg = document.getElementById('artist-bg');
+        bg.style.backgroundImage = `url(${pic})`;
+        S.current.artistPhoto = pic;
+        S.current.artistName = aData.name || artist.name;
+      }
+    } catch {}
 
     buildWaveform();
 
@@ -1623,7 +1787,11 @@ async function nextTrack() {
     S.round++;
     updateHUD();
 
-    setTimeout(() => { audio.play().catch(()=>{}); setPlay(true); }, 350);
+    setTimeout(() => {
+      audio.play().catch(()=>{});
+      setPlay(true);
+      document.getElementById('vinyl-wrap').classList.add('visible','spinning');
+    }, 350);
 
   } catch(e) {
     console.error(e);
@@ -1733,8 +1901,15 @@ function validate() {
   else S.streak = 0;
   updateHUD();
 
-  // Reveal cover
-  document.getElementById('cover-blur').classList.add('revealed');
+  // Reveal cover + artist
+  const cb = document.getElementById('cover-blur');
+  if (cb.dataset.src) cb.src = cb.dataset.src;
+  document.getElementById('cover-inset').classList.add('visible');
+  document.getElementById('artist-bg').classList.add('revealed');
+  const artistNameEl = document.getElementById('hero-artist-name');
+  artistNameEl.textContent = S.current?.artistName || S.current?.artist?.name || '';
+  artistNameEl.classList.add('visible');
+  document.getElementById('vinyl-wrap').classList.remove('spinning');
 
   // Build result panel
   buildResult({ artistOk, titleOk, matchedFeats, feats, totalGained, totalMax, gArtist, gTitle });
